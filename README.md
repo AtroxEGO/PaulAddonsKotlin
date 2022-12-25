@@ -1,9 +1,37 @@
-# Kotlin and Essential template for 1.8.9 client-side forge mods
+# Paul Addons
+[![GitHub release](https://img.shields.io/github/downloads/AtroxEGO/PaulAddons/total)](https://github.com/Cephetir/SkySkipped/releases)
+[![CodeFactor](https://www.codefactor.io/repository/github/AtroxEGO/PaulAddons/badge)](https://www.codefactor.io/repository/github/cephetir/skyskipped)\
+Mod with some useful features for Hypixel Skyblock \
+Website: ToDo \
 
-A small template mostly designed for my own learning and potentially future projects. Based on @romangraef's Forge 1.8.9 template.
+## Features
+<details>
+    <summary>Better Loot Share</summary>
 
-Note that I am new to Java and Kotlin, and MC modding in general: there very well could be questionable design choices or serious issues. (if you happen to notice any, I'd appreciate a note!) 
+### ESP
+- Glow On Mobs
+    - Renders an outline around selected Mobs
+- Mob Notification
+    - Displays notification if selected mob is near
+</details>
 
-Includes an example Vigilance configuration for main settings and PersistentData data class to allow easily de/serializing additional data.
+<details>
+    <summary>Star Cult</summary>
 
-This template is licensed under the Unlicense (license copy present in this repository), or alternatively under [Creative Commons 1.0 Universal (CC0 1.0)](https://creativecommons.org/publicdomain/zero/1.0/).  This means your mod, based on this template can be licensed whatever way you want, and does not need to reference back to this template in any way.
+### Dungeons
+- Star Cult Timer
+    - Displays a timer on your screen for star cult event
+- Auto Guild Notification
+    - Automatically sends notification in your guilds chat
+</details>
+
+## Commands
+<details>
+    <summary>Commands</summary>
+
+- /pauladdons (opens gui)
+
+</details>
+
+With any issues DM me <br>
+AtroxEGO#1952
