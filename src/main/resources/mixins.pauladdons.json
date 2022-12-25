@@ -1,0 +1,9 @@
+{
+  "package": "me.atroxego.pauladdons.mixin",
+  "refmap": "mixins.pauladdons.refmap.json",
+  "minVersion": "0.7",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "GuiMainMenuMixin"
+  ]
+}

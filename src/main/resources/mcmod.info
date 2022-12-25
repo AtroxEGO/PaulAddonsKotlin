@@ -1,0 +1,18 @@
+[
+  {
+	"modid": "${modid}",
+	"name": "${modname}",
+	"description": "Hypixel QOL Mod",
+	"version": "${version}",
+	"mcversion": "${mcversion}",
+	"url": "",
+	"updateUrl": "",
+	"authorList": [
+	  "AtroxEGO"
+	],
+	"credits": "",
+	"logoFile": "",
+	"screenshots": [],
+	"dependencies": []
+  }
+]
