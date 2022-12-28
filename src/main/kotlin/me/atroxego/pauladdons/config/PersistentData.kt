@@ -1,10 +1,11 @@
 package me.atroxego.pauladdons.config
 
+import PaulAddons
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
 
 @Serializable
 data class PersistentData(

@@ -1,5 +1,3 @@
-import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.include
-
 plugins {
     kotlin("jvm") version "1.7.10"
 
@@ -14,7 +12,7 @@ plugins {
 }
 
 group = "PaulAddons"
-version = "0.1"
+version = "0.3"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
@@ -53,6 +51,7 @@ repositories {
     maven("https://repo.spongepowered.org/maven/")
     maven("https://repo.sk1er.club/repository/maven-public")
     maven("https://maven.ilarea.ru/snapshots")
+    maven("https://repo.essential.gg/repository/maven-public")
 }
 
 val shadowImpl: Configuration by configurations.creating {
@@ -65,11 +64,11 @@ dependencies {
 //    implementation("me.cephetir:bladecore-1.8.9-forge:0.0.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
 
-implementation("gg.essential:vigilance-1.8.9-forge:273+pull-75")
+    implementation("gg.essential:vigilance-1.8.9-forge:273+pull-75")
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
-
+    implementation("gg.essential:universalcraft-1.8.9-forge:251")
     shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") { isTransitive = false }
     annotationProcessor("org.spongepowered:mixin:0.8.4-SNAPSHOT")
 

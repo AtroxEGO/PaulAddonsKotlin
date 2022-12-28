@@ -2,7 +2,7 @@
 [![GitHub release](https://img.shields.io/github/downloads/AtroxEGO/PaulAddons/total)](https://github.com/Cephetir/SkySkipped/releases)
 [![CodeFactor](https://www.codefactor.io/repository/github/AtroxEGO/PaulAddons/badge)](https://www.codefactor.io/repository/github/cephetir/skyskipped)\
 Mod with some useful features for Hypixel Skyblock \
-Website: ToDo \
+Website: Work In Progress
 
 ## Features
 <details>

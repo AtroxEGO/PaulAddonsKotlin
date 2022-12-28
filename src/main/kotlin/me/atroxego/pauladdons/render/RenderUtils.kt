@@ -27,21 +27,18 @@ package me.atroxego.pauladdons.render
 
 import PaulAddons.Companion.mc
 import me.atroxego.pauladdons.config.Config
+import me.atroxego.pauladdons.mixin.IMixinRenderManager
 import me.atroxego.pauladdons.utils.Utils.getLayerRenderers
 import me.atroxego.pauladdons.utils.Utils.getRenderPartialTicks
-import me.atroxego.pauladdons.utils.Utils.getRenderPositions
 import me.atroxego.pauladdons.utils.Utils.interpolateRotation
 import me.atroxego.pauladdons.utils.Utils.preRenderCallback
 import me.atroxego.pauladdons.utils.Utils.rotateCorpse
 import me.atroxego.pauladdons.utils.Utils.setModelVisibilities
-import me.cephetir.skyskipped.utils.render.OutlineUtils
 import net.minecraft.client.Minecraft
 import net.minecraft.client.entity.AbstractClientPlayer
+import net.minecraft.client.gui.Gui
 import net.minecraft.client.model.ModelBase
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.client.renderer.OpenGlHelper
-import net.minecraft.client.renderer.RenderGlobal
-import net.minecraft.client.renderer.Tessellator
+import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.culling.Frustum
 import net.minecraft.client.renderer.entity.RenderPlayer
 import net.minecraft.client.renderer.entity.layers.LayerArmorBase
@@ -52,6 +49,7 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.monster.EntitySkeleton
 import net.minecraft.item.ItemArmor
+import net.minecraft.item.ItemStack
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.util.MathHelper
 import net.minecraft.util.ResourceLocation
@@ -145,11 +143,11 @@ object RenderUtils {
         var visible = false
         if (Minecraft.getMinecraft().thePlayer.canEntityBeSeen(entity)){ visible = true }
         if (Config.disableVisible && visible) {return}
-        val rm = getRenderPositions(mc.renderManager)
+        val rm = mc.renderManager as IMixinRenderManager
         val partialTicks = getRenderPartialTicks()
-        val renderPosX = rm.first
-        val renderPosY = rm.second
-        val renderPosZ = rm.third
+        val renderPosX = rm.renderPosX
+        val renderPosY = rm.renderPosY
+        val renderPosZ = rm.renderPosZ
         val x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks - renderPosX
         val y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks - renderPosY
         val z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks - renderPosZ
@@ -162,7 +160,7 @@ object RenderUtils {
             bbox.maxY - entity.posY + y,
             bbox.maxZ - entity.posZ + z
         )
-        if (entity is EntityArmorStand) aabb = aabb.expand(0.3, 2.0, 0.3)
+        if (entity is EntityArmorStand) aabb = aabb.expand(0.3, 1.0, 0.3)
         drawFilledBoundingBox(aabb, color)
     }
 
@@ -240,36 +238,36 @@ object RenderUtils {
         return current + if (shouldContinueAnimation) factor else -factor
     }
 
-    fun drawRect(left: Float, top: Float, right: Float, bottom: Float, color: Int) {
-        var left = left
-        var top = top
-        var right = right
-        var bottom = bottom
-        if (left < right) {
-            val i = left
-            left = right
-            right = i
+    fun drawRect(left: Double, top: Double, right: Double, bottom: Double, color: Int) {
+        var leftModifiable = left
+        var topModifiable = top
+        var rightModifiable = right
+        var bottomModifiable = bottom
+        if (leftModifiable < rightModifiable) {
+            val i = leftModifiable
+            leftModifiable = rightModifiable
+            rightModifiable = i
         }
-        if (top < bottom) {
-            val j = top
-            top = bottom
-            bottom = j
+        if (topModifiable < bottomModifiable) {
+            val j = topModifiable
+            topModifiable = bottomModifiable
+            bottomModifiable = j
         }
         val f3 = (color shr 24 and 255).toFloat() / 255.0f
         val f = (color shr 16 and 255).toFloat() / 255.0f
         val f1 = (color shr 8 and 255).toFloat() / 255.0f
         val f2 = (color and 255).toFloat() / 255.0f
+        GlStateManager.color(f, f1, f2, f3)
         val tessellator = Tessellator.getInstance()
-        val worldrenderer = tessellator.worldRenderer
+        val worldRenderer = tessellator.worldRenderer
         GlStateManager.enableBlend()
         GlStateManager.disableTexture2D()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-        GlStateManager.color(f, f1, f2, f3)
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION)
-        worldrenderer.pos(left.toDouble(), bottom.toDouble(), 0.0).endVertex()
-        worldrenderer.pos(right.toDouble(), bottom.toDouble(), 0.0).endVertex()
-        worldrenderer.pos(right.toDouble(), top.toDouble(), 0.0).endVertex()
-        worldrenderer.pos(left.toDouble(), top.toDouble(), 0.0).endVertex()
+        worldRenderer.begin(7, DefaultVertexFormats.POSITION)
+        worldRenderer.pos(leftModifiable, bottomModifiable, 0.0).endVertex()
+        worldRenderer.pos(rightModifiable, bottomModifiable, 0.0).endVertex()
+        worldRenderer.pos(rightModifiable, topModifiable, 0.0).endVertex()
+        worldRenderer.pos(leftModifiable, topModifiable, 0.0).endVertex()
         tessellator.draw()
         GlStateManager.enableTexture2D()
         GlStateManager.disableBlend()
@@ -402,7 +400,8 @@ object RenderUtils {
 
     private fun preModelDraw(entity: EntityLivingBase, model: ModelBase, partialTicks: Float): ModelData {
         val render = mc.renderManager.getEntityRenderObject<EntityLivingBase>(entity)
-        val renderManager = getRenderPositions(mc.renderManager)
+//        val renderManager = getRenderPositions(mc.renderManager)
+        val renderManager = mc.renderManager as IMixinRenderManager
         val renderer = getLayerRenderers(entity)
 
         val renderYaw = interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, partialTicks)
@@ -420,7 +419,7 @@ object RenderUtils {
         val x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks.toDouble()
         val y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks.toDouble()
         val z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks.toDouble()
-        GlStateManager.translate(x - renderManager.first, y - renderManager.second, z - renderManager.third)
+        GlStateManager.translate(x - renderManager.renderPosX, y - renderManager.renderPosY, z - renderManager.renderPosZ)
         val f = interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, partialTicks)
         rotateCorpse(entity, age, f, partialTicks)
         GlStateManager.enableRescaleNormal()
@@ -657,5 +656,78 @@ object RenderUtils {
         tessellator.draw()
         GlStateManager.enableDepth()
         GlStateManager.popMatrix()
+    }
+
+    @JvmStatic
+    fun renderItem(itemStack: ItemStack?, x: Int, y: Int) {
+        RenderHelper.enableGUIStandardItemLighting()
+        GlStateManager.enableDepth()
+        mc.renderItem.renderItemAndEffectIntoGUI(itemStack, x, y)
+    }
+
+    /**
+     * Taken from Skyblockcatia under MIT License
+     * Modified
+     * https://github.com/SteveKunG/SkyBlockcatia/blob/1.8.9/LICENSE.md
+     *
+     * @author SteveKunG
+     */
+    @JvmStatic
+    fun renderTexture(
+        texture: ResourceLocation?,
+        x: Int,
+        y: Int,
+        width: Int = 16,
+        height: Int = 16,
+        enableLighting: Boolean = true
+    ) {
+        if (enableLighting) RenderHelper.enableGUIStandardItemLighting()
+        GlStateManager.enableRescaleNormal()
+        GlStateManager.enableBlend()
+        GlStateManager.enableDepth()
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+        GlStateManager.pushMatrix()
+        mc.textureManager.bindTexture(texture)
+        GlStateManager.enableRescaleNormal()
+        GlStateManager.enableAlpha()
+        GlStateManager.alphaFunc(516, 0.1f)
+        GlStateManager.enableBlend()
+        GlStateManager.blendFunc(770, 771)
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
+        Gui.drawModalRectWithCustomSizedTexture(x, y, 0f, 0f, width, height, width.toFloat(), height.toFloat())
+        GlStateManager.disableAlpha()
+        GlStateManager.disableRescaleNormal()
+        GlStateManager.disableLighting()
+        GlStateManager.popMatrix()
+    }
+    fun drawRect(left: Double, top: Double, right: Double, bottom: Double, color: Color) {
+        var leftModifiable = left
+        var topModifiable = top
+        var rightModifiable = right
+        var bottomModifiable = bottom
+        if (leftModifiable < rightModifiable) {
+            val i = leftModifiable
+            leftModifiable = rightModifiable
+            rightModifiable = i
+        }
+        if (topModifiable < bottomModifiable) {
+            val j = topModifiable
+            topModifiable = bottomModifiable
+            bottomModifiable = j
+        }
+        GlStateManager.color(color.red.toFloat(), color.green.toFloat(), color.blue.toFloat(), color.alpha.toFloat())
+        val tessellator = Tessellator.getInstance()
+        val worldRenderer = tessellator.worldRenderer
+        GlStateManager.enableBlend()
+        GlStateManager.disableTexture2D()
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+        worldRenderer.begin(7, DefaultVertexFormats.POSITION)
+        worldRenderer.pos(leftModifiable, bottomModifiable, 0.0).endVertex()
+        worldRenderer.pos(rightModifiable, bottomModifiable, 0.0).endVertex()
+        worldRenderer.pos(rightModifiable, topModifiable, 0.0).endVertex()
+        worldRenderer.pos(leftModifiable, topModifiable, 0.0).endVertex()
+        tessellator.draw()
+        GlStateManager.enableTexture2D()
+        GlStateManager.disableBlend()
     }
 }

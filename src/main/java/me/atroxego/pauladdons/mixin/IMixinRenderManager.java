@@ -23,10 +23,20 @@
  * SOFTWARE.
  */
 
-package me.atroxego.pauladdons.features
+package me.atroxego.pauladdons.mixin;
 
-import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.entity.RenderManager;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-abstract class Feature {
-    protected val mc: Minecraft = Minecraft.getMinecraft()
+@Mixin(RenderManager.class)
+public interface IMixinRenderManager {
+    @Accessor
+    double getRenderPosX();
+
+    @Accessor
+    double getRenderPosY();
+
+    @Accessor
+    double getRenderPosZ();
 }

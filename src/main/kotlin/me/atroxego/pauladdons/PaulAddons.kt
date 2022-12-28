@@ -1,15 +1,20 @@
+
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import me.atroxego.pauladdons.commands.ExampleCommand
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.config.PersistentData
 import me.atroxego.pauladdons.features.betterlootshare.ESP.onRenderMob
+import me.atroxego.pauladdons.features.betterlootshare.MobNotification
+import me.atroxego.pauladdons.features.starcult.StarCult
+import me.atroxego.pauladdons.gui.GuiManager
+import me.atroxego.pauladdons.utils.ApiDateInformation.getDateInformation
 import me.atroxego.pauladdons.utils.UpdateManager.checkUpdate
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.settings.KeyBinding
 import net.minecraft.entity.EntityLivingBase
 import net.minecraftforge.client.ClientCommandHandler
-import net.minecraftforge.client.GuiIngameForge
-import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderLivingEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.client.registry.ClientRegistry
@@ -17,7 +22,6 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.ModMetadata
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
-import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
@@ -35,7 +39,33 @@ import java.io.File
 )
 class PaulAddons {
 
-    @Mod.EventHandler
+    companion object {
+        val mc: Minecraft = Minecraft.getMinecraft()
+        var currentGui: GuiScreen? = null
+        lateinit var configDirectory: File
+        var keyBindings = arrayOfNulls<KeyBinding>(1)
+        lateinit var config: Config
+        lateinit var persistentData: PersistentData
+        const val MODID = "pauladdons"
+        const val MOD_NAME = "Paul Addons"
+        const val VERSION = "0.3"
+        lateinit var metadata: ModMetadata
+        const val prefix = "§5§l[§9§lPaul Addons§5§l] §8"
+
+        @JvmStatic
+        lateinit var guiManager: GuiManager
+
+        val json = Json {
+            prettyPrint = true
+            isLenient = true
+            ignoreUnknownKeys = true
+            serializersModule = SerializersModule {
+                include(serializersModule)
+            }
+        }
+    }
+
+    @EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
         metadata = event.modMetadata
         val directory = File(event.modConfigurationDirectory, event.modMetadata.modId)
@@ -43,14 +73,19 @@ class PaulAddons {
         configDirectory = directory
         persistentData = PersistentData.load()
         config = Config
+        guiManager = GuiManager
         checkUpdate()
+        getDateInformation()
     }
 
-    @Mod.EventHandler
+    @EventHandler
     fun onInit(event: FMLInitializationEvent) {
         ClientCommandHandler.instance.registerCommand(ExampleCommand())
         listOf(
-            this
+            this,
+            guiManager,
+            MobNotification,
+            StarCult,
         ).forEach(MinecraftForge.EVENT_BUS::register)
         Runtime.getRuntime().addShutdownHook(object : Thread(){
             override fun run(){
@@ -79,29 +114,5 @@ class PaulAddons {
         onRenderMob(event.entity, event.renderer.mainModel, event)
     }
 
-    @EventHandler
-    fun onLoad(event: FMLLoadCompleteEvent){
-//        EssentialAPI.getDI()
-//        logger.info("Checking for updates...")
-//        EssentialAPI.getNotifications().push(
-//            "SkySkipped",
-//            "New Version Detected: 1.0\nClick to Download",
-//            10f,
-//            action = { Desktop.getDesktop().browse(URI("https://github.com/Cephetir/SkySkipped/releases")) }
-//        )
 
-    }
-
-    companion object {
-        val mc: Minecraft = Minecraft.getMinecraft()
-        var currentGui: GuiScreen? = null
-        lateinit var configDirectory: File
-        var keyBindings = arrayOfNulls<KeyBinding>(1)
-        lateinit var config: Config
-        lateinit var persistentData: PersistentData
-        const val MODID = "pauladdons"
-        const val MOD_NAME = "Paul Addons"
-        const val VERSION = "0.3"
-        lateinit var metadata: ModMetadata
-    }
 }

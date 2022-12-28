@@ -14,11 +14,10 @@ object UpdateManager {
 public fun checkUpdate(){
     logger.info("Checking for updates...")
     Multithreading.runAsync {
-        val version = HttpUtils.sendGet("https://raw.githubusercontent.com/AtroxEGO/PaulAddonsKotlin/master/version.txt", null)?.toDouble() ?: return@runAsync
+        val version = HttpUtils.sendGet("https://raw.githubusercontent.com/AtroxEGO/PaulAddons/master/version.txt", null)?.toDouble() ?: return@runAsync
         if (PaulAddons.VERSION.toDouble() < version) {
-            drawFrame(version)
+//            drawFrame(version)
         } else logger.info("Latest version!")
-
     }
 }
 

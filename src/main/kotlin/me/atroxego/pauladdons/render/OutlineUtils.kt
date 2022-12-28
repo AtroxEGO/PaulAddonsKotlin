@@ -23,10 +23,9 @@
  * SOFTWARE.
  */
 
-package me.cephetir.skyskipped.utils.render
+package me.atroxego.pauladdons.render
 
 import PaulAddons.Companion.mc
-import me.atroxego.pauladdons.render.RenderUtils
 import me.atroxego.pauladdons.utils.Utils.getLayerRenderers
 import net.minecraft.client.model.ModelBase
 import net.minecraft.client.renderer.GlStateManager
