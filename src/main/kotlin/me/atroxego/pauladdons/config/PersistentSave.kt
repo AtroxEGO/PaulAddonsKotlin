@@ -77,7 +77,7 @@ abstract class PersistentSave(protected val saveFile: File) {
         }
 
         init {
-            fixedRateTimer("Skytils-PersistentSave-Write", period = 30000L) {
+            fixedRateTimer("PaulAddons-PersistentSave-Write", period = 30000L) {
                 for (save in SAVES) {
                     if (save.dirty) save.writeSave()
                 }
@@ -86,7 +86,7 @@ abstract class PersistentSave(protected val saveFile: File) {
                 for (save in SAVES) {
                     if (save.dirty) save.writeSave()
                 }
-            }, "Skytils-PersistentSave-Shutdown"))
+            }, "PaulAddons-PersistentSave-Shutdown"))
         }
     }
 }

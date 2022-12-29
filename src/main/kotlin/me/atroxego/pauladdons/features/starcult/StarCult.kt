@@ -4,23 +4,18 @@ import PaulAddons
 import PaulAddons.Companion.mc
 import me.atroxego.pauladdons.config.Cache
 import me.atroxego.pauladdons.config.Config
-import me.atroxego.pauladdons.features.betterlootshare.ESP
-import me.atroxego.pauladdons.features.betterlootshare.MobNotification
 import me.atroxego.pauladdons.gui.GuiElement
+import me.atroxego.pauladdons.render.DisplayNotification.displayNotification
 import me.atroxego.pauladdons.render.RenderUtils.renderTexture
 import me.atroxego.pauladdons.utils.ApiDateInformation
+import me.atroxego.pauladdons.utils.Utils.stripColor
 import me.atroxego.pauladdons.utils.core.FloatPair
-import net.minecraft.client.Minecraft
 import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.ResourceLocation
-import net.minecraftforge.client.GuiIngameForge
-import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import org.lwjgl.opengl.GL11
 import kotlin.math.floor
-import kotlin.math.pow
 import kotlin.time.ExperimentalTime
 
 object StarCult {
@@ -35,17 +30,16 @@ object StarCult {
             var text = ""
             if (toggled) {
                 val timeNow = (System.currentTimeMillis() / 1000).toDouble()
-        text = if (getTimeSecBetween(timeNow, nextCult) < 0 || cultActive) {
+        text = if(ApiDateInformation.busy){
+            "Wait"
+        } else if (getTimeSecBetween(timeNow, nextCult) < 0 || cultActive) {
             "§a" + getTimeCultEnd(timeNow, nextCult)
         } else {
             getTimeBetween(timeNow, nextCult)
         }
-//                var texture = ResourceLocation("textures/items/apple.png")
-//                renderTexture(texture,0,0)
-                val textX = smartFontPlacement(16f,text)
+                val textX = smartFontPlacement(16f,text.stripColor())
                 smartTexturePlacement(0f, text)
                 fr.drawString(text, textX, 5f, 0xFFFFFF, true)
-//                renderTexture(helmetIcon, textureX,0)
             }
         }
 
@@ -53,12 +47,10 @@ object StarCult {
             val textX = smartFontPlacement(16f,"1h59m")
             smartTexturePlacement(0f, "1h59m")
             fr.drawString("1h59m", textX, 5f, 0xFFFFFF, true)
-//            renderTexture(helmetIcon, textureX,0, 16,16)
-//            logger.info()
         }
 
         private fun smartFontPlacement(position : Float, text: String) :Float{
-            if(this.actualX < mc.displayWidth/4){
+            if((this.actualX + this.actualWidth / 2) < mc.displayWidth/4){
                return position
             }else{
                 var offset = 0f
@@ -73,7 +65,7 @@ object StarCult {
         }
 
         private fun smartTexturePlacement(position : Float, text: String){
-             if(this.actualX < mc.displayWidth/4){
+             if((this.actualX + this.actualWidth / 2) < mc.displayWidth/4){
                  var textureBasic = ResourceLocation("pauladdons/helmetBasic.png")
                  renderTexture(textureBasic, position.toInt(),0)
             }else{
@@ -88,7 +80,7 @@ object StarCult {
             get() = 20 + fr.getStringWidth("1h59m")
 
         override val toggled: Boolean
-            get() = true
+            get() = Config.starCultTimer
 
         init {
             PaulAddons.guiManager.registerElement(this)
@@ -101,11 +93,12 @@ object StarCult {
     }
 
 
-    private var veryImportantBoolean = false
+    var veryImportantBoolean = false
     fun getTimeSecBetween (timeOne: Double,timeTwo: Double): Double{
         if ((timeTwo - timeOne < 0 && timeTwo - timeOne > -1) && !veryImportantBoolean) {
-            Minecraft.getMinecraft().thePlayer.addChatMessage(ChatComponentText(PaulAddons.prefix + EnumChatFormatting.DARK_AQUA + " Star Cult Active!"));
+            if (Config.cStarCultNotification) mc.thePlayer.addChatMessage(ChatComponentText(PaulAddons.prefix + EnumChatFormatting.DARK_AQUA + " Star Cult Active!"));
             if (Config.gcStarCultNofification) mc.thePlayer.sendChatMessage("/gc [Paul Addons] Star Cult Active!")
+            if (Config.screenStarCultNotification) displayNotification("§9§lStar Cult",3000,true)
             veryImportantBoolean = true;
         }
         return timeTwo - timeOne;
@@ -180,7 +173,7 @@ object StarCult {
         return if (timeTwo + 300 - timeOne < 0) {
             ApiDateInformation.getDateInformation()
             getNextCult()
-            veryImportantBoolean = false
+
             "What Happened? API prob down -_-"
         } else getTimeBetween(timeOne, timeTwo + 300)
     }

@@ -54,6 +54,7 @@ object ApiDateInformation {
             if (currentTime.endsWith("pm") && currentHour != 12) currentHour = dateData!!.get("hour").asInt + 12
             busy = false
             StarCult.getNextCult()
+            StarCult.veryImportantBoolean = false
         }
     }
 }

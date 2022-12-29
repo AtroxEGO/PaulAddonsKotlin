@@ -22,7 +22,7 @@ import java.io.File
 import java.io.Reader
 import java.io.Writer
 
-object GuiManager : PersistentSave(File(PaulAddons.MODID, "guipositions.json")) {
+object GuiManager : PersistentSave(File("config/".plus(PaulAddons.MODID), "guipositions.json")) {
     val GUIPOSITIONS = hashMapOf<String, FloatPair>()
     val GUISCALES = hashMapOf<String, Float>()
     val elements = hashMapOf<Int, GuiElement>()

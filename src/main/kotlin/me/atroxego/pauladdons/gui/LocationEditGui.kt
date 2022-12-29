@@ -3,7 +3,6 @@ package me.atroxego.pauladdons.gui
 import PaulAddons
 import gg.essential.universal.UResolution
 import me.atroxego.pauladdons.config.PersistentSave
-import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.gui.buttons.LocationButton
 import me.atroxego.pauladdons.gui.buttons.ResizeButton
 import me.atroxego.pauladdons.gui.buttons.ResizeButton.Corner
@@ -117,7 +116,6 @@ class LocationEditGui : GuiScreen() {
                     if (locationButton.element.scale * newScale < 0.5f) locationButton.element.scale = 0.5f
                     else if (locationButton.element.scale * newScale > 10f) locationButton.element.scale = 10f
                     else locationButton.element.scale *= newScale
-                    logger.info(locationButton.element.pos.getY())
                 }
 
                 Corner.TOP_LEFT -> {
@@ -133,7 +131,6 @@ class LocationEditGui : GuiScreen() {
                     val scaleX = newWidth / width
                     val scaleY = newHeight / height
                     val newScale = scaleX.coerceAtLeast(scaleY).coerceAtLeast(0.5f)
-                    logger.info(scaledY / sr.scaledHeight)
                     if (locationButton.element.scale * newScale < 0.5f) locationButton.element.scale = 0.5f
                     else if (locationButton.element.scale * newScale > 10f) locationButton.element.scale = 10f
                     else locationButton.element.scale *= newScale

@@ -2,7 +2,6 @@ package me.atroxego.pauladdons.utils
 
 import me.atroxego.pauladdons.config.Cache
 import me.atroxego.pauladdons.config.Config
-import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.features.starcult.StarCult
 import me.atroxego.pauladdons.features.starcult.StarCult.getNextCult
 import me.atroxego.pauladdons.gui.buttons.LocationButton
@@ -182,14 +181,23 @@ object Utils {
         Cache.currentDay = day.toInt()
         Cache.currentHour = hour.toInt()
         Cache.currentMinute = minute.toInt()
-        logger.info(Cache.currentDay)
-        logger.info(Cache.currentHour)
-        logger.info(Cache.currentMinute)
         getNextCult()
+    }
+    var lastTimeChecked : Long = 0
+    var customMobs = ""
+    fun getCustomMobsReal(): String {
+        if (System.currentTimeMillis() - lastTimeChecked > 5000){
+            customMobs = Config.customESPMobs
+            lastTimeChecked = System.currentTimeMillis()
+            return customMobs
+        } else return customMobs
+
+
     }
 
     @JvmStatic
     fun String.stripColor(): String = STRIP_COLOR_PATTERN.replace(this, "")
+
     fun File.ensureFile() = (parentFile.exists() || parentFile.mkdirs()) && createNewFile()
 
     fun getMobsForNotification(): HashMap<String, String> {
@@ -207,14 +215,13 @@ object Utils {
 //        if (Config.yetiNotification) mobsSelected.add("Yeti")
 
         var mobsSelected = hashMapOf<String, String>()
+        if (Config.nutterNotification) mobsSelected["Nutcracker"] = "§9"
         if (Config.gwSharkNotification) mobsSelected["Great White Shark"] = "§c"
         if (Config.thunderNotification) mobsSelected["Thunder"] = "§d"
         if (Config.jawbusNotification) mobsSelected["Lord Jawbus"] = "§d"
         if (Config.grimNotification) mobsSelected["Grim Reaper"] = "§6"
         if (Config.yetiNotification) mobsSelected["Yeti"] = "§6"
         if (Config.hydraNotification) mobsSelected["Hydra"] = "§6"
-        if (Config.nutterNotification) mobsSelected["Nut Cracker"] = "§9"
-        mobsSelected["Star Cult"] = "§9"
         return mobsSelected
     }
 

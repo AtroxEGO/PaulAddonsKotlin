@@ -14,9 +14,9 @@ object UpdateManager {
 public fun checkUpdate(){
     logger.info("Checking for updates...")
     Multithreading.runAsync {
-        val version = HttpUtils.sendGet("https://raw.githubusercontent.com/AtroxEGO/PaulAddons/master/version.txt", null)?.toDouble() ?: return@runAsync
+        val version = HttpUtils.sendGet("https://raw.githubusercontent.com/AtroxEGO/PaulAddonsKotlin/master/version.txt", null)?.toDouble() ?: return@runAsync
         if (PaulAddons.VERSION.toDouble() < version) {
-//            drawFrame(version)
+            drawFrame(version)
         } else logger.info("Latest version!")
     }
 }
@@ -49,7 +49,7 @@ public fun checkUpdate(){
         button.background = Color.WHITE
 // Set the action for the button
         button.addActionListener {
-            val url = "https://github.com/AtroxEGO/PaulAddons/releases"
+            val url = "https://github.com/AtroxEGO/PaulAddonsKotlin/releases"
             Desktop.getDesktop().browse(URI(url))
             frame.dispose()
         }
