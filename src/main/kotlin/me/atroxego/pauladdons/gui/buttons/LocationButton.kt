@@ -32,7 +32,7 @@ class LocationButton(var element: GuiElement) : GuiButton(-1, 0, 0, null) {
         refreshLocations()
         hovered = mouseX >= x && mouseY >= y && mouseX < x2 && mouseY < y2 + 2 * element.scale
         val c = Color(255, 255, 255, if (hovered) 100 else 40)
-        RenderUtils.drawRect(0.0, 0.0, (element.width).toDouble(), (element.height + 4).toDouble(), c.rgb)
+        RenderUtils.drawRect(0.0, 0.0, element.width.toDouble(), (element.height + 4).toDouble(), c.rgb)
         GlStateManager.translate(0f, -2f, 0f)
         element.demoRender()
         GlStateManager.translate(0f, 0f, 0f)

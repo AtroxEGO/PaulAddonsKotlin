@@ -4,10 +4,8 @@ import PaulAddons.Companion.mc
 import me.atroxego.pauladdons.config.Config
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.*
 
 object AutoHi {
 
@@ -15,28 +13,28 @@ object AutoHi {
     @SubscribeEvent
     fun listenForFriendsJoin(event: ClientChatReceivedEvent){
         if (!Config.autoFriendHi && !Config.autoGuildHi) return
-        val message = event.message.unformattedText
-        if (message.contains("You are playing on profile:") && Config.autoGuildHi){
+        val messageIncoming = event.message.unformattedText
+        val messageOutcoming = Config.autoGuildHiCustomMessage
+        if (messageIncoming.contains("You are playing on profile:") && Config.autoGuildHi){
             if (Config.autoGuildHiFrequency == 0){
                 val day = LocalDate.now().dayOfMonth
                 val hour = LocalDateTime.now().hour
                 if (day != Config.lastGuildHi && hour > 4){
-                    val message = Config.autoGuildHiCustomMessage
-                    mc.thePlayer.sendChatMessage("/gc $message")
+
+                    mc.thePlayer.sendChatMessage("/gc $messageOutcoming")
                     Config.lastGuildHi = day
                     }
             } else {
-                val message = Config.autoGuildHiCustomMessage
-                mc.thePlayer.sendChatMessage("/gc $message")
+                mc.thePlayer.sendChatMessage("/gc $messageOutcoming")
                 Config.lastGuildHi = LocalDate.now().dayOfMonth
             }
         }
 
         if (Config.autoHiFriends == "" || !Config.autoFriendHi) return
-        for (ign in Config.autoHiFriends.split(",")) {
-            if (message.startsWith("Friend > ")) {
-                if (message.contains(ign.plus(" joined."))){
-                    var command = ""
+        for (ign in Config.autoHiFriends.split(", ")) {
+            if (messageIncoming.startsWith("Friend > ")) {
+                if (messageIncoming.contains(ign.plus(" joined."))){
+                    var command : String
                     if (lastMessage[ign] == null || System.currentTimeMillis() - lastMessage[ign]!! > Config.autoFriendHiCooldown * 1000){
                         if (Config.autoFriendHiType == 0){
                             if(Config.autoHiCustomCommand == ""){

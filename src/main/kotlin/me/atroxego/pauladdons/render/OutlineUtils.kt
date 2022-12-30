@@ -26,11 +26,10 @@
 package me.atroxego.pauladdons.render
 
 import PaulAddons.Companion.mc
-import me.atroxego.pauladdons.utils.Utils.getLayerRenderers
+import me.atroxego.pauladdons.mixin.IMixinRendererLivingEntity
 import net.minecraft.client.model.ModelBase
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.OpenGlHelper
-import net.minecraft.client.renderer.entity.layers.LayerRenderer
 import net.minecraft.client.shader.Framebuffer
 import net.minecraft.entity.EntityLivingBase
 import org.lwjgl.opengl.EXTFramebufferObject
@@ -50,7 +49,7 @@ object OutlineUtils {
         color: Int
     ) {
         var scale = scaleFactor
-        val renderer = getLayerRenderers(entity)
+        val renderer = mc.renderManager.getEntityRenderObject<EntityLivingBase>(entity) as IMixinRendererLivingEntity
         val fancyGraphics = mc.gameSettings.fancyGraphics
         val gamma = mc.gameSettings.gammaSetting
         mc.gameSettings.fancyGraphics = false
@@ -65,7 +64,7 @@ object OutlineUtils {
         model.render(entity, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch, scale)
         setColor(f, f1, f2, f3)
         RenderUtils.renderLayers(
-            renderer as List<LayerRenderer<EntityLivingBase>>,
+            renderer,
             entity,
             limbSwing,
             limbSwingAmount,

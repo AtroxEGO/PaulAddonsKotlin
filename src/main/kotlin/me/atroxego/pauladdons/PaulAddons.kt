@@ -11,7 +11,6 @@ import me.atroxego.pauladdons.features.betterlootshare.MobNotification
 import me.atroxego.pauladdons.features.starcult.StarCult
 import me.atroxego.pauladdons.gui.GuiManager
 import me.atroxego.pauladdons.render.DisplayNotification
-import me.atroxego.pauladdons.utils.ApiDateInformation.getDateInformation
 import me.atroxego.pauladdons.utils.UpdateManager.checkUpdate
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
@@ -49,7 +48,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "0.4"
+        const val VERSION = "0.5"
         lateinit var metadata: ModMetadata
         const val prefix = "§5§l[§9§lPaul Addons§5§l] §8"
 
@@ -75,7 +74,6 @@ class PaulAddons {
         config = Config
         guiManager = GuiManager
         checkUpdate()
-        getDateInformation()
     }
 
     @EventHandler
@@ -109,7 +107,7 @@ class PaulAddons {
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
         if (keyBindings[0]!!.isKeyDown) {
-            currentGui = Config.gui();
+            currentGui = Config.gui()
         }
         if (event.phase != TickEvent.Phase.START || currentGui == null) return
         mc.displayGuiScreen(currentGui)

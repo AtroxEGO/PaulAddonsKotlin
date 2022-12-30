@@ -19,7 +19,6 @@ class LocationEditGui : GuiScreen() {
     private var yOffset = 0f
     private var resizing = false
     private var resizingCorner: Corner? = null
-    private var megaposy = 0f
     private var dragging: GuiElement? = null
     private val locationButtons: MutableMap<GuiElement?, LocationButton> = HashMap()
     private var scaleCache = 0f
@@ -34,7 +33,7 @@ class LocationEditGui : GuiScreen() {
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        onMouseMove(mouseX, mouseY)
+        onMouseMove()
         recalculateResizeButtons()
         drawGradientRect(0, 0, width, height, Color(0, 0, 0, 50).rgb, Color(0, 0, 0, 200).rgb)
         for (button in buttonList) {
@@ -95,7 +94,7 @@ class LocationEditGui : GuiScreen() {
         super.mouseClicked(mouseX, mouseY, mouseButton)
     }
 
-    private fun onMouseMove(mouseX: Int, mouseY: Int) {
+    private fun onMouseMove() {
         val sr = UResolution
         val minecraftScale = sr.scaleFactor.toFloat()
         val floatMouseX = Mouse.getX() / minecraftScale
@@ -112,7 +111,7 @@ class LocationEditGui : GuiScreen() {
                     val newHeight = floatMouseY - scaledY1
                     val scaleX = newWidth / width
                     val scaleY = newHeight / height
-                    var newScale = scaleX.coerceAtLeast(scaleY / 2).coerceAtLeast(0.5f)
+                    val newScale = scaleX.coerceAtLeast(scaleY / 2).coerceAtLeast(0.5f)
                     if (locationButton.element.scale * newScale < 0.5f) locationButton.element.scale = 0.5f
                     else if (locationButton.element.scale * newScale > 10f) locationButton.element.scale = 10f
                     else locationButton.element.scale *= newScale
@@ -157,7 +156,7 @@ class LocationEditGui : GuiScreen() {
         buttonList.removeIf { button: GuiButton? -> button is ResizeButton && button.element !== element }
         val locationButton = locationButtons[element] ?: return
         val boxXOne = locationButton.x - ResizeButton.SIZE * element.scale
-        val boxXTwo = locationButton.x + element.actualWidth - (ResizeButton.SIZE * element.scale)
+        val boxXTwo = locationButton.x + element.actualWidth - ResizeButton.SIZE * element.scale
         val boxYOne = locationButton.y - ResizeButton.SIZE * element.scale
         val boxYTwo = locationButton.y + element.actualHeight + ResizeButton.SIZE * 2 * element.scale
         buttonList.add(ResizeButton(boxXOne, boxYOne, element, Corner.TOP_LEFT))
@@ -173,7 +172,7 @@ class LocationEditGui : GuiScreen() {
                 val element = button.element
                 val locationButton = locationButtons[element] ?: continue
                 val boxXOne = locationButton.x - ResizeButton.SIZE * element.scale
-                val boxXTwo = locationButton.x + element.actualWidth - (ResizeButton.SIZE * element.scale)
+                val boxXTwo = locationButton.x + element.actualWidth - ResizeButton.SIZE * element.scale
                 val boxYOne = locationButton.y - ResizeButton.SIZE * element.scale
                 val boxYTwo = locationButton.y + element.actualHeight + ResizeButton.SIZE * element.scale
                 when (corner) {

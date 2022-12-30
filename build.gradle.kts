@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "PaulAddons"
-version = "0.3"
+version = "0.5"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
@@ -62,7 +62,7 @@ dependencies {
     // For serialization: remove if not needed
 //    implementation("me.cephetir:bladecore-loader-1.8.9-forge:1.1")
 //    implementation("me.cephetir:bladecore-1.8.9-forge:0.0.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
     implementation("gg.essential:vigilance-1.8.9-forge:273+pull-75")
     minecraft("com.mojang:minecraft:1.8.9")

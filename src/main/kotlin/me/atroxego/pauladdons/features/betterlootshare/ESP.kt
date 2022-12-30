@@ -11,7 +11,6 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.monster.EntityMob
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.util.MathHelper
@@ -22,16 +21,15 @@ import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import kotlin.math.log
 
 object ESP : Feature() {
     val logger: Logger = LogManager.getLogger("PaulAddons")
-    private val drawBox = hashMapOf<Entity, Int>()
     private val customMobs = hashMapOf<Entity, EntityLivingBase>()
 
     @SubscribeEvent
     fun onRenderMob(event: RenderLivingEvent.Pre<EntityLivingBase>) {
         if (!Config.glowOnMob) return
+//        logger.info("Test")
         if (event.entity is EntityPlayerMP) return
         if (event.entity is EntityArmorStand) {
             if (!event.entity.hasCustomName()) return
@@ -39,6 +37,7 @@ object ESP : Feature() {
             if (mobsForESP == "" || mobsForESP == " ") return
             val name = event.entity.customNameTag.stripColor()
             for (cname in mobsForESP.split(", ")) {
+//                if (name.endsWith(cname, true)) break
                 if (!name.contains(cname, true)) continue
                 val mob = customMobs[event.entity]
                 if (mob != null) {
@@ -94,10 +93,10 @@ object ESP : Feature() {
 
     private fun getMobsWithinAABB(entity: Entity) {
         val aabb = AxisAlignedBB(entity.posX + 0.4, entity.posY - 2.0, entity.posZ + 0.4, entity.posX - 0.4, entity.posY + 0.2, entity.posZ - 0.4)
-        val i = MathHelper.floor_double((aabb.minX - 1.0)) shr 4
-        val j = MathHelper.floor_double((aabb.maxX + 1.0)) shr 4
-        val k = MathHelper.floor_double((aabb.minZ - 1.0)) shr 4
-        val l = MathHelper.floor_double((aabb.maxZ + 1.0)) shr 4
+        val i = MathHelper.floor_double(aabb.minX - 1.0) shr 4
+        val j = MathHelper.floor_double(aabb.maxX + 1.0) shr 4
+        val k = MathHelper.floor_double(aabb.minZ - 1.0) shr 4
+        val l = MathHelper.floor_double(aabb.maxZ + 1.0) shr 4
         for (i1 in i..j)
             for (j1 in k..l)
                 this.getMobsWithinAABBForEntity(mc.theWorld.getChunkFromChunkCoords(i1, j1), entity, aabb)
@@ -105,16 +104,16 @@ object ESP : Feature() {
 
     private fun getMobsWithinAABBForEntity(chunk: Chunk, entityIn: Entity, aabb: AxisAlignedBB) {
         val entityLists = chunk.entityLists
-        var i = MathHelper.floor_double(((aabb.minY - World.MAX_ENTITY_RADIUS) / 16.0))
-        var j = MathHelper.floor_double(((aabb.maxY + World.MAX_ENTITY_RADIUS) / 16.0))
-        i = MathHelper.clamp_int(i, 0, (entityLists.size - 1))
-        j = MathHelper.clamp_int(j, 0, (entityLists.size - 1))
+        var i = MathHelper.floor_double((aabb.minY - World.MAX_ENTITY_RADIUS) / 16.0)
+        var j = MathHelper.floor_double((aabb.maxY + World.MAX_ENTITY_RADIUS) / 16.0)
+        i = MathHelper.clamp_int(i, 0, entityLists.size - 1)
+        j = MathHelper.clamp_int(j, 0, entityLists.size - 1)
         for (k in i..j) {
             if (entityLists[k].isEmpty()) continue
             entity@ for (e in entityLists[k]) {
                 if (!e.entityBoundingBox.intersectsWith(aabb)) continue@entity
                 if (e !is EntityMob || e.health <= 0.0f || e.isInvisible) continue@entity
-                customMobs[entityIn] = (e as EntityLivingBase)
+                customMobs[entityIn] = e as EntityLivingBase
             }
         }
     }

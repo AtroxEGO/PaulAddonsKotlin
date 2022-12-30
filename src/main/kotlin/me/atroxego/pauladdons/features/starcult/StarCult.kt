@@ -27,7 +27,7 @@ object StarCult {
 
         @OptIn(ExperimentalTime::class)
         override fun render() {
-            var text = ""
+            val text : String
             if (toggled) {
                 val timeNow = (System.currentTimeMillis() / 1000).toDouble()
         text = if(ApiDateInformation.busy){
@@ -38,19 +38,19 @@ object StarCult {
             getTimeBetween(timeNow, nextCult)
         }
                 val textX = smartFontPlacement(16f,text.stripColor())
-                smartTexturePlacement(0f, text)
+                smartTexturePlacement(0f)
                 fr.drawString(text, textX, 5f, 0xFFFFFF, true)
             }
         }
 
         override fun demoRender() {
             val textX = smartFontPlacement(16f,"1h59m")
-            smartTexturePlacement(0f, "1h59m")
+            smartTexturePlacement(0f)
             fr.drawString("1h59m", textX, 5f, 0xFFFFFF, true)
         }
 
         private fun smartFontPlacement(position : Float, text: String) :Float{
-            if((this.actualX + this.actualWidth / 2) < mc.displayWidth/4){
+            if(this.actualX + this.actualWidth / 2 < mc.displayWidth/4){
                return position
             }else{
                 var offset = 0f
@@ -64,12 +64,12 @@ object StarCult {
 
         }
 
-        private fun smartTexturePlacement(position : Float, text: String){
-             if((this.actualX + this.actualWidth / 2) < mc.displayWidth/4){
-                 var textureBasic = ResourceLocation("pauladdons/helmetBasic.png")
+        private fun smartTexturePlacement(position : Float){
+             if(this.actualX + this.actualWidth / 2 < mc.displayWidth/4){
+                 val textureBasic = ResourceLocation("pauladdons/helmetBasic.png")
                  renderTexture(textureBasic, position.toInt(),0)
             }else{
-                 var textureMirrored = ResourceLocation("pauladdons/helmetMirror.png")
+                 val textureMirrored = ResourceLocation("pauladdons/helmetMirror.png")
                 renderTexture(textureMirrored, (position+34).toInt(),0)
             }
         }
@@ -90,18 +90,19 @@ object StarCult {
     @SubscribeEvent
     fun onWorldChange(event: WorldEvent.Load){
         ApiDateInformation.getDateInformation()
+        getNextCult()
     }
 
 
     var veryImportantBoolean = false
     fun getTimeSecBetween (timeOne: Double,timeTwo: Double): Double{
-        if ((timeTwo - timeOne < 0 && timeTwo - timeOne > -1) && !veryImportantBoolean) {
-            if (Config.cStarCultNotification) mc.thePlayer.addChatMessage(ChatComponentText(PaulAddons.prefix + EnumChatFormatting.DARK_AQUA + " Star Cult Active!"));
+        if (timeTwo - timeOne < 0 && timeTwo - timeOne > -1 && !veryImportantBoolean && Cache.currentDay != 0) {
+            if (Config.cStarCultNotification) mc.thePlayer.addChatMessage(ChatComponentText(PaulAddons.prefix + EnumChatFormatting.DARK_AQUA + " Star Cult Active!"))
             if (Config.gcStarCultNofification) mc.thePlayer.sendChatMessage("/gc [Paul Addons] Star Cult Active!")
             if (Config.screenStarCultNotification) displayNotification("§9§lStar Cult",3000,true)
-            veryImportantBoolean = true;
+            veryImportantBoolean = true
         }
-        return timeTwo - timeOne;
+        return timeTwo - timeOne
     }
 
     fun getTimeBetween(timeOne: Double, timeTwo: Double): String {
@@ -110,7 +111,7 @@ object StarCult {
         val days: Int
         val hours: Int
         val minutes: Int
-        var seconds = 0
+        val seconds : Int
         if (secondsBetween > 86400) {
             // More than 1d, display #d#h
             days = (secondsBetween / 86400).toInt()
@@ -171,9 +172,6 @@ object StarCult {
             Cache.currentMinute = 0
         }
         return if (timeTwo + 300 - timeOne < 0) {
-            ApiDateInformation.getDateInformation()
-            getNextCult()
-
             "What Happened? API prob down -_-"
         } else getTimeBetween(timeOne, timeTwo + 300)
     }

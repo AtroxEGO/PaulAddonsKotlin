@@ -48,7 +48,7 @@ object DisplayNotification {
         if (Minecraft.getMinecraft().ingameGUI !is GuiIngameForge) return
         if (event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE && event.type != RenderGameOverlayEvent.ElementType.JUMPBAR) return
         val fontRenderer = mc.fontRendererObj
-        var text = notificationText
+        val text = notificationText
 //        var altText = "§k§lW"
 //        var amountOfLetters = getStringWidth(text)*4 / getStringWidth("W")
 //        do {
@@ -56,10 +56,10 @@ object DisplayNotification {
 //            amountOfLetters--
 //        }while (amountOfLetters > 0)
 //        logger.info(altText)
-        var scale = 4.0 / (1080/ mc.displayHeight)
+        val scale = 4.0 / (1080/ mc.displayHeight)
         val scaleReset = scale.pow(-1.0)
-        val x = ((mc.displayWidth / (scale * 4)) - fontRenderer.getStringWidth(text) / 2).toFloat()
-        val y = ((mc.displayHeight / (scale * 4)) - (17)).toFloat()
+        val x = (mc.displayWidth / (scale * 4) - fontRenderer.getStringWidth(text) / 2).toFloat()
+        val y = (mc.displayHeight / (scale * 4) - 17).toFloat()
         GL11.glScaled(scale,scale,scale)
         fontRenderer.drawString(text, x, y, 0xFFFFFF, true)
         GL11.glScaled(scaleReset,scaleReset,scaleReset)
