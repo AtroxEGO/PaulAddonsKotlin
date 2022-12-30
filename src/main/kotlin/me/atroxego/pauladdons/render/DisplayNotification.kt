@@ -68,9 +68,9 @@ object DisplayNotification {
             val altText = "§k§lIWONDERWHOANDWHYISREADINGTHAT"
             val scaleOther = 1.0 / (1080/ mc.displayHeight)
             val scaleResetOther = scaleOther.pow(-1.0)
-            val yTop = (y + (mc.displayHeight / (scaleOther * 4) * 0.5) - 3).toFloat()
-            val yBot = (y + (mc.displayHeight / (scaleOther * 4) * 0.7)).toFloat()
-            val altX = ((mc.displayWidth / (scaleOther * 4)) - fontRenderer.getStringWidth(altText) / 2).toFloat()
+            val yTop = (y + mc.displayHeight / (scaleOther * 4) * 0.5 - 3).toFloat()
+            val yBot = (y + mc.displayHeight / (scaleOther * 4) * 0.7).toFloat()
+            val altX = (mc.displayWidth / (scaleOther * 4) - fontRenderer.getStringWidth(altText) / 2).toFloat()
             GL11.glScaled(scaleOther,scaleOther,scaleOther)
             fontRenderer.drawString(altText, altX, yTop, 0xFFFFFF, true)
             fontRenderer.drawString(altText, altX, yBot, 0xFFFFFF, true)
