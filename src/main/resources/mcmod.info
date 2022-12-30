@@ -1,15 +1,13 @@
 [
   {
-	"modid": "${modid}",
-	"name": "${modname}",
+	"modid": "$modid",
+	"name": "$modname",
 	"description": "Hypixel QOL Mod",
-	"version": "${version}",
-	"mcversion": "${mcversion}",
-	"url": "",
-	"updateUrl": "",
-	"authorList": [
-	  "AtroxEGO"
-	],
+	"version": "$version",
+	"mcversion": "$mcversion",
+	"url": "https://github.com/AtroxEGO/PaulAddonsKotlin",
+	"updateUrl": "https://github.com/AtroxEGO/PaulAddonsKotlin/releases/latest",
+	"authorList": ["AtroxEGO"],
 	"credits": "",
 	"logoFile": "",
 	"screenshots": [],

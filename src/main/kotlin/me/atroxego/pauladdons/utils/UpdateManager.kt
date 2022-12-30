@@ -11,7 +11,7 @@ import javax.swing.JLabel
 import javax.swing.border.EmptyBorder
 
 object UpdateManager {
-public fun checkUpdate(){
+    fun checkUpdate(){
     logger.info("Checking for updates...")
     Multithreading.runAsync {
         val version = HttpUtils.sendGet("https://raw.githubusercontent.com/AtroxEGO/PaulAddonsKotlin/master/version.txt", null)?.toDouble() ?: return@runAsync
