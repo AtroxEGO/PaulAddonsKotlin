@@ -45,7 +45,7 @@ object MobNotification : Feature() {
 //            logger.info(customMobs)
             for (customMob in customMobs.split(", ")){
                 if (customMob == "") continue
-                if (!entity.customNameTag.stripColor().contains(customMob, true)) continue
+                if (!entity.customNameTag.stripColor().contains(" $customMob ", true)) continue
 //                logger.info(customMob)
                 entitySeen.add(entity.entityId)
                 val notificationString = "§6§l".plus(customMob)

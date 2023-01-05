@@ -141,7 +141,7 @@ class LocationEditGui : GuiScreen() {
                 null -> {}
             }
 
-//            locationButton.drawButton(mc, mouseX, mouseY)
+//            locationButton.drawButton(mc, floatMouseX.toInt(), floatMouseY.toInt())
             recalculateResizeButtons()
         } else if (dragging != null) {
             val x = (floatMouseX - xOffset) / sr.scaledWidth.toFloat()

@@ -1,16 +1,24 @@
 package me.atroxego.pauladdons.utils
 
+import PaulAddons.Companion.mc
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EnumPlayerModelParts
+import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.MathHelper
 import java.io.File
 
 object Utils {
     private val STRIP_COLOR_PATTERN = Regex("(?i)§[\\dA-FK-OR]")
+
+    fun sendItemTags(){
+        val tags = mc.thePlayer.heldItem.tagCompound
+        mc.thePlayer.addChatMessage(ChatComponentText("$tags"))
+    }
+
 
     fun interpolateRotation(par1: Float, par2: Float, par3: Float): Float {
         var f: Float = par2 - par1

@@ -61,7 +61,7 @@ object ESP : Feature() {
             val mobsForESP = getMobsForESP()
             if (mobsForESP == "" || mobsForESP == " ") return
             for (cname in mobsForESP.split(", ")) {
-            if (event.entity.name?.contains(cname, true) == false) continue
+            if (event.entity.name?.contains(" $cname ", true) == false) continue
             drawEsp(
                 event.entity,
                 event.renderer.mainModel,

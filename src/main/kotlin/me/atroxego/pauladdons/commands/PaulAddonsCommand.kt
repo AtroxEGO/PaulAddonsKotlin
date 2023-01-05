@@ -4,6 +4,7 @@ import PaulAddons
 import PaulAddons.Companion.mc
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.gui.LocationEditGui
+import me.atroxego.pauladdons.utils.Utils.sendItemTags
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 import net.minecraft.util.ChatComponentText
@@ -25,7 +26,7 @@ class PaulAddonsCommand : CommandBase() {
             "hud" -> PaulAddons.currentGui = LocationEditGui()
             "save" -> Config.writeData()
 //            "hud" -> PaulAddons.currentGui = GuiHudEditor()
-//            "sendtags" -> sendItemTags()
+            "sendtags" -> sendItemTags()
 //            "hastags" -> itemHasTags()
 //            "date" -> dateStuff()
 //            "dateset" -> Utils.dateSet(args[1], args[2], args[3])

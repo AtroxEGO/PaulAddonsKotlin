@@ -45,6 +45,14 @@ object Config : Vigilant(
     var autoGuildHiFrequency = 0
     var autoThankYou = false
     var thankYouMessage = "Thank you [IGN]! <3"
+    var starCultGuildMessage = "[Paul Addons] Star Cult Wee Woo"
+    var funnyFishing = false
+    var barnFishingTimer = false
+    var displayBarnFishingTimerNotification = false
+    var timestampOfBarnFishingNotification = 240
+    var funnyFishingMove = false
+    var sensivity : Float = 0.015F
+    var barnFishingTimerText = "Kill"
 
     init {
         category("Better Loot Share") {
@@ -146,6 +154,10 @@ object Config : Vigilant(
                     name = "Guild Chat Notification",
                     description = "Sends a text in guild chat about star cult being active"
                 )
+                text(
+                    Config::starCultGuildMessage,
+                    name = "Star Cult Guild Message"
+                )
                 switch(
                     Config::screenStarCultNotification,
                     name = "Screen Notification",
@@ -225,6 +237,44 @@ object Config : Vigilant(
                 )
             }
         }
+        category("Better Fishing"){
+            switch(
+                Config::barnFishingTimer,
+                name = "Barn Fishing Timer",
+                description = "Displays a timer since first rod cast until item change //Desc TODO im sleepy"
+            )
+            switch(
+                Config::displayBarnFishingTimerNotification,
+                name = "Barn Fishing Timer Notification",
+                description = "Display Notification when timer gets to selected time"
+            )
+            text(
+                Config::barnFishingTimerText,
+                name = "Notification Text"
+            )
+            slider(
+                Config::timestampOfBarnFishingNotification,
+                name = "Timestamp of Notification",
+                description = "When to display a notification in seconds",
+                min = 10,
+                max = 300
+            )
+            subcategory("Funny Fishing Options"){
+            switch(
+                Config::funnyFishingMove,
+                name = "Funny Fishing Move",
+                description = "Moves left and right if funny fishing enabled"
+            )
+            decimalSlider(
+                Config::sensivity,
+                name = "Sensivity",
+                decimalPlaces = 3,
+                min = 0.005f,
+                max = 0.03f
+
+            )
+            }
+        }
         category("GUI Locations"){
             button(
                 name = "Edit GUI Locations",
@@ -260,6 +310,9 @@ object Config : Vigilant(
         addDependency(Config::autoGuildHiCustomMessage, Config::autoGuildHi)
         addDependency(Config::autoGuildHiFrequency, Config::autoGuildHi)
         addDependency(Config::thankYouMessage, Config::autoThankYou)
+        addDependency(Config::displayBarnFishingTimerNotification, Config::barnFishingTimer)
+        addDependency(Config::timestampOfBarnFishingNotification, Config::barnFishingTimer)
+        addDependency(Config::barnFishingTimerText, Config::barnFishingTimer)
         markDirty()
     }
 
@@ -269,6 +322,7 @@ object Config : Vigilant(
             "Star Cult",
             "Auto Hi",
             "Auto Thank You",
+            "Better Fishing",
             "GUI Locations"
         )
         override fun getCategoryComparator(): Comparator<in Category> =

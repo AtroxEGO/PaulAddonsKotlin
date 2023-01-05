@@ -7,13 +7,14 @@ import net.minecraftforge.client.GuiIngameForge
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import org.lwjgl.opengl.GL11
+import java.awt.Color
 import kotlin.math.pow
 
 object DisplayNotification {
     var renderNotification = false
     var notificationText = ""
     var displayTopAndBottomLines = false
-
+    var color: Color = Color.WHITE
     fun displayNotification(text:String,duration:Long,topAndBottomLines:Boolean) {
         val soundName = "random.orb"
         val volume = 1.0f
@@ -61,7 +62,7 @@ object DisplayNotification {
         val x = (mc.displayWidth / (scale * 4) - fontRenderer.getStringWidth(text) / 2).toFloat()
         val y = (mc.displayHeight / (scale * 4) - 17).toFloat()
         GL11.glScaled(scale,scale,scale)
-        fontRenderer.drawString(text, x, y, 0xFFFFFF, true)
+        fontRenderer.drawString(text, x, y, color.rgb, true)
         GL11.glScaled(scaleReset,scaleReset,scaleReset)
 
         if (displayTopAndBottomLines){

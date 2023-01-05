@@ -43,6 +43,7 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.monster.EntitySkeleton
 import net.minecraft.item.ItemArmor
+import net.minecraft.item.ItemStack
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.GL11.glDisable
@@ -51,6 +52,12 @@ import org.lwjgl.opengl.GL11.glEnable
 
 object RenderUtils {
 
+    @JvmStatic
+    fun renderItem(itemStack: ItemStack?, x: Int, y: Int) {
+        RenderHelper.enableGUIStandardItemLighting()
+        GlStateManager.enableDepth()
+        mc.renderItem.renderItemAndEffectIntoGUI(itemStack, x, y)
+    }
     fun renderBoundingBox(entity: Entity, color: Int) {
         var visible = false
         if (Minecraft.getMinecraft().thePlayer.canEntityBeSeen(entity)){ visible = true }

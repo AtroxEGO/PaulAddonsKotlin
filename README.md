@@ -6,11 +6,9 @@ Website: Work In Progress
 
 ## Changes
 
-- Switched From Java to Kotlin
-- New GUI
-- Added BLS
-- Added Auto Hi
-- Added Auto Thanks
+- Added Barn Fishing Timer
+- Added Funny Fishing (Experimental)
+- Update to Auto Thank You
 
 
 ## Features
@@ -49,6 +47,15 @@ Website: Work In Progress
 ### Auto Thanks
 - Auto Splash Thanks
   - Automatically sends a custom message after a splash, for splashers ign use [IGN]
+</details>
+<details>
+  <summary>Fishing Addons</summary>
+
+### Fishing Addons
+- Barn Fishing Timer
+  - Timer showing u time since last sea creatures kill
+- Funny Fishing
+  - Should automatically fish (experimental)
 </details>
 
 ## Commands
