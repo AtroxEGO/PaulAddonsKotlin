@@ -6,9 +6,8 @@ Website: Work In Progress
 
 ## Changes
 
-- Added Barn Fishing Timer
-- Added Funny Fishing (Experimental)
-- Update to Auto Thank You
+- Few Bug Fixes
+- Added Sea Creature Tracker
 
 
 ## Features
@@ -52,6 +51,8 @@ Website: Work In Progress
   <summary>Fishing Addons</summary>
 
 ### Fishing Addons
+- Sea Creature Tracker
+  - Displays a customizable list with your caught sea creatures
 - Barn Fishing Timer
   - Timer showing u time since last sea creatures kill
 - Funny Fishing

@@ -165,7 +165,7 @@ object FunnyFishing {
         val world = mc.theWorld
         val player = mc.thePlayer
         val playerPos = Vec3(player.posX, player.posY, player.posZ)
-        val radius = 10.0 // search radius in blocks
+        val radius = 15.0 // search radius in blocks
         val hooks = world.getEntitiesWithinAABB(EntityFishHook::class.java, player.entityBoundingBox.expand(radius, radius, radius))
         var closestHook: EntityFishHook? = null
         var closestDistance = Double.MAX_VALUE

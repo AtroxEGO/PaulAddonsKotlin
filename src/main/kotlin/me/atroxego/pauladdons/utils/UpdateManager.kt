@@ -36,7 +36,7 @@ object UpdateManager {
         frame.modalExclusionType = Dialog.ModalExclusionType.APPLICATION_EXCLUDE
 
 // Create a new JLabel
-        val text = "<html><b>Paul Addons new version found!</b><br>&nbsp;&nbsp;&nbsp;Current Version: " + PaulAddons.VERSION + "<br>&nbsp;&nbsp;&nbsp;Latest Version: "+ version +"</html>"
+        val text = "<html><b>Paul Addons new version found!</b><br>&nbsp;&nbsp;&nbsp;Current Version: " + PaulAddons.VERSION.toDouble() + "<br>&nbsp;&nbsp;&nbsp;Latest Version: "+ version +"</html>"
         val label = JLabel(text)
         label.border = EmptyBorder(10,5,5,5)
         label.font = Font("Posterama", Font.PLAIN, 16)

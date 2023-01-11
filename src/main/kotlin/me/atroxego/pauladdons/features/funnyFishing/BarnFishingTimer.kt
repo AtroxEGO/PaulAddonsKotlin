@@ -67,6 +67,7 @@ object BarnFishingTimer {
     }
     @SubscribeEvent
     fun onRodCast(event: PlayerInteractEvent){
+        if (!Config.barnFishingTimer) return
         if (event.entityPlayer.heldItem == null) return
         if (event.entityPlayer.heldItem.item == Items.fishing_rod && !timerRunning){
             timerRunning = true

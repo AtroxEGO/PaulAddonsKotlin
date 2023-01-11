@@ -7,8 +7,11 @@ import me.atroxego.pauladdons.config.PersistentSave
 import me.atroxego.pauladdons.features.autoHi.AutoHi
 import me.atroxego.pauladdons.features.autothankyou.SplashThankYou
 import me.atroxego.pauladdons.features.betterlootshare.ESP
+import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.features.betterlootshare.MobNotification
+import me.atroxego.pauladdons.features.dungeons.GhostBlock.createGhostBlock
 import me.atroxego.pauladdons.features.funnyFishing.BarnFishingTimer
+import me.atroxego.pauladdons.features.funnyFishing.FishingTracker
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.setupFishing
 import me.atroxego.pauladdons.features.starcult.StarCult
@@ -47,11 +50,11 @@ class PaulAddons {
         val mc: Minecraft = Minecraft.getMinecraft()
         var currentGui: GuiScreen? = null
         lateinit var configDirectory: File
-        var keyBindings = arrayOfNulls<KeyBinding>(2)
+        var keyBindings = arrayOfNulls<KeyBinding>(3)
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "0.7"
+        const val VERSION = "0.8"
         lateinit var metadata: ModMetadata
         const val prefix = "§b§l[§9§lPaul Addons§b§l]§8"
 
@@ -91,6 +94,7 @@ class PaulAddons {
             ESP,
             SplashThankYou,
             FunnyFishing,
+            FishingTracker,
             BarnFishingTimer,
             DisplayNotification
         ).forEach(MinecraftForge.EVENT_BUS::register)
@@ -100,6 +104,7 @@ class PaulAddons {
         })
         keyBindings[0] = KeyBinding("Open Gui", Keyboard.KEY_M, "PaulAddons")
         keyBindings[1] = KeyBinding("Funny Fishing", Keyboard.KEY_L, "PaulAddons")
+        keyBindings[2] = KeyBinding("Ghost Block", Keyboard.KEY_G, "PaulAddons")
         for (keyBinding in keyBindings) {
             ClientRegistry.registerKeyBinding(keyBinding)
         }
@@ -112,12 +117,9 @@ class PaulAddons {
 
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
-        if (keyBindings[0]!!.isKeyDown) {
-            currentGui = Config.gui()
-        }
-        if (keyBindings[1]!!.isPressed) {
-            setupFishing()
-        }
+        if (keyBindings[0]!!.isKeyDown) currentGui = Config.gui()
+        if (keyBindings[1]!!.isPressed) setupFishing()
+        if (keyBindings[2]!!.isKeyDown) createGhostBlock()
         if (event.phase != TickEvent.Phase.START || currentGui == null) return
         mc.displayGuiScreen(currentGui)
         currentGui = null

@@ -53,6 +53,13 @@ object Config : Vigilant(
     var funnyFishingMove = false
     var sensivity : Float = 0.015F
     var barnFishingTimerText = "Kill"
+    var fishingTracker = false
+    var fishingTrackerType = 0
+    var fishingTrackerTypeAutoDetect = false
+    var fishingTrackerMarina = false
+    var fishingTrackerSpooky = false
+    var fishingTrackerWinter = false
+    var fishingTrackerTimeSince = false
 
     init {
         category("Better Loot Share") {
@@ -239,6 +246,39 @@ object Config : Vigilant(
         }
         category("Better Fishing"){
             switch(
+                Config::fishingTracker,
+                name = "Fishing Tracker",
+                description = "Tracks your Sea Creature catches"
+            )
+            selector(
+                Config::fishingTrackerType,
+                name = "Fishing Tracker Type",
+                options = listOf("Water Fishing", "Lava Fishing", "None")
+            )
+            switch(
+                Config::fishingTrackerTypeAutoDetect,
+                name = "Fishing Tracker Type Auto Detect",
+                description = "TRIES to auto detect type of fishing"
+            )
+            switch(
+                Config::fishingTrackerTimeSince,
+                name = "Display Time Since",
+                description = "Displays time since rare sea creatures"
+            )
+            checkbox(
+                Config::fishingTrackerMarina,
+                name = "Display Marina Mobs",
+            )
+            checkbox(
+                Config::fishingTrackerSpooky,
+                name = "Display Spooky Mobs",
+            )
+            checkbox(
+                Config::fishingTrackerWinter,
+                name = "Display Winter Mobs",
+            )
+            subcategory("Fishing Timer"){
+            switch(
                 Config::barnFishingTimer,
                 name = "Barn Fishing Timer",
                 description = "Displays a timer since first rod cast until item change //Desc TODO im sleepy"
@@ -259,6 +299,7 @@ object Config : Vigilant(
                 min = 10,
                 max = 300
             )
+            }
             subcategory("Funny Fishing Options"){
             switch(
                 Config::funnyFishingMove,
@@ -313,6 +354,13 @@ object Config : Vigilant(
         addDependency(Config::displayBarnFishingTimerNotification, Config::barnFishingTimer)
         addDependency(Config::timestampOfBarnFishingNotification, Config::barnFishingTimer)
         addDependency(Config::barnFishingTimerText, Config::barnFishingTimer)
+        addDependency(Config::fishingTrackerTimeSince, Config::fishingTracker)
+        addDependency(Config::fishingTrackerType, Config::fishingTracker)
+        addDependency(Config::fishingTrackerTypeAutoDetect, Config::fishingTracker)
+        addDependency(Config::fishingTrackerMarina, Config::fishingTracker)
+        addDependency(Config::fishingTrackerSpooky, Config::fishingTracker)
+        addDependency(Config::fishingTrackerWinter, Config::fishingTracker)
+
         markDirty()
     }
 
