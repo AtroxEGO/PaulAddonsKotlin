@@ -17,7 +17,10 @@ object UpdateManager {
         val version = HttpUtils.sendGet("https://raw.githubusercontent.com/AtroxEGO/PaulAddonsKotlin/master/version.txt", null)?.toDouble() ?: return@runAsync
         if (PaulAddons.VERSION.toDouble() < version) {
             drawFrame(version)
-        } else logger.info("Latest version!")
+        } else {
+            logger.info(PaulAddons.VERSION)
+            logger.info("Latest version!")
+        }
     }
 }
 

@@ -60,6 +60,8 @@ object Config : Vigilant(
     var fishingTrackerSpooky = false
     var fishingTrackerWinter = false
     var fishingTrackerTimeSince = false
+    var helmetToSwapNameOne = "Rabbit Hat"
+    var helmetToSwapNameTwo = "Bonzo Mask"
 
     init {
         category("Better Loot Share") {
@@ -316,6 +318,16 @@ object Config : Vigilant(
             )
             }
         }
+        category("Helmet Swapper"){
+            text(
+                Config::helmetToSwapNameOne,
+                name = "Helmet #1 Name",
+            )
+            text(
+                Config::helmetToSwapNameTwo,
+                name = "Helmet #2 Name",
+            )
+        }
         category("GUI Locations"){
             button(
                 name = "Edit GUI Locations",
@@ -371,6 +383,7 @@ object Config : Vigilant(
             "Auto Hi",
             "Auto Thank You",
             "Better Fishing",
+            "Helmet Swapper",
             "GUI Locations"
         )
         override fun getCategoryComparator(): Comparator<in Category> =

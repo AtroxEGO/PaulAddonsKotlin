@@ -38,7 +38,7 @@ object ESP : Feature() {
             val name = event.entity.customNameTag.stripColor()
             for (cname in mobsForESP.split(", ")) {
 //                if (name.endsWith(cname, true)) break
-                if (!name.contains(cname, true)) continue
+                if (!name.contains(" $cname ", true)) continue
                 val mob = customMobs[event.entity]
                 if (mob != null) {
 //                    logger.info("mob != null")

@@ -149,11 +149,11 @@ object StarCult {
     }
 
     fun getTimeCultEnd(timeOne: Double, timeTwo: Double): String {
-        if ((Cache.currentDay + 1) % 7 == 0) {
-            Cache.currentDay++
-            Cache.currentHour = 0
-            Cache.currentMinute = 0
-        }
+//        if ((Cache.currentDay + 1) % 7 == 0) {
+//            Cache.currentDay++
+//            Cache.currentHour = 0
+//            Cache.currentMinute = 0
+//        }
         if (timeTwo + 300 - timeOne < 0) {
             getDateInformation()
             getNextCult()

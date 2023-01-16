@@ -1,17 +1,14 @@
 package me.atroxego.pauladdons.features.funnyFishing
 
+import PaulAddons
 import PaulAddons.Companion.mc
-import gg.essential.api.utils.ShutdownHookUtil
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.config.PersistentSave
 import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.gui.GuiElement
-import me.atroxego.pauladdons.render.font.FontUtils
 import me.atroxego.pauladdons.render.font.FontUtils.getTimeBetween
 import me.atroxego.pauladdons.utils.core.FloatPair
-import net.minecraft.init.Items
 import net.minecraftforge.client.event.ClientChatReceivedEvent
-import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
@@ -21,7 +18,6 @@ object FishingTracker {
     init {
         FishingTrackerGUIElement()
     }
-
     private var seaCreatureMessages = mapOf(
         "A Squid appeared." to "Squid",
         "You caught a Sea Walker." to "Sea Walker",

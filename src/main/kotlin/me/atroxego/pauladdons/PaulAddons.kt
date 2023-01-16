@@ -4,12 +4,13 @@ import kotlinx.serialization.modules.SerializersModule
 import me.atroxego.pauladdons.commands.PaulAddonsCommand
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.config.PersistentSave
+import me.atroxego.pauladdons.features.armorSwapper.ArmorSwapper.armorSwapper
 import me.atroxego.pauladdons.features.autoHi.AutoHi
 import me.atroxego.pauladdons.features.autothankyou.SplashThankYou
 import me.atroxego.pauladdons.features.betterlootshare.ESP
-import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.features.betterlootshare.MobNotification
 import me.atroxego.pauladdons.features.dungeons.GhostBlock.createGhostBlock
+import me.atroxego.pauladdons.features.dungeons.HelmetSwapper.helmetSwapper
 import me.atroxego.pauladdons.features.funnyFishing.BarnFishingTimer
 import me.atroxego.pauladdons.features.funnyFishing.FishingTracker
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
@@ -50,13 +51,13 @@ class PaulAddons {
         val mc: Minecraft = Minecraft.getMinecraft()
         var currentGui: GuiScreen? = null
         lateinit var configDirectory: File
-        var keyBindings = arrayOfNulls<KeyBinding>(3)
+        var keyBindings = arrayOfNulls<KeyBinding>(6)
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "0.8"
+        const val VERSION = "0.9"
         lateinit var metadata: ModMetadata
-        const val prefix = "§b§l[§9§lPaul Addons§b§l]§8"
+        const val prefix = "§5[§6PA§5]§8"
 
         @JvmStatic
         lateinit var guiManager: GuiManager
@@ -105,6 +106,9 @@ class PaulAddons {
         keyBindings[0] = KeyBinding("Open Gui", Keyboard.KEY_M, "PaulAddons")
         keyBindings[1] = KeyBinding("Funny Fishing", Keyboard.KEY_L, "PaulAddons")
         keyBindings[2] = KeyBinding("Ghost Block", Keyboard.KEY_G, "PaulAddons")
+        keyBindings[3] = KeyBinding("Armor Swapper", Keyboard.KEY_O, "PaulAddons")
+        keyBindings[4] = KeyBinding("Swap Helmet #1", Keyboard.KEY_I, "PaulAddons")
+        keyBindings[5] = KeyBinding("Swap Helmet #2", Keyboard.KEY_P, "PaulAddons")
         for (keyBinding in keyBindings) {
             ClientRegistry.registerKeyBinding(keyBinding)
         }
@@ -120,6 +124,9 @@ class PaulAddons {
         if (keyBindings[0]!!.isKeyDown) currentGui = Config.gui()
         if (keyBindings[1]!!.isPressed) setupFishing()
         if (keyBindings[2]!!.isKeyDown) createGhostBlock()
+        if (keyBindings[3]!!.isPressed) armorSwapper()
+        if (keyBindings[4]!!.isPressed) helmetSwapper(1)
+        if (keyBindings[5]!!.isPressed) helmetSwapper(2)
         if (event.phase != TickEvent.Phase.START || currentGui == null) return
         mc.displayGuiScreen(currentGui)
         currentGui = null
