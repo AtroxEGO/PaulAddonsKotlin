@@ -1,24 +1,56 @@
 package me.atroxego.pauladdons.utils
 
 import PaulAddons.Companion.mc
+import gg.essential.universal.wrappers.message.UTextComponent
+import gg.skytils.skytilsmod.utils.SBInfo
+import gg.skytils.skytilsmod.utils.SkyblockIsland
+import me.atroxego.pauladdons.events.impl.MainReceivePacketEvent
+import me.atroxego.pauladdons.events.impl.PacketEvent
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EnumPlayerModelParts
+import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.MathHelper
+import net.minecraftforge.client.event.ClientChatReceivedEvent
+import net.minecraftforge.common.MinecraftForge
 import java.io.File
 
 object Utils {
     private val STRIP_COLOR_PATTERN = Regex("(?i)§[\\dA-FK-OR]")
+
+    var skyblock = true
+
+    val inSkyblock: Boolean
+        get() = SBInfo.mode == "SKYBLOCK" || skyblock
+    val inDungeon
+        get() = SBInfo.mode == "dungeon"
 
     fun sendItemTags(){
         val tags = mc.thePlayer.heldItem.tagCompound
         mc.thePlayer.addChatMessage(ChatComponentText("$tags"))
     }
 
+    fun String?.stripControlCodes(): String = UTextComponent.stripFormatting(this ?: "")
+
+    fun checkThreadAndQueue(run: () -> Unit) {
+        if (!mc.isCallingFromMinecraftThread) {
+            mc.addScheduledTask(run)
+        } else run()
+    }
+
+    fun cancelChatPacket(ReceivePacketEvent: PacketEvent.ReceiveEvent) {
+        if (ReceivePacketEvent.packet !is S02PacketChat) return
+        ReceivePacketEvent.isCanceled = true
+        val packet = ReceivePacketEvent.packet
+        checkThreadAndQueue {
+            MinecraftForge.EVENT_BUS.post(MainReceivePacketEvent(mc.netHandler, ReceivePacketEvent.packet))
+            MinecraftForge.EVENT_BUS.post(ClientChatReceivedEvent(packet.type, packet.chatComponent))
+        }
+    }
 
     fun interpolateRotation(par1: Float, par2: Float, par3: Float): Float {
         var f: Float = par2 - par1

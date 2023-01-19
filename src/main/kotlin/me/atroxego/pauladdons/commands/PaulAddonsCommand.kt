@@ -2,10 +2,10 @@ package me.atroxego.pauladdons.commands
 
 import PaulAddons
 import PaulAddons.Companion.mc
+import gg.skytils.skytilsmod.utils.SBInfo
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.config.PersistentSave
 import me.atroxego.pauladdons.features.funnyFishing.FishingData
-import me.atroxego.pauladdons.gui.GuiManager
 import me.atroxego.pauladdons.gui.LocationEditGui
 import me.atroxego.pauladdons.utils.Utils.sendItemTags
 import net.minecraft.command.CommandBase
@@ -30,6 +30,7 @@ class PaulAddonsCommand : CommandBase() {
             "gui" -> PaulAddons.currentGui = LocationEditGui()
             "edit" -> PaulAddons.currentGui = LocationEditGui()
             "save" -> Config.writeData()
+            "mode" -> mc.thePlayer.addChatMessage(ChatComponentText("mode: " + SBInfo.mode + " date: " + SBInfo.date + " time: " + SBInfo.time))
             "s" -> PersistentSave.markDirty<FishingData>()
 //            "hud" -> PaulAddons.currentGui = GuiHudEditor()
             "sendtags" -> sendItemTags()

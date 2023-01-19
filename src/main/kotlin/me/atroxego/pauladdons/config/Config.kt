@@ -62,7 +62,16 @@ object Config : Vigilant(
     var fishingTrackerTimeSince = false
     var helmetToSwapNameOne = "Rabbit Hat"
     var helmetToSwapNameTwo = "Bonzo Mask"
-
+    var starredMobESP = false
+    var starredMobESPColor : Color = Color.BLUE
+    var terminalWaypoints = false
+    var deviceBeaconColor : Color = Color.BLUE
+    var terminalBeaconColor : Color = Color.BLUE
+    var leverBeaconColor : Color = Color.BLUE
+    var betterStonk = false
+    var betterStonkShiftOnly = false
+    var starredESPType = 1
+    var autoCloseChest = false
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -145,7 +154,57 @@ object Config : Vigilant(
 
             }
         }
-
+        category("Dungeons"){
+            switch(
+                Config::starredMobESP,
+                name = "Starred Mob ESP"
+            )
+            color(
+                Config::starredMobESPColor,
+                name = "Starred Mob ESP Color"
+            )
+            selector(
+                Config::starredESPType,
+                name = "Type of Starred ESP",
+                description = "Changes the type of ESP",
+                options = listOf("Chams", "Box", "Outline"),
+            )
+            subcategory("Secrets"){
+                switch(
+                    Config::autoCloseChest,
+                    name = "Auto Close Secret Chests"
+                )
+            }
+            subcategory("Terminal Waypoints"){
+            switch(
+                Config::terminalWaypoints,
+                name = "Terminal Waypoints",
+                description = "Creates a waypoint at unfinished terminal location"
+            )
+            color(
+                Config::deviceBeaconColor,
+                name = "Device Beacon Color"
+            )
+            color(
+                Config::leverBeaconColor,
+                name = "Lever Beacon Color"
+            )
+            color(
+                Config::terminalBeaconColor,
+                name = "Terminal Beacon Color"
+            )
+            }
+            subcategory("Better Stonk"){
+            switch(
+                Config::betterStonk,
+                name = "Better Stonk"
+            )
+            switch(
+                Config::betterStonkShiftOnly,
+                name = "Shift Only"
+            )
+            }
+        }
         category("Star Cult") {
             switch(
                 Config::starCultTimer,
@@ -260,7 +319,7 @@ object Config : Vigilant(
             switch(
                 Config::fishingTrackerTypeAutoDetect,
                 name = "Fishing Tracker Type Auto Detect",
-                description = "TRIES to auto detect type of fishing"
+                description = "Auto detects type of fishing\nNote: Wont work if Tracker Type is None!"
             )
             switch(
                 Config::fishingTrackerTimeSince,
@@ -337,6 +396,10 @@ object Config : Vigilant(
                 PaulAddons.currentGui = LocationEditGui()
             }
         }
+        addDependency(Config::starCultGuildMessage, Config::starCultTimer)
+        addDependency(Config::thankYouMessage,Config::autoThankYou)
+        addDependency(Config::starredMobESPColor,Config::starredMobESP)
+        addDependency(Config::starredESPType ,Config::starredMobESP )
         addDependency(Config::mobNotification, Config::betterLootShare)
         addDependency(Config::glowColor, Config::glowOnMob)
         addDependency(Config::espSelector, Config::glowOnMob)
@@ -372,13 +435,17 @@ object Config : Vigilant(
         addDependency(Config::fishingTrackerMarina, Config::fishingTracker)
         addDependency(Config::fishingTrackerSpooky, Config::fishingTracker)
         addDependency(Config::fishingTrackerWinter, Config::fishingTracker)
-
+        addDependency(Config::betterStonkShiftOnly ,Config::betterStonk)
+        addDependency(Config::deviceBeaconColor ,Config::terminalWaypoints)
+        addDependency(Config::leverBeaconColor ,Config::terminalWaypoints)
+        addDependency(Config::terminalBeaconColor ,Config::terminalWaypoints)
         markDirty()
     }
 
     private class ConfigSorting : SortingBehavior() {
         private val categories = listOf(
             "Better Loot Share",
+            "Dungeons",
             "Star Cult",
             "Auto Hi",
             "Auto Thank You",

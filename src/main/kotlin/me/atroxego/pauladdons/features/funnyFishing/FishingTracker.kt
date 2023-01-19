@@ -251,6 +251,7 @@ object FishingTracker {
         if (!Config.fishingTracker) return
         if (!Config.fishingTrackerTypeAutoDetect) return
         if (event.player.fishEntity == null) return
+        if (Config.fishingTrackerType == 2) return
         if (event.player.fishEntity.isInWater) Config.fishingTrackerType = 0
         if (event.player.fishEntity.isInLava) Config.fishingTrackerType = 1
     }
