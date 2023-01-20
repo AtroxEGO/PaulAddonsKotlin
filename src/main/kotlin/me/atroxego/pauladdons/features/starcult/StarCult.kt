@@ -17,19 +17,15 @@ import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import kotlin.time.ExperimentalTime
 
 object StarCult {
 
     init {
         StarCultTimerGuiElement()
     }
-
     class StarCultTimerGuiElement : GuiElement("Star Cult Timer", FloatPair(10, 10)) {
-
-        @OptIn(ExperimentalTime::class)
         override fun render() {
-            val text: String
+            var text = ""
             if (toggled) {
                 val timeNow = (System.currentTimeMillis() / 1000).toDouble()
                 text = if (ApiDateInformation.busy) {
@@ -51,32 +47,6 @@ object StarCult {
             fr.drawString("1h59m", textX, 5f, 0xFFFFFF, true)
         }
 
-//        private fun smartFontPlacement(position : Float, text: String, element: GuiElement) :Float{
-//            if(this.actualX + this.actualWidth / 2 < mc.displayWidth/4){
-//               return position
-//            }else{
-//                var offset = 0f
-//                when (text.length){
-//                    4 -> offset = 6f
-//                    5 -> offset = 12f
-//                    6 -> offset = 18f
-//                    14 -> offset = 66f
-//                }
-//                return position - offset
-//            }
-//
-//        }
-
-//        private fun smartTexturePlacement(position : Float){
-//             if(this.actualX + this.actualWidth / 2 < mc.displayWidth/4){
-//                 val textureBasic = ResourceLocation("pauladdons/helmetBasic.png")
-//                 renderTexture(textureBasic, position.toInt(),0)
-//            }else{
-//                 val textureMirrored = ResourceLocation("pauladdons/helmetMirror.png")
-//                renderTexture(textureMirrored, (position+34).toInt(),0)
-//            }
-//        }
-
         override val height: Int
             get() = fr.FONT_HEIGHT
         override val width: Int
@@ -92,10 +62,11 @@ object StarCult {
 
     @SubscribeEvent
     fun onWorldChange(event: WorldEvent.Load) {
+    if (!cultActive){
         getDateInformation()
         getNextCult()
+        }
     }
-
 
     var veryImportantBoolean = false
     fun getTimeSecBetween(timeOne: Double, timeTwo: Double): Double {

@@ -18,10 +18,7 @@
 package me.atroxego.pauladdons.hooks.gui
 
 import me.atroxego.pauladdons.events.impl.SendChatMessageEvent
-import net.minecraft.client.gui.GuiScreen
-import net.minecraft.util.IChatComponent
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 
 fun onSendChatMessage(message: String, addToChat: Boolean, ci: CallbackInfo) {
     if (SendChatMessageEvent(message, addToChat).postAndCatch()) ci.cancel()

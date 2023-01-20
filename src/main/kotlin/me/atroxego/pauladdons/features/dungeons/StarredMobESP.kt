@@ -32,7 +32,8 @@ object StarredMobESP : Feature() {
         if (event.entity is EntityArmorStand) {
             if (!event.entity.hasCustomName()) return
             val name = event.entity.customNameTag.stripColor()
-                if (!name.startsWith("✯") && !name.contains("Mimic") && !name.contains("Lost Adventurer") && !name.contains("Angry Archaeologist") && !name.contains("Shadow Assassin") && !name.contains("Frozen Adventurer")) return
+                if (!name.startsWith("✯") && !name.contains("Mimic")) return
+//                        && !name.contains("Lost Adventurer") && !name.contains("Angry Archaeologist") && !name.contains("Shadow Assassin") && !name.contains("Frozen Adventurer")
                 val mob = customMobs[event.entity]
                 if (mob != null) {
                     if (mob.isDead()) {

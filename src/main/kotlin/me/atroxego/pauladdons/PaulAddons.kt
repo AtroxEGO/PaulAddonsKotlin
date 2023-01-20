@@ -1,5 +1,4 @@
 
-import gg.skytils.skytilsmod.utils.SBInfo
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import me.atroxego.pauladdons.commands.PaulAddonsCommand
@@ -10,11 +9,11 @@ import me.atroxego.pauladdons.features.autoHi.AutoHi
 import me.atroxego.pauladdons.features.autothankyou.SplashThankYou
 import me.atroxego.pauladdons.features.betterlootshare.ESP
 import me.atroxego.pauladdons.features.betterlootshare.MobNotification
-import me.atroxego.pauladdons.features.dungeons.StarredMobESP
 import me.atroxego.pauladdons.features.dungeons.AutoChestCloser
 import me.atroxego.pauladdons.features.dungeons.BetterStonk
 import me.atroxego.pauladdons.features.dungeons.BetterStonk.createGhostBlock
 import me.atroxego.pauladdons.features.dungeons.HelmetSwapper.helmetSwapper
+import me.atroxego.pauladdons.features.dungeons.StarredMobESP
 import me.atroxego.pauladdons.features.dungeons.TerminalWaypoints
 import me.atroxego.pauladdons.features.funnyFishing.BarnFishingTimer
 import me.atroxego.pauladdons.features.funnyFishing.FishingTracker
@@ -23,6 +22,7 @@ import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.setupFishing
 import me.atroxego.pauladdons.features.starcult.StarCult
 import me.atroxego.pauladdons.gui.GuiManager
 import me.atroxego.pauladdons.render.DisplayNotification
+import me.atroxego.pauladdons.utils.SBInfo
 import me.atroxego.pauladdons.utils.UpdateManager.checkUpdate
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
@@ -60,7 +60,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "0.9"
+        const val VERSION = "1.0"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
 

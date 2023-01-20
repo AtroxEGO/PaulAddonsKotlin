@@ -5,8 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "MixinGuiScreen",
-    "MixinNetworkManager",
-    "MixinNetHandlerPlayClient"
+    "MixinNetHandlerPlayClient",
+    "MixinNetworkManager"
   ],
   "client": [
     "GuiMainMenuMixin",

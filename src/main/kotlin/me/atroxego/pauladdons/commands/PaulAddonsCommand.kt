@@ -2,12 +2,9 @@ package me.atroxego.pauladdons.commands
 
 import PaulAddons
 import PaulAddons.Companion.mc
-import gg.skytils.skytilsmod.utils.SBInfo
 import me.atroxego.pauladdons.config.Config
-import me.atroxego.pauladdons.config.PersistentSave
-import me.atroxego.pauladdons.features.funnyFishing.FishingData
 import me.atroxego.pauladdons.gui.LocationEditGui
-import me.atroxego.pauladdons.utils.Utils.sendItemTags
+import me.atroxego.pauladdons.utils.SBInfo
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 import net.minecraft.util.ChatComponentText
@@ -30,14 +27,11 @@ class PaulAddonsCommand : CommandBase() {
             "gui" -> PaulAddons.currentGui = LocationEditGui()
             "edit" -> PaulAddons.currentGui = LocationEditGui()
             "save" -> Config.writeData()
-            "mode" -> mc.thePlayer.addChatMessage(ChatComponentText("mode: " + SBInfo.mode + " date: " + SBInfo.date + " time: " + SBInfo.time))
-            "s" -> PersistentSave.markDirty<FishingData>()
-//            "hud" -> PaulAddons.currentGui = GuiHudEditor()
-            "sendtags" -> sendItemTags()
-//            "hastags" -> itemHasTags()
-//            "date" -> dateStuff()
-//            "dateset" -> Utils.dateSet(args[1], args[2], args[3])
-//            "repair" -> Utils.repair()
+            "mode" -> mc.thePlayer.addChatMessage(ChatComponentText("mode: " + SBInfo.mode + " date: " +
+                    SBInfo.date.split(" ")[2].dropLast(SBInfo.date.split(" ")[2].length-2)
+                    + " time: " +
+                    SBInfo.time.split(":")[0] + " "+SBInfo.time.split(":")[1].dropLast(2)
+            ))
             else -> mc.thePlayer.addChatMessage(ChatComponentText(
                 """
                     §9PaulAddons §f:: §aUsage:

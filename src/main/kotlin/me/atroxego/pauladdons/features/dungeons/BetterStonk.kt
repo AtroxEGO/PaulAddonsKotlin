@@ -5,7 +5,6 @@ import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.utils.Utils
 import net.minecraft.init.Blocks
 import net.minecraft.init.Items
-import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.InputEvent
 import org.lwjgl.input.Mouse
@@ -26,10 +25,7 @@ object BetterStonk {
                 createGhostBlock()
             }
         }
-
     }
-
-
 
     fun createGhostBlock(){
         val raytrace = mc.thePlayer.rayTrace(5.0,1.0f)

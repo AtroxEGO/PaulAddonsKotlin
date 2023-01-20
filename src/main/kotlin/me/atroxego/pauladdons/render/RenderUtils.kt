@@ -26,6 +26,11 @@
 package me.atroxego.pauladdons.render
 
 import PaulAddons.Companion.mc
+import gg.essential.elementa.font.DefaultFonts
+import gg.essential.elementa.font.ElementaFonts
+import gg.essential.universal.ChatColor
+import gg.essential.universal.UGraphics
+import gg.essential.universal.UMatrixStack
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.mixin.IMixinMinecraft
 import me.atroxego.pauladdons.mixin.IMixinRenderManager
@@ -46,15 +51,13 @@ import net.minecraft.entity.monster.EntitySkeleton
 import net.minecraft.item.ItemArmor
 import net.minecraft.item.ItemStack
 import net.minecraft.util.AxisAlignedBB
-import net.minecraft.util.BlockPos
 import net.minecraft.util.MathHelper
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.glDisable
 import org.lwjgl.opengl.GL11.glEnable
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
+import java.awt.Color
+import kotlin.math.*
 
 
 object RenderUtils {
@@ -498,4 +501,102 @@ object RenderUtils {
         GlStateManager.popMatrix()
     }
 
+    fun renderWaypointText(
+        str: String,
+        x: Double,
+        y: Double,
+        z: Double,
+        partialTicks: Float,
+        matrixStack: UMatrixStack
+    ) {
+        matrixStack.push()
+        GlStateManager.alphaFunc(516, 0.1f)
+        val (viewerX, viewerY, viewerZ) = getViewerPos(partialTicks)
+        val distX = x - viewerX
+        val distY = y - viewerY - mc.renderViewEntity.eyeHeight
+        val distZ = z - viewerZ
+        val dist = sqrt(distX * distX + distY * distY + distZ * distZ)
+        val renderX: Double
+        val renderY: Double
+        val renderZ: Double
+        if (dist > 12) {
+            renderX = distX * 12 / dist + viewerX
+            renderY = distY * 12 / dist + viewerY + mc.renderViewEntity.eyeHeight
+            renderZ = distZ * 12 / dist + viewerZ
+        } else {
+            renderX = x
+            renderY = y
+            renderZ = z
+        }
+        drawNametag(renderX, renderY, renderZ, str, Color.WHITE, partialTicks, matrixStack)
+        matrixStack.rotate(-mc.renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
+        matrixStack.rotate(mc.renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
+        matrixStack.translate(0.0, -0.25, 0.0)
+        matrixStack.rotate(-mc.renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
+        matrixStack.rotate(mc.renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
+        drawNametag(
+            renderX,
+            renderY,
+            renderZ,
+            "${ChatColor.YELLOW}${dist.roundToInt()}m",
+            Color.WHITE,
+            partialTicks,
+            matrixStack
+        )
+        matrixStack.pop()
+    }
+
+    fun getViewerPos(partialTicks: Float): Triple<Double, Double, Double> {
+        val viewer = mc.renderViewEntity
+        val viewerX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * partialTicks
+        val viewerY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * partialTicks
+        val viewerZ = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * partialTicks
+        return Triple(viewerX, viewerY, viewerZ)
+    }
+
+    private fun drawNametag(
+        x: Double, y: Double, z: Double,
+        str: String, color: Color,
+        partialTicks: Float, matrixStack: UMatrixStack,
+        shadow: Boolean = true, scale: Float = 1f, background: Boolean = true
+    ) {
+        val player = mc.thePlayer
+        val x1 = x - player.lastTickPosX + (x - player.posX - (x - player.lastTickPosX)) * partialTicks
+        val y1 = y - player.lastTickPosY + (y - player.posY - (y - player.lastTickPosY)) * partialTicks
+        val z1 = z - player.lastTickPosZ + (z - player.posZ - (z - player.lastTickPosZ)) * partialTicks
+        val f1 = 0.0266666688
+        val width = mc.fontRendererObj.getStringWidth(str) / 2
+        matrixStack.push()
+        matrixStack.translate(x1, y1, z1)
+        GL11.glNormal3f(0f, 1f, 0f)
+        matrixStack.rotate(-mc.renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
+        matrixStack.rotate(mc.renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
+        matrixStack.scale(-f1, -f1, -f1)
+        UGraphics.disableLighting()
+        UGraphics.depthMask(false)
+        UGraphics.enableBlend()
+        UGraphics.tryBlendFuncSeparate(770, 771, 1, 0)
+        if (background) {
+            val worldRenderer = UGraphics.getFromTessellator()
+            worldRenderer.beginWithDefaultShader(UGraphics.DrawMode.QUADS, DefaultVertexFormats.POSITION_COLOR)
+            worldRenderer.pos(matrixStack, (-width - 1.0), -1.0, 0.0).color(0f, 0f, 0f, 0.25f).endVertex()
+            worldRenderer.pos(matrixStack, (-width - 1.0), 8.0, 0.0).color(0f, 0f, 0f, 0.25f).endVertex()
+            worldRenderer.pos(matrixStack, width + 1.0, 8.0, 0.0).color(0f, 0f, 0f, 0.25f).endVertex()
+            worldRenderer.pos(matrixStack, width + 1.0, -1.0, 0.0).color(0f, 0f, 0f, 0.25f).endVertex()
+            worldRenderer.drawDirect()
+        }
+        GlStateManager.enableTexture2D()
+        DefaultFonts.VANILLA_FONT_RENDERER.drawString(
+            matrixStack,
+            str,
+            color,
+            -width.toFloat(),
+            ElementaFonts.MINECRAFT.getBelowLineHeight() * scale,
+            width * 2f,
+            scale,
+            shadow
+        )
+        UGraphics.depthMask(true)
+        matrixStack.pop()
+    }
 }

@@ -2,8 +2,6 @@ package me.atroxego.pauladdons.utils
 
 import PaulAddons.Companion.mc
 import gg.essential.universal.wrappers.message.UTextComponent
-import gg.skytils.skytilsmod.utils.SBInfo
-import gg.skytils.skytilsmod.utils.SkyblockIsland
 import me.atroxego.pauladdons.events.impl.MainReceivePacketEvent
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import net.minecraft.client.Minecraft

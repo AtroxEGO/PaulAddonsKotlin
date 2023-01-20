@@ -6,8 +6,6 @@ import me.atroxego.pauladdons.utils.Utils
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.inventory.ContainerChest
-import net.minecraft.network.play.client.C0DPacketCloseWindow
-import net.minecraft.network.play.server.S2DPacketOpenWindow
 import net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 

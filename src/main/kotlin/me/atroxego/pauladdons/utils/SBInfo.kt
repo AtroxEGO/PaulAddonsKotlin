@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package gg.skytils.skytilsmod.utils
+package me.atroxego.pauladdons.utils
 
 import PaulAddons.Companion.json
 import PaulAddons.Companion.mc
@@ -30,21 +30,18 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.events.impl.SendChatMessageEvent
-import me.atroxego.pauladdons.utils.ScoreboardUtil
-import me.atroxego.pauladdons.utils.Utils
+import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.utils.Utils.stripControlCodes
 import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.inventory.ContainerChest
 import net.minecraft.network.play.client.C01PacketChatMessage
 import net.minecraft.network.play.server.S02PacketChat
-import net.minecraft.util.ChatComponentText
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
-import tv.twitch.chat.Chat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -154,6 +151,7 @@ object SBInfo {
                         val parseFormat = SimpleDateFormat("hh:mm a")
                         currentTimeDate = parseFormat.parse(timeSpace)
                     } catch (e: ParseException) {
+                        logger.info("Error")
                     }
                 }
                 lines.find { it.contains('⏣') }?.replace(junkRegex, "")?.trim()?.let {

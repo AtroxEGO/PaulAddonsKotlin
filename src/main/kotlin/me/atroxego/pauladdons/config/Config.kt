@@ -72,6 +72,7 @@ object Config : Vigilant(
     var betterStonkShiftOnly = false
     var starredESPType = 1
     var autoCloseChest = false
+    var hideDefaultNames = false
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -193,6 +194,11 @@ object Config : Vigilant(
                 Config::terminalBeaconColor,
                 name = "Terminal Beacon Color"
             )
+                switch(
+                    Config::hideDefaultNames,
+                    name = "Hide Default Text",
+                    description = "Hides default text next to terminals"
+                )
             }
             subcategory("Better Stonk"){
             switch(
@@ -439,6 +445,7 @@ object Config : Vigilant(
         addDependency(Config::deviceBeaconColor ,Config::terminalWaypoints)
         addDependency(Config::leverBeaconColor ,Config::terminalWaypoints)
         addDependency(Config::terminalBeaconColor ,Config::terminalWaypoints)
+        addDependency(Config::hideDefaultNames, Config::terminalWaypoints)
         markDirty()
     }
 

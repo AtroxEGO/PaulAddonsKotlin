@@ -32,7 +32,7 @@ object AutoHi {
 
         if (Config.autoHiFriends == "" || !Config.autoFriendHi) return
         for (ign in Config.autoHiFriends.split(", ")) {
-            if (messageIncoming.startsWith("Friend > ")) {
+            if (messageIncoming.startsWith("Friend > ") || messageIncoming.startsWith("Guild > ")) {
                 if (messageIncoming.contains(ign.plus(" joined."))){
                     var command : String
                     if (lastMessage[ign] == null || System.currentTimeMillis() - lastMessage[ign]!! > Config.autoFriendHiCooldown * 1000){
