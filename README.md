@@ -7,7 +7,7 @@ Website: Work In Progress
 ## Changes
 
 - Few Bug Fixes
-- Added Sea Creature Tracker
+- Added armor swapper
 
 
 ## Features
