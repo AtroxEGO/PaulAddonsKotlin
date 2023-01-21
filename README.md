@@ -3,6 +3,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/AtroxEGO/PaulAddonsKotlin/badge)](https://www.codefactor.io/repository/github/AtroxEGO/PaulAddonsKotlin)\
 Mod with some useful features for Hypixel Skyblock \
 Website: Work In Progress
+Discord: https://discord.gg/qVamggFna6
 
 ## Changes
 
