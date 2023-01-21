@@ -8,6 +8,7 @@ import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.gui.GuiElement
 import me.atroxego.pauladdons.render.font.FontUtils.getTimeBetween
 import me.atroxego.pauladdons.utils.core.FloatPair
+import net.minecraft.init.Items
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -63,7 +64,10 @@ object FishingTracker {
     class FishingTrackerGUIElement : GuiElement("Fishing Tracker", FloatPair(10, 10)) {
 
         override fun render() {
-            if (toggled && (Config.fishingTrackerSpooky || Config.fishingTrackerMarina || Config.fishingTrackerWinter || Config.fishingTrackerType == 1 || Config.fishingTrackerType == 0)) {
+            if (!toggled) return
+            if (mc.thePlayer.heldItem == null) return
+            if (mc.thePlayer.heldItem.item != Items.fishing_rod) return
+            if (Config.fishingTrackerSpooky || Config.fishingTrackerMarina || Config.fishingTrackerWinter || Config.fishingTrackerType == 1 || Config.fishingTrackerType == 0) {
                 val left = this.actualX + this.actualWidth / 2 < mc.displayWidth / 4
                 var xOffset = 0f
                 var offset = 6f

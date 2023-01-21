@@ -1,45 +1,57 @@
 package me.atroxego.pauladdons.features.dungeons
 
+import PaulAddons.Companion.mc
 import gg.essential.universal.UMatrixStack
 import gg.essential.universal.UScreen
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.render.RenderUtils.drawBeaconBeam
 import me.atroxego.pauladdons.render.RenderUtils.renderWaypointText
+import me.atroxego.pauladdons.utils.Utils
+import me.atroxego.pauladdons.utils.Utils.stripColor
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.util.AxisAlignedBB
+import net.minecraft.util.ChatComponentText
+import net.minecraftforge.client.event.RenderLivingEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 object TerminalWaypoints {
 
-    @SubscribeEvent
+//    @SubscribeEvent
 //    fun onRenderMob(event: RenderLivingEvent.Pre<EntityLivingBase>) {
 //        if (!Config.terminalWaypoints) return
 //        if (!Utils.inDungeon) return
 //        if (!event.entity.hasCustomName()) return
-//        val terminals = listOf("Not Activated","Inactive Terminal","Inactive")
+//        val terminals = listOf("Not Activated", "Inactive Terminal", "Inactive")
 //        if (event.entity !is EntityArmorStand) return
-//            for (i in 0..2){
-//                if (terminals[i] == event.entity.customNameTag.stripColor()){
-//                    when (event.entity.customNameTag){
-//                        "Inactive" -> drawBeaconBeam(event.entity, Config.deviceBeaconColor.rgb, 1) // Device
-//                        "Not Activated" -> drawBeaconBeam(event.entity, Config.leverBeaconColor.rgb, 2) // Lever
-//                        "Inactive Terminal" -> drawBeaconBeam(event.entity, Config.terminalBeaconColor.rgb, 3) // Terminal
-//                    }
-//                }
+//        if (!event.entity.hasCustomName()) return
+//        when (event.entity.customNameTag.stripColor()) {
+//            "Inactive" -> drawBeaconBeam(event.entity, Config.deviceBeaconColor.rgb, 1) // Device
+//            "Not Activated" -> drawBeaconBeam(event.entity, Config.leverBeaconColor.rgb, 2) // Lever
+//            "Inactive Terminal" -> drawBeaconBeam(event.entity, Config.terminalBeaconColor.rgb, 3) // Terminal
+//            else -> return
+//        }
+//        if (Config.hideDefaultNames) {
+//            for (near in getEntitiesInRadius(event.entity, 1)) {
+//                if (near !is EntityArmorStand) continue
+//                near.alwaysRenderNameTag = false
 //            }
+//        }
+//    }
 
+        @SubscribeEvent
         fun checkForMob(event: RenderWorldLastEvent){
-            if (UScreen.currentScreen.toString().contains("gg.essential.vigilance.gui.SettingsGui")) return
             if (!Config.terminalWaypoints) return
+            if (!Utils.inDungeon) return
             val world = Minecraft.getMinecraft().theWorld
             val entityList = world.loadedEntityList
             for (entity in entityList){
-                if (!entity.hasCustomName()){continue}
-                when (entity.customNameTag){
+                if (!entity.hasCustomName()) continue
+                if (entity !is EntityArmorStand) continue
+                when (entity.customNameTag.stripColor()){
                     "Inactive" -> drawTerminalWaypoint(entity as EntityLivingBase, Config.deviceBeaconColor.rgb,1,event.partialTicks,"Device") // Device
                     "Not Activated" -> drawTerminalWaypoint(entity as EntityLivingBase, Config.leverBeaconColor.rgb,2,event.partialTicks,"Lever") // Lever
                     "Inactive Terminal" -> drawTerminalWaypoint(entity as EntityLivingBase, Config.terminalBeaconColor.rgb,3,event.partialTicks,"Terminal") // Terminal
@@ -54,17 +66,26 @@ object TerminalWaypoints {
             }
         }
 
-    fun getEntitiesInRadius(center: Entity, radius: Int): List<Entity> {
-        val world = center.worldObj
-        val x = center.posX
-        val y = center.posY
-        val z = center.posZ
-        return world.getEntitiesWithinAABB(Entity::class.java, AxisAlignedBB(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius))
-    }
+        fun getEntitiesInRadius(center: Entity, radius: Int): List<Entity> {
+            val world = center.worldObj
+            val x = center.posX
+            val y = center.posY
+            val z = center.posZ
+            return world.getEntitiesWithinAABB(
+                Entity::class.java,
+                AxisAlignedBB(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius)
+            )
+        }
 
-    private fun drawTerminalWaypoint(entity : EntityLivingBase, color: Int, type: Int, partialTicks: Float, text: String){
-        drawBeaconBeam(entity, color, type)
-        renderWaypointText(text,entity.posX,entity.posY + 3.5,entity.posZ,partialTicks, UMatrixStack())
-    }
+        fun drawTerminalWaypoint(
+            entity: EntityLivingBase,
+            color: Int,
+            type: Int,
+            partialTicks: Float,
+            text: String
+        ) {
+            drawBeaconBeam(entity, color, type)
+            renderWaypointText(text, entity.posX, entity.posY + 3.5, entity.posZ, partialTicks, UMatrixStack())
+        }
     }
 

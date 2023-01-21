@@ -80,7 +80,7 @@ object RenderUtils {
         val x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks - renderPosX
         val y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks - renderPosY
         val z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks - renderPosZ
-        val bbox = entity.entityBoundingBox
+        val bbox = entity.entityBoundingBox.expand(0.2,0.0,0.2)
         var aabb = AxisAlignedBB(
             bbox.minX - entity.posX + x,
             bbox.minY - entity.posY + y,
@@ -407,14 +407,14 @@ object RenderUtils {
 
     fun drawBeaconBeam(entity: EntityLivingBase, color: Int, type: Int) {
         val partialTicks = (mc as IMixinMinecraft).timer.renderPartialTicks
-        val x = (entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks) - 0.5
+        val x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks - 0.5
         var y = 0.0
         when(type){
-            1 -> y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks
-            2 -> y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks
+            1 -> y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks + 2
+            2 -> y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks - 0.5
             3 -> y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks + 1
         }
-        val z = (entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks) - 0.5
+        val z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks - 0.5
 
         renderBeaconBeam(x, y, z, color, partialTicks)
     }
@@ -579,8 +579,8 @@ object RenderUtils {
         if (background) {
             val worldRenderer = UGraphics.getFromTessellator()
             worldRenderer.beginWithDefaultShader(UGraphics.DrawMode.QUADS, DefaultVertexFormats.POSITION_COLOR)
-            worldRenderer.pos(matrixStack, (-width - 1.0), -1.0, 0.0).color(0f, 0f, 0f, 0.25f).endVertex()
-            worldRenderer.pos(matrixStack, (-width - 1.0), 8.0, 0.0).color(0f, 0f, 0f, 0.25f).endVertex()
+            worldRenderer.pos(matrixStack, -width - 1.0, -1.0, 0.0).color(0f, 0f, 0f, 0.25f).endVertex()
+            worldRenderer.pos(matrixStack, -width - 1.0, 8.0, 0.0).color(0f, 0f, 0f, 0.25f).endVertex()
             worldRenderer.pos(matrixStack, width + 1.0, 8.0, 0.0).color(0f, 0f, 0f, 0.25f).endVertex()
             worldRenderer.pos(matrixStack, width + 1.0, -1.0, 0.0).color(0f, 0f, 0f, 0.25f).endVertex()
             worldRenderer.drawDirect()
