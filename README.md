@@ -1,15 +1,15 @@
 # Paul Addons
-[![GitHub release](https://img.shields.io/github/downloads/AtroxEGO/PaulAddonsKotlin/total)](https://github.com/AtroxEGO/PaulAddonsKotlin/releases)
-[![CodeFactor](https://www.codefactor.io/repository/github/AtroxEGO/PaulAddonsKotlin/badge)](https://www.codefactor.io/repository/github/AtroxEGO/PaulAddonsKotlin)\
+[![GitHub release](https://img.shields.io/github/downloads/AtroxEGO/PaulAddonsKotlin/total)](https://github.com/AtrpxEGO/PaulAddonsKotlin/releases)  [![CodeFactor](https://www.codefactor.io/repository/github/AtroxEGO/PaulAddonsKotlin/badge)](https://www.codefactor.io/repository/github/AtroxEGO/PaulAddonsKotlin)\
 Mod with some useful features for Hypixel Skyblock \
-Website: Work In Progress \
-Discord: https://discord.gg/qVamggFna6
+Website: Work In Progress
 
 ## Changes
 
-- Few Bug Fixes
-- Added armor swapper
-
+- Added Auto Chest Closer
+- Added Better Stonk
+- Added Starred Mob ESP
+- Added Terminal Waypotins
+- Small changes
 
 ## Features
 <details>
@@ -20,6 +20,18 @@ Discord: https://discord.gg/qVamggFna6
     - Renders an outline around selected Mobs
 - Mob Notification
     - Displays notification if selected mob is near
+</details>
+
+<details>
+  <summary>Dungeons</summary>
+
+### Dungeons
+- Starred Mob ESP
+- Better Stonk
+- Ghost Block
+- Auto Chest Closer
+- Terminal Waypoints
+- Helmet Swapper
 </details>
 
 <details>
@@ -58,6 +70,13 @@ Discord: https://discord.gg/qVamggFna6
   - Timer showing u time since last sea creatures kill
 - Funny Fishing
   - Should automatically fish (experimental)
+</details>
+
+<details>
+  <summary>Other</summary>
+
+### Other
+- Armor Swapper
 </details>
 
 ## Commands
