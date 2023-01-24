@@ -58,7 +58,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "1.0"
+        const val VERSION = "1.1"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
 

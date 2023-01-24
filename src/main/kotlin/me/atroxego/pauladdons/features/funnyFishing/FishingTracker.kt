@@ -53,8 +53,8 @@ object FishingTracker {
         "A small but fearsome Lava Leech emerges." to "Lava Leech",
         "You feel the heat radiating as a Pyroclastic Worm surfaces." to "Pyroclastic Worm",
         "A Lava Flame flies out from beneath the lava." to "Lava Flame",
-        "A Fire Eel slithers out from the depths." to "Fire EEl",
-        "Taurus and his Steed Emerge." to "Taurus",
+        "A Fire Eel slithers out from the depths." to "Fire Eel",
+        "Taurus and his steed emerge." to "Taurus",
         "You hear a massive rumble as Thunder emerges." to "Thunder",
         "You have angered a legendary creature... Lord Jawbus has arrived" to "Lord Jawbus"
     )
