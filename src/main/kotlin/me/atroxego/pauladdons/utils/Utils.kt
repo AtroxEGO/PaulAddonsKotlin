@@ -5,10 +5,16 @@ import gg.essential.universal.wrappers.message.UTextComponent
 import me.atroxego.pauladdons.events.impl.MainReceivePacketEvent
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import net.minecraft.client.Minecraft
+import net.minecraft.client.entity.EntityPlayerSP
+import net.minecraft.client.gui.GuiScreen
+import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.entity.player.EnumPlayerModelParts
+import net.minecraft.inventory.ContainerChest
 import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
@@ -20,9 +26,10 @@ import java.io.File
 object Utils {
     private val STRIP_COLOR_PATTERN = Regex("(?i)§[\\dA-FK-OR]")
 
-    var skyblock = true
+    var skyblock = false
 
     val inSkyblock: Boolean
+//        get() = true
         get() = SBInfo.mode == "SKYBLOCK" || skyblock
     val inDungeon
         get() = SBInfo.mode == "dungeon"
@@ -30,6 +37,36 @@ object Utils {
     fun sendItemTags(){
         val tags = mc.thePlayer.heldItem.tagCompound
         mc.thePlayer.addChatMessage(ChatComponentText("$tags"))
+    }
+
+    public fun getGuiName(gui: GuiScreen?): String? {
+        return if (gui is GuiChest) {
+            (gui.inventorySlots as ContainerChest).lowerChestInventory.displayName.unformattedText
+        } else ""
+    }
+
+    fun scoreboardData(){
+//        for (line in getScoreboardLines()){
+////            mc.thePlayer.addChatMessage(ChatComponentText(line.))
+//        }
+    }
+
+    fun getScoreboardLines(): List<String> {
+        val mc = Minecraft.getMinecraft()
+        val scoreboard = mc.theWorld.scoreboard
+        val objective = scoreboard.getObjectiveInDisplaySlot(1) // 1 is the display slot for the sidebar
+        val teams = scoreboard.teams
+
+        val lines = mutableListOf<String>()
+        for (team in teams) {
+            val members = team.membershipCollection
+            for (member in members) {
+                val score = scoreboard.getValueFromObjective(member, objective)
+                lines.add("$member: $score")
+                mc.thePlayer.addChatMessage(ChatComponentText(score.toString()))
+            }
+        }
+        return lines
     }
 
     fun String?.stripControlCodes(): String = UTextComponent.stripFormatting(this ?: "")

@@ -73,6 +73,10 @@ object Config : Vigilant(
     var starredESPType = 1
     var autoCloseChest = false
     var hideDefaultNames = false
+    var removeBlindness = false
+    var autoExperiments = false
+    var autoCloseExperiments = false
+    var autoExperimentsDelay = 200
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -209,6 +213,12 @@ object Config : Vigilant(
                 Config::betterStonkShiftOnly,
                 name = "Shift Only"
             )
+            }
+            subcategory("Other"){
+                switch(
+                    Config::removeBlindness,
+                    name = "Remove Blindness"
+                )
             }
         }
         category("Star Cult") {
@@ -393,6 +403,24 @@ object Config : Vigilant(
                 name = "Helmet #2 Name",
             )
         }
+        category("Auto Experiments"){
+            switch(
+                Config::autoExperiments,
+                name = "Auto Experiments"
+            )
+            switch(
+                Config::autoCloseExperiments,
+                name = "Auto Close Experiments",
+                description = "Automatically closes the window after getting 3 clicks"
+            )
+            slider(
+                Config::autoExperimentsDelay,
+                name = "Click delay in ms",
+                min = 50,
+                max = 500,
+                description = "I would leave it at around 200, less might crash"
+            )
+        }
         category("GUI Locations"){
             button(
                 name = "Edit GUI Locations",
@@ -446,6 +474,8 @@ object Config : Vigilant(
         addDependency(Config::leverBeaconColor ,Config::terminalWaypoints)
         addDependency(Config::terminalBeaconColor ,Config::terminalWaypoints)
         addDependency(Config::hideDefaultNames, Config::terminalWaypoints)
+        addDependency(Config::autoCloseExperiments, Config::autoExperiments)
+        addDependency(Config::autoExperimentsDelay, Config::autoExperiments)
         markDirty()
     }
 
@@ -458,6 +488,7 @@ object Config : Vigilant(
             "Auto Thank You",
             "Better Fishing",
             "Helmet Swapper",
+            "Auto Experiments",
             "GUI Locations"
         )
         override fun getCategoryComparator(): Comparator<in Category> =

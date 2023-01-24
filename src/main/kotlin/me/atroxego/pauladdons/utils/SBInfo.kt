@@ -31,6 +31,7 @@ import kotlinx.serialization.encoding.Encoder
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.events.impl.SendChatMessageEvent
 import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
+import me.atroxego.pauladdons.utils.Utils.stripColor
 import me.atroxego.pauladdons.utils.Utils.stripControlCodes
 import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.inventory.ContainerChest
@@ -56,6 +57,7 @@ object SBInfo {
 
     private val timePattern = ".+(am|pm)".toRegex()
 
+    var onSkyblock = false
     var location = ""
     var date = ""
     var time = ""
@@ -137,6 +139,8 @@ object SBInfo {
             lastLocRaw = System.currentTimeMillis()
             mc.thePlayer.sendChatMessage("/locraw")
         }
+        val scoreObjective = mc.thePlayer.worldScoreboard.getObjectiveInDisplaySlot(1)
+        onSkyblock = scoreObjective.displayName.stripColor().startsWith("SKYBLOCK")
         try {
             val lines = ScoreboardUtil.fetchScoreboardLines().map { it.stripControlCodes() }
             if (lines.size >= 5) {

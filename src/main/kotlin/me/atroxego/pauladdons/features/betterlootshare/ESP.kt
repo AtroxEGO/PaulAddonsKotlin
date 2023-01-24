@@ -11,7 +11,6 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.monster.EntityMob
-import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.util.MathHelper
 import net.minecraft.world.World
@@ -30,7 +29,7 @@ object ESP : Feature() {
     fun onRenderMob(event: RenderLivingEvent.Pre<EntityLivingBase>) {
         if (!Config.glowOnMob) return
 //        logger.info("Test")
-        if (event.entity is EntityPlayerMP) return
+//        if (event.entity is EntityPlayerMP) return
         if (event.entity is EntityArmorStand) {
             if (!event.entity.hasCustomName()) return
             val mobsForESP = getMobsForESP()

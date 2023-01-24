@@ -80,7 +80,7 @@ object RenderUtils {
         val x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks - renderPosX
         val y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks - renderPosY
         val z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks - renderPosZ
-        val bbox = entity.entityBoundingBox.expand(0.2,0.0,0.2)
+        val bbox = entity.entityBoundingBox.expand(0.15,0.2,0.15)
         var aabb = AxisAlignedBB(
             bbox.minX - entity.posX + x,
             bbox.minY - entity.posY + y,

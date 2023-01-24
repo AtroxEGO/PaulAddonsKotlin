@@ -17,6 +17,8 @@
  */
 package me.atroxego.pauladdons.events.impl
 
+import me.atroxego.pauladdons.events.Cancellable
+import me.atroxego.pauladdons.events.ICancellable
 import me.atroxego.pauladdons.events.PaulAddonsEvent
 import net.minecraft.network.Packet
 import net.minecraftforge.fml.common.eventhandler.Cancelable
@@ -25,13 +27,13 @@ import net.minecraftforge.fml.common.eventhandler.Cancelable
 open class PacketEvent(val packet: Packet<*>) : PaulAddonsEvent() {
     var direction: Direction? = null
 
-    class ReceiveEvent(packet: Packet<*>) : PacketEvent(packet) {
+    class ReceiveEvent(packet: Packet<*>) : PacketEvent(packet), ICancellable by Cancellable()  {
         init {
             direction = Direction.INBOUND
         }
     }
 
-    class SendEvent(packet: Packet<*>) : PacketEvent(packet) {
+    class SendEvent(packet: Packet<*>) : PacketEvent(packet), ICancellable by Cancellable() {
         init {
             direction = Direction.OUTBOUND
         }

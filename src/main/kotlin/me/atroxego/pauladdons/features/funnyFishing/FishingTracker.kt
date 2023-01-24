@@ -32,11 +32,11 @@ object FishingTracker {
         "You've discovered a Guardian Defender of the sea." to "Guardian Defender",
         "You have awoken the Deep Sea Protector, prepare for a battle!" to "Deep Sea Protector",
         "The Water Hydra has come to test your strength." to "Water Hydra",
-        "Sea Emperor arises from the depths." to "The Sea Emperor",
+        "Sea Emperor arises from the depths." to "Sea Emperor",
         "Phew! It's only a Scarecrow." to "Scarecrow",
         "You hear trotting from beneath the waves, you caught a Nightmare." to "Nightmare",
         "It must be a full moon, a Werewolf appears." to "Werewolf",
-        "The spirit of a long lost Phantom Fisherman has come to haunt you." to "Phantom Fisherman",
+        "The spirit of a long lost Phantom Fisher has come to haunt you." to "Phantom Fisher",
         "This can't be! The manifestation of death himself!" to "Grim Reaper",
         "Frozen Steve fell into the pond long ago, never to resurface...until now!" to "Frozen Steve",
         "It's a snowman! He looks harmless" to "Frosty The Snowman",
@@ -179,11 +179,11 @@ object FishingTracker {
     fun getTrackerMobs(): String {
         var text = ""
         text =
-            if (Config.fishingTrackerType == 0) "-----------------.§fSquid.§fSea Walker.§fSea Guardian.§aSea Witch.§aSea Archer.§aRider Of The Deep.§9Catfish.§9Carrot King.§9Sea Leech.§5Guardian Defender.§5Deep Sea Protector.§6Water Hydra.§6The Sea Emperor."
+            if (Config.fishingTrackerType == 0) "-----------------.§fSquid.§fSea Walker.§fSea Guardian.§aSea Witch.§aSea Archer.§aRider Of The Deep.§9Catfish.§9Carrot King.§9Sea Leech.§5Guardian Defender.§5Deep Sea Protector.§6Water Hydra.§6Sea Emperor."
             else if (Config.fishingTrackerType == 1) "-----------------.§9Magma Slug.§9Moogma.§9Lava Leech.§9Pyroclastic Worm.§9Lava Flame.§9Fire Eel.§9Taurus.§dThunder.§dLord Jawbus."
             else ""
         if (Config.fishingTrackerMarina) text += "-----------------.§cNurse Shark.§cBlue Shark.§cTiger Shark.§cGreat White Shark."
-        if (Config.fishingTrackerSpooky) text += "-----------------.§fScarecrow.§aNightmare.§5Werewolf.§6Phantom Fisherman.§6Grim Reaper."
+        if (Config.fishingTrackerSpooky) text += "-----------------.§fScarecrow.§aNightmare.§5Werewolf.§6Phantom Fisher.§6Grim Reaper."
         if (Config.fishingTrackerWinter) text += "-----------------.§fFrozen Steve.§fFrosty The Snowman.§aGrinch.§9Nutcracker.§6Yeti.§6Reindrake."
 //        text = text.removeSuffix(".")
         text += "-----------------"
@@ -211,7 +211,7 @@ object FishingTracker {
         if (Config.fishingTrackerSpooky) text += "§6Grim Reaper."
         if (Config.fishingTrackerWinter) text += "§6Yeti.§6Reindrake."
         if (Config.fishingTrackerType == 1) text += "§dThunder.§dLord Jawbus."
-        if (Config.fishingTrackerType == 0) text += "§6The Sea Emperor."
+        if (Config.fishingTrackerType == 0) text += "§6Sea Emperor."
 //        text = text.removeSuffix(".")
         text += "-----------------"
         return text
@@ -237,7 +237,7 @@ object FishingTracker {
                     "Lord Jawbus" -> lastTimeCatched["Lord Jawbus"] = System.currentTimeMillis() / 1000.toDouble()
                     "Great White Shark" -> lastTimeCatched["Great White Shark"] = System.currentTimeMillis() / 1000.toDouble()
                     "Grim Reaper" -> lastTimeCatched["Grim Reaper"] = System.currentTimeMillis() / 1000.toDouble()
-                    "The Sea Emperor" -> lastTimeCatched["The Sea Emperor"] = System.currentTimeMillis() / 1000.toDouble()
+                    "Sea Emperor" -> lastTimeCatched["Sea Emperor"] = System.currentTimeMillis() / 1000.toDouble()
                 }
                 if (mobsCatched[mobMessage.value] != null) {
                     mobsCatched[mobMessage.value] = mobsCatched[mobMessage.value]!! + 1

@@ -2,7 +2,6 @@ package me.atroxego.pauladdons.features.dungeons
 
 import PaulAddons.Companion.mc
 import gg.essential.universal.UMatrixStack
-import gg.essential.universal.UScreen
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.render.RenderUtils.drawBeaconBeam
 import me.atroxego.pauladdons.render.RenderUtils.renderWaypointText
@@ -14,9 +13,9 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.util.ChatComponentText
-import net.minecraftforge.client.event.RenderLivingEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import kotlin.math.absoluteValue
 
 object TerminalWaypoints {
 
@@ -84,6 +83,10 @@ object TerminalWaypoints {
             partialTicks: Float,
             text: String
         ) {
+            val diffX = (mc.thePlayer.posX - entity.posX).absoluteValue.toString()
+            val diffZ = (mc.thePlayer.posZ - entity.posZ).absoluteValue.toString()
+//            mc.thePlayer.addChatMessage(ChatComponentText("$diffX $diffZ"))
+            if ((mc.thePlayer.posX - entity.posX).absoluteValue < 3 && (mc.thePlayer.posZ - entity.posZ).absoluteValue < 3) return
             drawBeaconBeam(entity, color, type)
             renderWaypointText(text, entity.posX, entity.posY + 3.5, entity.posZ, partialTicks, UMatrixStack())
         }

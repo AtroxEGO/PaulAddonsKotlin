@@ -5,6 +5,8 @@ import PaulAddons.Companion.mc
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.gui.LocationEditGui
 import me.atroxego.pauladdons.utils.SBInfo
+import me.atroxego.pauladdons.utils.Utils.inSkyblock
+import me.atroxego.pauladdons.utils.Utils.scoreboardData
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 import net.minecraft.util.ChatComponentText
@@ -27,11 +29,13 @@ class PaulAddonsCommand : CommandBase() {
             "gui" -> PaulAddons.currentGui = LocationEditGui()
             "edit" -> PaulAddons.currentGui = LocationEditGui()
             "save" -> Config.writeData()
-            "mode" -> mc.thePlayer.addChatMessage(ChatComponentText("mode: " + SBInfo.mode + " date: " +
-                    SBInfo.date.split(" ")[2].dropLast(SBInfo.date.split(" ")[2].length-2)
-                    + " time: " +
-                    SBInfo.time.split(":")[0] + " "+SBInfo.time.split(":")[1].dropLast(2)
-            ))
+            "mode" -> mc.thePlayer.addChatMessage(ChatComponentText("mode: " + SBInfo.mode + " inSkyblock: " + inSkyblock))
+            "sb" -> scoreboardData()
+//                    + " date: " +
+//                    SBInfo.date.split(" ")[2].dropLast(SBInfo.date.split(" ")[2].length-2)
+//                    + " time: " +
+//                    SBInfo.time.split(":")[0] + " "+SBInfo.time.split(":")[1].dropLast(2)
+//            ))
             else -> mc.thePlayer.addChatMessage(ChatComponentText(
                 """
                     §9PaulAddons §f:: §aUsage:

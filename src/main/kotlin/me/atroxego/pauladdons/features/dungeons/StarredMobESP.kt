@@ -7,38 +7,78 @@ import me.atroxego.pauladdons.render.RenderUtils
 import me.atroxego.pauladdons.utils.Utils
 import me.atroxego.pauladdons.utils.Utils.getRenderPartialTicks
 import me.atroxego.pauladdons.utils.Utils.stripColor
+import net.minecraft.client.Minecraft
 import net.minecraft.client.model.ModelBase
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.monster.EntityMob
-import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.util.MathHelper
 import net.minecraft.world.World
 import net.minecraft.world.chunk.Chunk
-import net.minecraftforge.client.event.RenderLivingEvent
+import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 object StarredMobESP : Feature() {
     private val customMobs = hashMapOf<Entity, EntityLivingBase>()
 
+//    @SubscribeEvent
+//    fun onRenderMob(event: RenderLivingEvent.Pre<EntityLivingBase>) {
+//        if (!Config.starredMobESP) return
+//        if (!Utils.inDungeon) return
+////        if (event.entity is EntityPlayerMP) return
+//        if (event.entity is EntityArmorStand) {
+//            if (!event.entity.hasCustomName()) return
+//            val name = event.entity.customNameTag.stripColor()
+//                if (!name.startsWith("✯") && !name.contains("Mimic")) return
+////                        && !name.contains("Lost Adventurer") && !name.contains("Angry Archaeologist") && !name.contains("Shadow Assassin") && !name.contains("Frozen Adventurer")
+//                val mob = customMobs[event.entity]
+//                if (mob != null) {
+//                    if (mob.isDead()) {
+//                        customMobs.remove(event.entity)
+//                        return
+//                    }
+//                    val model = (mc.renderManager.getEntityRenderObject<EntityLivingBase>(mob) as IMixinRendererLivingEntity).mainModel
+//                    drawEsp(
+//                        mob,
+//                        model,
+//                        Config.starredMobESPColor.rgb,
+//                        getRenderPartialTicks()
+//                    )
+//                    return
+//                } else getMobsWithinAABB(event.entity)
+//        } else{
+//                if (event.entity.name?.startsWith("✯") == false) return
+//                drawEsp(
+//                    event.entity,
+//                    event.renderer.mainModel,
+//                    Config.starredMobESPColor.rgb,
+//                    getRenderPartialTicks()
+//                )
+//                return
+//            }
+//        }
+
     @SubscribeEvent
-    fun onRenderMob(event: RenderLivingEvent.Pre<EntityLivingBase>) {
+    fun onRenderMob(event: RenderWorldLastEvent) {
         if (!Config.starredMobESP) return
         if (!Utils.inDungeon) return
-        if (event.entity is EntityPlayerMP) return
-        if (event.entity is EntityArmorStand) {
-            if (!event.entity.hasCustomName()) return
-            val name = event.entity.customNameTag.stripColor()
-                if (!name.startsWith("✯") && !name.contains("Mimic")) return
+//        if (event.entity is EntityPlayerMP) return
+        val world = Minecraft.getMinecraft().theWorld
+        val entityList = world.loadedEntityList
+        for (entity in entityList) {
+            if (entity.customNameTag.stripColor() == "Dinnerbone") entity.isInvisible = false
+            if (entity is EntityArmorStand) {
+                val name = entity.customNameTag.stripColor()
+                if (!name.contains("✯") && !name.contains("Mimic") && !name.contains("Key")) continue
 //                        && !name.contains("Lost Adventurer") && !name.contains("Angry Archaeologist") && !name.contains("Shadow Assassin") && !name.contains("Frozen Adventurer")
-                val mob = customMobs[event.entity]
+                val mob = customMobs[entity]
                 if (mob != null) {
                     if (mob.isDead()) {
-                        customMobs.remove(event.entity)
-                        return
+                        customMobs.remove(entity)
+                        continue
                     }
                     val model = (mc.renderManager.getEntityRenderObject<EntityLivingBase>(mob) as IMixinRendererLivingEntity).mainModel
                     drawEsp(
@@ -47,19 +87,23 @@ object StarredMobESP : Feature() {
                         Config.starredMobESPColor.rgb,
                         getRenderPartialTicks()
                     )
-                    return
-                } else getMobsWithinAABB(event.entity)
-        } else{
-                if (event.entity.name?.startsWith("✯") == false) return
+                    continue
+                } else getMobsWithinAABB(entity)
+            } else {
+                val name = entity.customNameTag.stripColor()
+                if (!name.contains("✯") && !name.contains("Mimic") && !name.contains("Key")) continue
                 drawEsp(
-                    event.entity,
-                    event.renderer.mainModel,
+                    entity as EntityLivingBase,
+                    (mc.renderManager.getEntityRenderObject<EntityLivingBase>(entity) as IMixinRendererLivingEntity).mainModel,
                     Config.starredMobESPColor.rgb,
                     getRenderPartialTicks()
                 )
-                return
+                continue
             }
         }
+    }
+
+
     @SubscribeEvent
     fun onWorldLoad(event: WorldEvent.Load){
         customMobs.clear()

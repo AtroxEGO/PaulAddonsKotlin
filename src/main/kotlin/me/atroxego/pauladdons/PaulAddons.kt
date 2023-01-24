@@ -5,16 +5,14 @@ import me.atroxego.pauladdons.commands.PaulAddonsCommand
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.config.PersistentSave
 import me.atroxego.pauladdons.features.armorSwapper.ArmorSwapper.armorSwapper
+import me.atroxego.pauladdons.features.autoExperiments.AutoExperiments
 import me.atroxego.pauladdons.features.autoHi.AutoHi
 import me.atroxego.pauladdons.features.autothankyou.SplashThankYou
 import me.atroxego.pauladdons.features.betterlootshare.ESP
 import me.atroxego.pauladdons.features.betterlootshare.MobNotification
-import me.atroxego.pauladdons.features.dungeons.AutoChestCloser
-import me.atroxego.pauladdons.features.dungeons.BetterStonk
+import me.atroxego.pauladdons.features.dungeons.*
 import me.atroxego.pauladdons.features.dungeons.BetterStonk.createGhostBlock
 import me.atroxego.pauladdons.features.dungeons.HelmetSwapper.helmetSwapper
-import me.atroxego.pauladdons.features.dungeons.StarredMobESP
-import me.atroxego.pauladdons.features.dungeons.TerminalWaypoints
 import me.atroxego.pauladdons.features.funnyFishing.BarnFishingTimer
 import me.atroxego.pauladdons.features.funnyFishing.FishingTracker
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
@@ -106,6 +104,8 @@ class PaulAddons {
             StarredMobESP,
             BetterStonk,
             FishingTracker,
+            RemoveBlindness,
+            AutoExperiments,
             BarnFishingTimer,
             DisplayNotification
         ).forEach(MinecraftForge.EVENT_BUS::register)
