@@ -55,6 +55,7 @@ object TerminalWaypoints {
                     "Inactive Terminal" -> drawTerminalWaypoint(entity as EntityLivingBase, Config.terminalBeaconColor.rgb,3,event.partialTicks,"Terminal") // Terminal
                     else -> continue
                     }
+                if ((mc.thePlayer.posX - entity.posX).absoluteValue < 3 && (mc.thePlayer.posZ - entity.posZ).absoluteValue < 3) return
                 if(Config.hideDefaultNames){
                     for (near in getEntitiesInRadius(entity,1)){
                         if (near !is EntityArmorStand) continue

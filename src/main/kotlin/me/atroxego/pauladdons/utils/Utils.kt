@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EnumPlayerModelParts
 import net.minecraft.inventory.ContainerChest
+import net.minecraft.item.ItemStack
 import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
@@ -19,6 +20,8 @@ import net.minecraft.util.MathHelper
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.common.MinecraftForge
 import java.io.File
+import java.util.*
+
 
 object Utils {
     private val STRIP_COLOR_PATTERN = Regex("(?i)§[\\dA-FK-OR]")
@@ -42,27 +45,37 @@ object Utils {
         } else ""
     }
 
+    fun getItemLore(itemStack: ItemStack): List<String?> {
+        val NBT_INTEGER = 3
+        val NBT_STRING = 8
+        val NBT_LIST = 9
+        val NBT_COMPOUND = 10
+        if (itemStack.hasTagCompound() && itemStack.tagCompound.hasKey("display", NBT_COMPOUND)) {
+            val display = itemStack.tagCompound.getCompoundTag("display")
+            if (display.hasKey("Lore", NBT_LIST)) {
+                val lore = display.getTagList("Lore", NBT_STRING)
+                val loreAsList: MutableList<String> = ArrayList()
+                for (lineNumber in 0 until lore.tagCount()) {
+                    loreAsList.add(lore.getStringTagAt(lineNumber))
+                }
+                return Collections.unmodifiableList(loreAsList)
+            }
+        }
+        return Collections.emptyList()
+    }
     fun scoreboardData(){
+        if(getScoreboardLines()[3].contains("F7") || getScoreboardLines()[3].contains("M7")) addMessage("True")
 //        for (line in getScoreboardLines()){
-////            mc.thePlayer.addChatMessage(ChatComponentText(line.))
+//            mc.thePlayer.addChatMessage(ChatComponentText(line))
 //        }
     }
 
-    fun getScoreboardLines(): List<String> {
-        val mc = Minecraft.getMinecraft()
-        val scoreboard = mc.theWorld.scoreboard
-        val objective = scoreboard.getObjectiveInDisplaySlot(1) // 1 is the display slot for the sidebar
-        val teams = scoreboard.teams
+    fun addMessage(message: String){
+        mc.thePlayer.addChatMessage(ChatComponentText(message))
+    }
 
-        val lines = mutableListOf<String>()
-        for (team in teams) {
-            val members = team.membershipCollection
-            for (member in members) {
-                val score = scoreboard.getValueFromObjective(member, objective)
-                lines.add("$member: $score")
-                mc.thePlayer.addChatMessage(ChatComponentText(score.toString()))
-            }
-        }
+    fun getScoreboardLines(): List<String> {
+        val lines = ScoreboardUtil.fetchScoreboardLines().map { it.stripControlCodes() }
         return lines
     }
 

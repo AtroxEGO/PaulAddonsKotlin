@@ -90,7 +90,7 @@ object ESP : Feature() {
         }
     }
 
-    private fun getMobsWithinAABB(entity: Entity) {
+    fun getMobsWithinAABB(entity: Entity) {
         val aabb = AxisAlignedBB(entity.posX + 0.4, entity.posY - 2.0, entity.posZ + 0.4, entity.posX - 0.4, entity.posY + 0.2, entity.posZ - 0.4)
         val i = MathHelper.floor_double(aabb.minX - 1.0) shr 4
         val j = MathHelper.floor_double(aabb.maxX + 1.0) shr 4
@@ -101,7 +101,7 @@ object ESP : Feature() {
                 this.getMobsWithinAABBForEntity(mc.theWorld.getChunkFromChunkCoords(i1, j1), entity, aabb)
     }
 
-    private fun getMobsWithinAABBForEntity(chunk: Chunk, entityIn: Entity, aabb: AxisAlignedBB) {
+    fun getMobsWithinAABBForEntity(chunk: Chunk, entityIn: Entity, aabb: AxisAlignedBB) {
         val entityLists = chunk.entityLists
         var i = MathHelper.floor_double((aabb.minY - World.MAX_ENTITY_RADIUS) / 16.0)
         var j = MathHelper.floor_double((aabb.maxY + World.MAX_ENTITY_RADIUS) / 16.0)

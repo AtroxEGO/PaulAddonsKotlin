@@ -77,6 +77,19 @@ object Config : Vigilant(
     var autoExperiments = false
     var autoCloseExperiments = false
     var autoExperimentsDelay = 200
+    var miniESP = false
+    var slayerESP = false
+    var bossESPColor : Color = Color.BLUE
+    var worseMiniColor : Color = Color.BLUE
+    var betterMiniColor : Color = Color.BLUE
+    var slayerESPType = 2
+    var bossESP = false
+    var autoDaed = false
+    var daedSwapHealthType = 0
+    var percentageHealthDaed = 0f
+    var manualHealthDaed = "150k"
+    var autoP3P5GhostBlocks = false
+    var bonzoMaskTimer = false
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -219,6 +232,14 @@ object Config : Vigilant(
                     Config::removeBlindness,
                     name = "Remove Blindness"
                 )
+                switch(
+                    Config::bonzoMaskTimer,
+                    name = "Bonzo Mask Timer"
+                )
+            switch(
+                Config::autoP3P5GhostBlocks,
+                name = "Auto P3/P5 Ghost Blocks"
+            )
             }
         }
         category("Star Cult") {
@@ -250,20 +271,34 @@ object Config : Vigilant(
             }
 
         }
-        category("Auto Hi"){
-//            subcategory("Auto Hi"){
+        category("Auto Stuff") {
+            subcategory("Auto Daed Swap"){
+                switch(
+                    Config::autoDaed,
+                    name = "Auto Daed Swap"
+                )
+                selector(
+                    Config::daedSwapHealthType,
+                    name = "Health Detection Type",
+                    options = listOf("Percentage", "Manual")
+                )
+                percentSlider(
+                    Config::percentageHealthDaed,
+                    name = "Percentage Boss Health",
+                    description = "Select at what percentage of health swap to daed",
+                )
+                text(
+                    Config::manualHealthDaed,
+                    name = "Manual Boss Health",
+                    description = "Select at what amount of health swap to daed, for example: '10.2M'"
+                )
+            }
+            subcategory("Auto Hi") {
                 switch(
                     Config::autoFriendHi,
                     name = "Auto Friend Hi",
                     description = "Automatically sends Hi message to selected friends when they join"
                 )
-                switch(
-                    Config::autoGuildHi,
-                    name = "Auto Guild Hi",
-                    description = "Automatically sends Hi message to guild"
-                )
-//            }
-            subcategory("Auto Friend Hi Options"){
                 text(
                     Config::autoHiFriends,
                     name = "Auto Hi Friends",
@@ -287,8 +322,11 @@ object Config : Vigilant(
                     name = "Custom Command",
                     description = "Type custom command, for ign use [IGN], leave empty for default"
                 )
-            }
-            subcategory("Auto Guild Hi Options"){
+                switch(
+                    Config::autoGuildHi,
+                    name = "Auto Guild Hi",
+                    description = "Automatically sends Hi message to guild"
+                )
                 text(
                     Config::autoGuildHiCustomMessage,
                     name = "Custom Guild Hi Message",
@@ -303,22 +341,22 @@ object Config : Vigilant(
                     name = "Last Guild Hi",
                     min = 0,
                     max = 31,
-//                    hidden = true
+                    hidden = true
                 )
             }
-        }
-        category("Auto Thank You"){
-            switch(
-                Config::autoThankYou,
-                name = "Auto Thank You",
-                description = "Automatically thanks for a splash :D"
-            )
-            subcategory("Auto Thank You Options"){
-                text(
-                    Config::thankYouMessage,
-                    name = "Thank You Message",
-                    description = "For Splashers IGN use [IGN]"
+            subcategory("Auto Thank You") {
+                switch(
+                    Config::autoThankYou,
+                    name = "Auto Thank You",
+                    description = "Automatically thanks for a splash :D"
                 )
+                subcategory("Auto Thank You Options") {
+                    text(
+                        Config::thankYouMessage,
+                        name = "Thank You Message",
+                        description = "For Splashers IGN use [IGN]"
+                    )
+                }
             }
         }
         category("Better Fishing"){
@@ -421,6 +459,40 @@ object Config : Vigilant(
                 description = "I would leave it at around 200, less might crash"
             )
         }
+        category("Slayer"){
+            subcategory("Slayer ESP"){
+                switch(
+                    Config::slayerESP,
+                    name = "Slayer ESP"
+                )
+                selector(
+                    Config::slayerESPType,
+                    name = "Type of Slayer ESP",
+                    description = "Changes the type of ESP",
+                    options = listOf("Chams", "Box", "Outline")
+                )
+                switch(
+                    Config::bossESP,
+                    name = "Boss ESP"
+                )
+                switch(
+                    Config::miniESP,
+                    name = "Mini ESP"
+                )
+                color(
+                    Config::bossESPColor,
+                    name = "Boss Color"
+                )
+                color(
+                    Config::worseMiniColor,
+                    name = "Weak Mini Color"
+                )
+                color(
+                    Config::betterMiniColor,
+                    name = "Strong Mini Color"
+                )
+            }
+        }
         category("GUI Locations"){
             button(
                 name = "Edit GUI Locations",
@@ -476,6 +548,15 @@ object Config : Vigilant(
         addDependency(Config::hideDefaultNames, Config::terminalWaypoints)
         addDependency(Config::autoCloseExperiments, Config::autoExperiments)
         addDependency(Config::autoExperimentsDelay, Config::autoExperiments)
+        addDependency(Config::slayerESPType, Config::slayerESP)
+        addDependency(Config::bossESP, Config::slayerESP)
+        addDependency(Config::miniESP, Config::slayerESP)
+        addDependency(Config::bossESPColor, Config::bossESP)
+        addDependency(Config::betterMiniColor, Config::miniESP)
+        addDependency(Config::worseMiniColor, Config::miniESP)
+        addDependency(Config::daedSwapHealthType, Config::autoDaed)
+        addDependency(Config::percentageHealthDaed, Config::autoDaed)
+        addDependency(Config::manualHealthDaed, Config::autoDaed)
         markDirty()
     }
 
@@ -484,11 +565,12 @@ object Config : Vigilant(
             "Better Loot Share",
             "Dungeons",
             "Star Cult",
-            "Auto Hi",
+            "Auto Stuff",
             "Auto Thank You",
             "Better Fishing",
             "Helmet Swapper",
             "Auto Experiments",
+            "Slayer",
             "GUI Locations"
         )
         override fun getCategoryComparator(): Comparator<in Category> =

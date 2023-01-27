@@ -211,7 +211,7 @@ object RenderUtils {
     }
 
     fun drawChamsEsp(entity: EntityLivingBase, model: ModelBase, color: Int, partialTicks: Float) {
-        if (Minecraft.getMinecraft().thePlayer.canEntityBeSeen(entity)){return}
+//        if (Minecraft.getMinecraft().thePlayer.canEntityBeSeen(entity)){return}
         val modelData = preModelDraw(entity, model, partialTicks)
         val f3 = (color shr 24 and 255).toFloat() / 255f
         val f = (color shr 16 and 255).toFloat() / 255f
@@ -413,6 +413,7 @@ object RenderUtils {
             1 -> y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks + 2
             2 -> y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks - 0.5
             3 -> y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks + 1
+            4 -> y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks
         }
         val z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks - 0.5
 

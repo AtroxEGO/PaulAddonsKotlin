@@ -17,6 +17,8 @@ import me.atroxego.pauladdons.features.funnyFishing.BarnFishingTimer
 import me.atroxego.pauladdons.features.funnyFishing.FishingTracker
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.setupFishing
+import me.atroxego.pauladdons.features.slayers.AutoDaed
+import me.atroxego.pauladdons.features.slayers.SlayerESP
 import me.atroxego.pauladdons.features.starcult.StarCult
 import me.atroxego.pauladdons.gui.GuiManager
 import me.atroxego.pauladdons.render.DisplayNotification
@@ -95,9 +97,13 @@ class PaulAddons {
             MobNotification,
             StarCult,
             AutoHi,
+            AutoDaed,
+            AutoP3GhostBlocks,
             AutoChestCloser,
             ESP,
+            SlayerESP,
             SBInfo,
+            BonzoMask,
             SplashThankYou,
             FunnyFishing,
             TerminalWaypoints,

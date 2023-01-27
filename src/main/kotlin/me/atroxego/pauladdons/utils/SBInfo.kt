@@ -133,14 +133,15 @@ object SBInfo {
 
     @SubscribeEvent
     fun onTick(event: ClientTickEvent) {
-        if (event.phase != TickEvent.Phase.START || mc.thePlayer == null || mc.theWorld == null || !Utils.inSkyblock) return
+        if (event.phase != TickEvent.Phase.START || mc.thePlayer == null || mc.theWorld == null) return
         val currentTime = System.currentTimeMillis()
         if (locraw == null && currentTime - joinedWorld > 1300 && currentTime - lastLocRaw > 15000) {
             lastLocRaw = System.currentTimeMillis()
             mc.thePlayer.sendChatMessage("/locraw")
         }
+//        addMessage("a")
         val scoreObjective = mc.thePlayer.worldScoreboard.getObjectiveInDisplaySlot(1)
-        onSkyblock = scoreObjective.displayName.stripColor().startsWith("SKYBLOCK")
+        if (scoreObjective != null) onSkyblock = scoreObjective.displayName.stripColor().startsWith("SKYBLOCK")
         try {
             val lines = ScoreboardUtil.fetchScoreboardLines().map { it.stripControlCodes() }
             if (lines.size >= 5) {

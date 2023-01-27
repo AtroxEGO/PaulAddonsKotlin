@@ -1,26 +1,7 @@
-Shadow Assasin
-
-distance from terminals dependent on x and z
-
-show fels
-
-keys esp
-
-fels dont work in starred esp
-
-- Angry Guard Alarm
-
-try starred mobs esp as world render instead entity render
-
 - book combiner
-
-- auto experiments
 
 - make auto chest closer faster
 
-- play music
-
 - Auto Kismet
-
 
 - Timer for jacob with crops

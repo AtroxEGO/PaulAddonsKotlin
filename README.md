@@ -6,11 +6,10 @@ Discord: discord.gg/qVamggFna6
 
 ## Changes
 
-- Added Auto Chest Closer
-- Added Better Stonk
-- Added Starred Mob ESP
-- Added Terminal Waypotins
-- Small changes
+- Added Slayer ESP
+- Added Auto Daedalus Axe Swapper
+- Added Bonzo Mask Timer
+- Added Auto P3/P5 Ghost Blocks
 
 ## Features
 <details>

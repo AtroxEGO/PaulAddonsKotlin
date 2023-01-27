@@ -12,6 +12,7 @@
     "GuiMainMenuMixin",
     "IMixinMinecraft",
     "IMixinRendererLivingEntity",
-    "IMixinRenderManager"
+    "IMixinRenderManager",
+    "MixinRenderManager"
   ]
 }

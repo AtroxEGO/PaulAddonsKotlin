@@ -92,7 +92,7 @@ object StarCult {
         var nextCultInDays = 0
         var nextCultInHours = 0
         var nextCultInMinutes = 0
-        if (Cache.currentDay % 7 == 0 && Cache.currentHour < 6) {
+        if (Cache.currentDay % 7 == 0 && Cache.currentHour < 6 && Cache.currentDay != 0 ) {
             cultActive = true
             nextCultInDays = -1
             nextCultInHours = 23 - Cache.currentHour
@@ -125,7 +125,7 @@ object StarCult {
 //            Cache.currentHour = 0
 //            Cache.currentMinute = 0
 //        }
-        if (timeTwo + 300 - timeOne < 0) {
+        if (timeTwo + 300 - timeOne < 0 && timeOne != 0.0 && timeTwo != 0.0) {
             getDateInformation()
             getNextCult()
             return "What Happened?"
