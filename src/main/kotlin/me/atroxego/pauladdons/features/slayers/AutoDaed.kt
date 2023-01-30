@@ -2,6 +2,7 @@ package me.atroxego.pauladdons.features.slayers
 
 import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
+import gg.essential.api.utils.Multithreading
 import gg.essential.universal.UScreen
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.utils.Utils.addMessage
@@ -37,8 +38,8 @@ object AutoDaed {
         for (entity in entityList){
             if (!entity.hasCustomName()) continue
             val name = entity.customNameTag.stripColor()
-//            if (name != "Spawned by: ${mc.thePlayer.name}") continue
-            if (name != "Spawned by: AtroxEGO") continue
+            if (name != "Spawned by: ${mc.thePlayer.name}") continue
+//            if (name != "Spawned by: AtroxEGO") continue
             bossActive = true
             val mob = customMobs[entity]
             if (mob != null) {
@@ -50,10 +51,13 @@ object AutoDaed {
                 }
                 if (healthNumber == 0.0){
                     if (dead) return
+                    Multithreading.runAsync{
+                        Thread.sleep(1000)
                     switchBack()
                     slotWithMainWeapon = -1
                     dead = true
-                    return
+                    return@runAsync
+                    }
                 } else dead = false
                 if (maxBossHealth < 0) maxBossHealth = healthNumber
                 if (Config.daedSwapHealthType == 0){
@@ -168,7 +172,7 @@ object AutoDaed {
 
     fun switchBack(){
         if (slotWithMainWeapon == -1) return
-        addMessage(slotWithMainWeapon.toString())
+//        addMessage(slotWithMainWeapon.toString())
         if (slotWithMainWeapon in 0..7){
             mc.thePlayer.inventory.currentItem = slotWithMainWeapon
         } else {

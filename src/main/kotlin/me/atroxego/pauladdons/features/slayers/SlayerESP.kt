@@ -3,20 +3,24 @@ package me.atroxego.pauladdons.features.slayers
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.RenderEntityModelEvent
 import me.atroxego.pauladdons.features.Feature
+import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.mixin.IMixinRendererLivingEntity
 import me.atroxego.pauladdons.render.RenderUtils
 import me.atroxego.pauladdons.utils.Utils
+import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import net.minecraft.client.model.ModelBase
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.monster.EntityMob
+import net.minecraft.entity.passive.EntityWolf
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.util.MathHelper
 import net.minecraft.world.World
 import net.minecraft.world.chunk.Chunk
 import net.minecraftforge.event.world.WorldEvent
+import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 object SlayerESP : Feature() {
@@ -29,6 +33,7 @@ object SlayerESP : Feature() {
         if (event.entity is EntityArmorStand) {
             if (!event.entity.hasCustomName()) return
             val name = event.entity.customNameTag.stripColor()
+//            addMessage(name)
             for (bname in getBossesForEsp()) {
                 if (!name.contains(bname, true)) continue
                 val mob = customMobs[event.entity]
@@ -51,9 +56,14 @@ object SlayerESP : Feature() {
                 break
             }
             for (mini in getMinisForEsp()) {
+                if (mini.key in 4..5){
+                    val contains = name.contains(mini.value.name)
+//                    logger.info("Does $name contain ${mini.value.name}? $contains")
+                }
                 if (!name.contains(mini.value.name, true)) continue
                 val mob = customMobs[event.entity]
                 if (mob != null) {
+//                addMessage(name)
                     if (mob.isDead()) {
                         customMobs.remove(event.entity)
                         break
@@ -136,8 +146,17 @@ object SlayerESP : Feature() {
             if (entityLists[k].isEmpty()) continue
             entity@ for (e in entityLists[k]) {
                 if (!e.entityBoundingBox.intersectsWith(aabb)) continue@entity
-                if (e !is EntityMob || e.health <= 0.0f || e.isInvisible) continue@entity
-                customMobs[entityIn] = e as EntityLivingBase
+//                addMessage(e.name)
+                if (e is EntityWolf){
+                    if (e.health <= 0.0f || e.isInvisible) continue@entity
+                    customMobs[entityIn] = e as EntityLivingBase
+                } else if (e is EntityMob){
+                    if (e.health <= 0.0f || e.isInvisible) continue@entity
+                    customMobs[entityIn] = e as EntityLivingBase
+                }
+//                if (e !is EntityMob || e.health <= 0.0f || e.isInvisible) continue@entity
+//                addMessage("${e.name} is entitymob? ${e !is EntityMob}")
+
             }
         }
     }

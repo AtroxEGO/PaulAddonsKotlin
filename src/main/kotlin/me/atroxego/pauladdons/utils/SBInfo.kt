@@ -39,6 +39,7 @@ import net.minecraft.network.play.client.C01PacketChatMessage
 import net.minecraft.network.play.server.S02PacketChat
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.minecraftforge.event.world.WorldEvent
+import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
@@ -110,7 +111,7 @@ object SBInfo {
                 try {
                     val obj = json.decodeFromString<LocrawObject>(unformatted)
                     if (System.currentTimeMillis() - lastManualLocRaw > 5000) {
-                        Utils.cancelChatPacket(event)
+                        if (!Loader.isModLoaded("skytils")) Utils.cancelChatPacket(event)
                     }
                     locraw = obj
                     mode = obj.mode
