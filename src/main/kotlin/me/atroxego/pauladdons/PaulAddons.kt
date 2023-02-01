@@ -7,6 +7,7 @@ import me.atroxego.pauladdons.config.PersistentSave
 import me.atroxego.pauladdons.features.armorSwapper.ArmorSwapper.armorSwapper
 import me.atroxego.pauladdons.features.autoExperiments.AutoExperiments
 import me.atroxego.pauladdons.features.autoHi.AutoHi
+import me.atroxego.pauladdons.features.autoMelody.AutoMelody
 import me.atroxego.pauladdons.features.autothankyou.SplashThankYou
 import me.atroxego.pauladdons.features.betterlootshare.ESP
 import me.atroxego.pauladdons.features.betterlootshare.MobNotification
@@ -60,7 +61,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "1.3"
+        const val VERSION = "1.4"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
 
@@ -104,6 +105,7 @@ class PaulAddons {
             SlayerESP,
             SBInfo,
             BonzoMask,
+            AutoMelody,
             SplashThankYou,
             FunnyFishing,
             TerminalWaypoints,

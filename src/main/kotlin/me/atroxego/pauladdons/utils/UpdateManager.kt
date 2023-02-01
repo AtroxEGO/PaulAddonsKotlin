@@ -15,7 +15,8 @@ object UpdateManager {
     logger.info("Checking for updates...")
     Multithreading.runAsync {
         val version = HttpUtils.sendGet("https://raw.githubusercontent.com/AtroxEGO/PaulAddonsKotlin/master/version.txt", null)?.toDouble() ?: return@runAsync
-        logger.info(PaulAddons.VERSION)
+//        val currentVersion = "1.3"
+//        logger.info("A ${currentVersion.toDouble()}")
         if (PaulAddons.VERSION.toDouble() < version) {
             drawFrame(version)
         } else {

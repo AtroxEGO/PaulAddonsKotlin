@@ -3,11 +3,9 @@ package me.atroxego.pauladdons.features.slayers
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.RenderEntityModelEvent
 import me.atroxego.pauladdons.features.Feature
-import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.mixin.IMixinRendererLivingEntity
 import me.atroxego.pauladdons.render.RenderUtils
 import me.atroxego.pauladdons.utils.Utils
-import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import net.minecraft.client.model.ModelBase
 import net.minecraft.entity.Entity
@@ -20,7 +18,6 @@ import net.minecraft.util.MathHelper
 import net.minecraft.world.World
 import net.minecraft.world.chunk.Chunk
 import net.minecraftforge.event.world.WorldEvent
-import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 object SlayerESP : Feature() {

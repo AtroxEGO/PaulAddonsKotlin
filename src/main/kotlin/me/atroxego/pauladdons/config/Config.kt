@@ -90,6 +90,7 @@ object Config : Vigilant(
     var manualHealthDaed = "150k"
     var autoP3P5GhostBlocks = false
     var bonzoMaskTimer = false
+    var autoMelody = false
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -291,6 +292,12 @@ object Config : Vigilant(
                     Config::manualHealthDaed,
                     name = "Manual Boss Health",
                     description = "Select at what amount of health swap to daed, for example: '10.2M'"
+                )
+            }
+            subcategory("Auto Melody"){
+                switch(
+                    Config::autoMelody,
+                    name = "Auto Melody"
                 )
             }
             subcategory("Auto Hi") {
