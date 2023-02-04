@@ -4,7 +4,6 @@ import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.features.Feature
 import me.atroxego.pauladdons.mixin.IMixinRendererLivingEntity
 import me.atroxego.pauladdons.render.RenderUtils
-import me.atroxego.pauladdons.utils.Utils.getRenderPartialTicks
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import net.minecraft.client.model.ModelBase
 import net.minecraft.entity.Entity
@@ -50,7 +49,7 @@ object ESP : Feature() {
                         mob,
                         model,
                         Config.glowColor.rgb,
-                        getRenderPartialTicks()
+                        1.0f
                     )
                     return
                 } else getMobsWithinAABB(event.entity)
@@ -65,7 +64,7 @@ object ESP : Feature() {
                 event.entity,
                 event.renderer.mainModel,
                 Config.glowColor.rgb,
-                getRenderPartialTicks()
+                1.0f
             )
             return
         }

@@ -46,7 +46,7 @@ object SlayerESP : Feature() {
                         mob,
                         model,
                         Config.bossESPColor.rgb,
-                        event.partialTicks
+                        1.0f
                     )
                     break
                 } else getMobsWithinAABB(event.entity)
@@ -71,7 +71,7 @@ object SlayerESP : Feature() {
                         mob,
                         model,
                         if (mini.value.color == 1) Config.worseMiniColor.rgb else Config.betterMiniColor.rgb,
-                        event.partialTicks
+                        1.0f
                     )
                     break
                 } else getMobsWithinAABB(event.entity)
@@ -85,7 +85,7 @@ object SlayerESP : Feature() {
                 event.entity,
                 event.model,
                 Config.bossESPColor.rgb,
-                event.partialTicks
+                1.0f
             )
             break
         }
@@ -95,7 +95,7 @@ object SlayerESP : Feature() {
                     event.entity,
                     event.model,
                     if (mini.value.color == 1) Config.worseMiniColor.rgb else Config.betterMiniColor.rgb,
-                    event.partialTicks
+                    1.0f
                 )
                 break
             }

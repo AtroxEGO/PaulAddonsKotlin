@@ -14,6 +14,7 @@ import me.atroxego.pauladdons.features.betterlootshare.MobNotification
 import me.atroxego.pauladdons.features.dungeons.*
 import me.atroxego.pauladdons.features.dungeons.BetterStonk.createGhostBlock
 import me.atroxego.pauladdons.features.dungeons.HelmetSwapper.helmetSwapper
+import me.atroxego.pauladdons.features.dwarfenMines.MonolithESP
 import me.atroxego.pauladdons.features.funnyFishing.BarnFishingTimer
 import me.atroxego.pauladdons.features.funnyFishing.FishingTracker
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
@@ -61,7 +62,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "1.4"
+        const val VERSION = "1.5"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
 
@@ -112,6 +113,8 @@ class PaulAddons {
             StarredMobESP,
             BetterStonk,
             FishingTracker,
+            SpiritMask,
+            MonolithESP,
             RemoveBlindness,
             AutoExperiments,
             BarnFishingTimer,

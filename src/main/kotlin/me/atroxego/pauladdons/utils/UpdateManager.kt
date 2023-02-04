@@ -1,6 +1,5 @@
 package me.atroxego.pauladdons.utils
 
-import PaulAddons
 import gg.essential.api.utils.Multithreading
 import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import java.awt.*
@@ -11,16 +10,16 @@ import javax.swing.JLabel
 import javax.swing.border.EmptyBorder
 
 object UpdateManager {
+    private const val currentVersion = 1.5
     fun checkUpdate(){
     logger.info("Checking for updates...")
     Multithreading.runAsync {
         val version = HttpUtils.sendGet("https://raw.githubusercontent.com/AtroxEGO/PaulAddonsKotlin/master/version.txt", null)?.toDouble() ?: return@runAsync
 //        val currentVersion = "1.3"
 //        logger.info("A ${currentVersion.toDouble()}")
-        if (PaulAddons.VERSION.toDouble() < version) {
+        if (currentVersion < version) {
             drawFrame(version)
         } else {
-            logger.info(PaulAddons.VERSION)
             logger.info("Latest version!")
         }
     }
@@ -41,7 +40,8 @@ object UpdateManager {
         frame.modalExclusionType = Dialog.ModalExclusionType.APPLICATION_EXCLUDE
 
 // Create a new JLabel
-        val text = "<html><b>Paul Addons new version found!</b><br>&nbsp;&nbsp;&nbsp;Current Version: " + PaulAddons.VERSION.toDouble() + "<br>&nbsp;&nbsp;&nbsp;Latest Version: "+ version +"</html>"
+        val text =
+            "<html><b>Paul Addons new version found!</b><br>&nbsp;&nbsp;&nbsp;Current Version: $currentVersion<br>&nbsp;&nbsp;&nbsp;Latest Version: $version</html>"
         val label = JLabel(text)
         label.border = EmptyBorder(10,5,5,5)
         label.font = Font("Posterama", Font.PLAIN, 16)

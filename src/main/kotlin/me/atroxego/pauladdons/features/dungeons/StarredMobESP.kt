@@ -136,7 +136,7 @@ object StarredMobESP : Feature() {
                             mob,
                             model,
                             Config.starredMobESPColor.rgb,
-                            event.partialTicks
+                            1.0f
                         )
                     } else getStarredMobsWithinAABB(event.entity)
                 } else if (name == "Wither Key" || name == "Blood Key")
@@ -149,7 +149,7 @@ object StarredMobESP : Feature() {
                         event.entity,
                         event.model,
                         Config.starredMobESPColor.rgb,
-                        event.partialTicks
+                        1.0f
                     )
 
             is EntityEnderman ->
@@ -161,7 +161,7 @@ object StarredMobESP : Feature() {
                     event.entity,
                     event.model,
                     Config.starredMobESPColor.rgb,
-                    event.partialTicks
+                    1.0f
                 )
                 event.cancel()
             }

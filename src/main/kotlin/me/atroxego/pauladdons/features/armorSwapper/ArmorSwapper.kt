@@ -2,7 +2,10 @@ package me.atroxego.pauladdons.features.armorSwapper
 
 import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.utils.Utils
+import me.atroxego.pauladdons.utils.Utils.stripColor
 import net.minecraft.client.gui.inventory.GuiInventory
+import net.minecraft.item.ItemStack
 import net.minecraft.network.play.client.C0EPacketClickWindow
 import net.minecraft.util.ChatComponentText
 
@@ -23,10 +26,8 @@ object ArmorSwapper {
 //            mc.thePlayer.sendChatMessage(inventorySlot.item.isValidArmor(inventorySlot,0,mc.thePlayer).toString())
             for(a in 0..3){
                 if (inventorySlot.item.isValidArmor(inventorySlot,a,mc.thePlayer)) {
-                if (armorSlotsUsed.contains(a + 5)) {
-
-                    break
-                }
+                if (armorSlotsUsed.contains(a + 5)) break
+                    if (a == 0 && !isHypixelHelmet(inventorySlot)) break
                     armorSlot = a + 5
                     armorSlotsUsed.add(armorSlot)
                     break
@@ -50,7 +51,17 @@ object ArmorSwapper {
         mc.thePlayer.openContainer.slotClick(inventorySlot,0,0,mc.thePlayer)
         sendClick(armorSlot)
         mc.thePlayer.openContainer.slotClick(armorSlot,0,0,mc.thePlayer)
-        mc.netHandler.addToSendQueue(C0EPacketClickWindow(GuiInventory(mc.thePlayer).inventorySlots.windowId, inventorySlot,0,0,null,0))
+        val itemStack = if (mc.thePlayer.inventoryContainer.inventory[inventorySlot] == null) null else mc.thePlayer.inventoryContainer.inventory[inventorySlot]
+        mc.netHandler.addToSendQueue(C0EPacketClickWindow(GuiInventory(mc.thePlayer).inventorySlots.windowId, inventorySlot,0,0,itemStack,0))
         mc.thePlayer.openContainer.slotClick(inventorySlot,0,0,mc.thePlayer)
+    }
+
+    fun isHypixelHelmet(item: ItemStack): Boolean{
+        for (line in Utils.getItemLore(item)){
+            if (line == null) continue
+            if (line.stripColor().contains("HELMET")) return true
+        }
+
+        return false
     }
 }

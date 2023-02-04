@@ -106,11 +106,12 @@ object SBInfo {
     fun onChatMessage(event: PacketEvent.ReceiveEvent) {
 //                mc.thePlayer.addChatMessage(ChatComponentText("a"))
         if (event.packet is S02PacketChat) {
+//            if(event.packet.chatComponent.unformattedText.contains("❤") && event.packet.chatComponent.unformattedText.contains("❈") && event.packet.chatComponent.unformattedText.contains("✎")) addMessage(event.packet.chatComponent.formattedText)
             val unformatted = event.packet.chatComponent.unformattedText
             if (unformatted.startsWith("{") && unformatted.endsWith("}")) {
                 try {
                     val obj = json.decodeFromString<LocrawObject>(unformatted)
-                    if (System.currentTimeMillis() - lastManualLocRaw > 5000) {
+                    if (System.currentTimeMillis() - lastManualLocRaw > 6000) {
                         if (!Loader.isModLoaded("skytils")) Utils.cancelChatPacket(event)
                     }
                     locraw = obj

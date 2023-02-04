@@ -27,11 +27,11 @@ object SplashThankYou {
     @SubscribeEvent
     fun tickTimer(event: TickEvent.PlayerTickEvent){
         if (countTicks) ticksWithoutMessage++
-        if (ticksWithoutMessage > 320){
-            mc.thePlayer.sendChatMessage("/ac $messageToSend")
+        if (ticksWithoutMessage > 1000){
             lastTimeThanked = System.currentTimeMillis()
             countTicks = false
             ticksWithoutMessage = 0
+            mc.thePlayer.sendChatMessage("/ac $messageToSend")
         }
     }
 

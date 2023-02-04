@@ -16,6 +16,7 @@ import net.minecraft.util.AxisAlignedBB
 import net.minecraft.util.MathHelper
 import net.minecraft.world.World
 import net.minecraft.world.chunk.Chunk
+import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -27,28 +28,33 @@ object AutoDaed {
     private var maxBossHealth = -1.0
     var dead = false
     var switching = false
-
+    var lastHealth = -1.0
     @SubscribeEvent
     fun checkForBoss(event: RenderWorldLastEvent){
         if (!Config.autoDaed) return
         if (UScreen.currentScreen.toString().contains("gg.essential.vigilance.gui.SettingsGui")) return
         val world = Minecraft.getMinecraft().theWorld
-//        Daedalus Axe
         val entityList = world.loadedEntityList
         for (entity in entityList){
             if (!entity.hasCustomName()) continue
             val name = entity.customNameTag.stripColor()
+            if (name.contains("ⓉⓎⓅⒽⓄⒺⓊⓈ") || name.contains("ⓆⓊⒶⓏⒾⒾ")) return
             if (name != "Spawned by: ${mc.thePlayer.name}") continue
-//            if (name != "Spawned by: AtroxEGO") continue
             bossActive = true
+//            ☠ ⓉⓎⓅⒽⓄⒺⓊⓈ 10M❤ ☠ ⓆⓊⒶⓏⒾⒾ 10M❤
             val mob = customMobs[entity]
             if (mob != null) {
-                val health = mob.customNameTag.stripColor().split(" ").last().replace("❤","").lowercase()
-                val healthNumber = if (health == "0") 0.0 else when (health.drop(health.length-1)){
-                    "k" -> health.dropLast(1).toDouble() * 1000
-                    "m" -> health.dropLast(1).toDouble() * 1000000
-                    else -> health.toDouble()
+                val healthNumber = if (mob.customNameTag.contains("Hit")) lastHealth
+                else {
+                    val health = mob.customNameTag.stripColor().split(" ").last().replace("❤", "").lowercase()
+                    if (health == "0") 0.0 else when (health.drop(health.length - 1)) {
+                        "k" -> health.dropLast(1).toDouble() * 1000
+                        "m" -> health.dropLast(1).toDouble() * 1000000
+                        else -> health.toDouble()
+                    }
                 }
+                lastHealth = healthNumber
+                if (lastHealth == -1.0) return
                 if (healthNumber == 0.0){
                     if (dead) return
                     Multithreading.runAsync{
@@ -78,7 +84,7 @@ object AutoDaed {
                     }
                 } else {
                     val healthNumberToSwapAt =
-                        when (Config.manualHealthDaed.drop(health.length - 1).lowercase(Locale.getDefault())) {
+                        when (Config.manualHealthDaed.drop(Config.manualHealthDaed.length - 1).lowercase(Locale.getDefault())) {
                             "k" -> Config.manualHealthDaed.dropLast(1).toDouble() * 1000
                             "m" -> Config.manualHealthDaed.dropLast(1).toDouble() * 1000000
                             else -> Config.manualHealthDaed.toDouble()
@@ -104,8 +110,15 @@ object AutoDaed {
             }
             return
         }
+        if (bossActive) return
         bossActive = false
         maxBossHealth = -1.0
+    }
+
+    @SubscribeEvent
+    fun onChat(event: ClientChatReceivedEvent){
+        val message = event.message.unformattedText
+        if (message.contains("SLAYER QUEST COMPLETE!") || message.startsWith(" ☠ You")) bossActive = false
     }
 
     fun getMobsWithinAABB(entity: Entity) {

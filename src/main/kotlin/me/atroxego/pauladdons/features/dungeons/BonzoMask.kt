@@ -1,18 +1,27 @@
 package me.atroxego.pauladdons.features.dungeons
 
 import PaulAddons
+import PaulAddons.Companion.keyBindings
 import PaulAddons.Companion.mc
+import PaulAddons.Companion.prefix
 import me.atroxego.pauladdons.config.Config
+import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.gui.GuiElement
 import me.atroxego.pauladdons.render.font.FontUtils
 import me.atroxego.pauladdons.utils.Utils
+import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import me.atroxego.pauladdons.utils.core.FloatPair
+import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.network.play.client.C0EPacketClickWindow
+import net.minecraft.network.play.server.S02PacketChat
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.event.world.WorldEvent
+import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import kotlin.math.roundToInt
 
 
 object BonzoMask {
@@ -66,9 +75,11 @@ object BonzoMask {
         }
     }
 
+    var timeWorldJoined = -1L
     @SubscribeEvent
     fun onWorldChange(event: WorldEvent.Load?) {
         nextBonzoUse = 0.0
+        timeWorldJoined = System.currentTimeMillis()/1000
     }
 //Your ⚚ Bonzo's Mask saved your life!
     @SubscribeEvent
@@ -86,5 +97,84 @@ object BonzoMask {
         }
         logger.info("Got Bonzo Mask Cooldown: $cooldownSeconds")
         if (cooldownSeconds > 0) nextBonzoUse = usedTime + cooldownSeconds
+        if (mainHelmetSlotIndex != -1){
+            addMessage("$prefix Switched back to ${mc.thePlayer.inventoryContainer.inventory[mainHelmetSlotIndex].displayName}")
+            mc.displayGuiScreen(GuiInventory(mc.thePlayer))
+            sendInventoryClick(mainHelmetSlotIndex)
+            sendInventoryClick(5)
+            sendInventoryClick(mainHelmetSlotIndex)
+            mc.thePlayer.closeScreen()
+            mainHelmetSlotIndex = -1
+            mc.thePlayer.playSound("random.orb", 1.0f,0.5f)
+        }
     }
+
+    @SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = true)
+    fun onChatPacket(event: PacketEvent.ReceiveEvent) {
+        if (!Utils.inDungeon) return
+        if (!Config.autoBonzoMask) return
+        if (nextBonzoUse - System.currentTimeMillis()/1000 < 0)
+        if (event.packet is S02PacketChat) {
+        if (System.currentTimeMillis()/1000 - timeWorldJoined < 5) return
+            if(event.packet.chatComponent.unformattedText.contains("❤") && event.packet.chatComponent.unformattedText.contains("❈") && event.packet.chatComponent.unformattedText.contains("✎") && !event.packet.chatComponent.unformattedText.contains(":")){
+            val unformatted = event.packet.chatComponent.unformattedText
+                val health = unformatted.split("/")[0].replace(",","").stripColor().toDouble()
+                val maxHealth = unformatted.split(" ")[0].split("/")[1].replace("❤","").replace(",","").stripColor().toDouble()
+                val healthPercent = (health/maxHealth * 100).roundToInt()
+//                addMessage("Health: $health Max Health: $maxHealth Percent: $healthPercent")
+                val helmetEquipped = mc.thePlayer.inventoryContainer.inventory[5]
+                if (healthPercent < Config.autoBonzoMaskHealth * 100 || keyBindings[2]!!.isPressed){
+                    if (helmetEquipped == null){
+                    swapToBonzo()
+                    addMessage("$prefix Automatically Equipped ${mc.thePlayer.inventoryContainer.inventory[5].displayName}")
+                    } else if (!helmetEquipped.displayName.contains("Bonzo's Mask")){
+                        swapToBonzo()
+                        addMessage("$prefix Automatically Equipped ${mc.thePlayer.inventoryContainer.inventory[5].displayName}")
+                    }
+                }
+                if (healthPercent > 50 && mainHelmetSlotIndex != -1){
+                    addMessage("$prefix Switched back to ${mc.thePlayer.inventoryContainer.inventory[mainHelmetSlotIndex].displayName}")
+                    mc.displayGuiScreen(GuiInventory(mc.thePlayer))
+                    sendInventoryClick(mainHelmetSlotIndex)
+                    sendInventoryClick(5)
+                    sendInventoryClick(mainHelmetSlotIndex)
+                    mc.thePlayer.closeScreen()
+                    mainHelmetSlotIndex = -1
+                    mc.thePlayer.playSound("random.orb", 1.0f,0.5f)
+                }
+            }
+        }
+    }
+
+    private var mainHelmetSlotIndex = -1
+
+    fun swapToBonzo(){
+        var bonzoSlotIndex = -1
+        for (slot in 9..43){
+            val itemStack = mc.thePlayer.openContainer.getSlot(slot).stack ?: continue
+            if (!itemStack.displayName.contains("Bonzo's Mask")) continue
+            bonzoSlotIndex = slot
+            break
+        }
+        if (bonzoSlotIndex == -1){
+            addMessage("$prefix Havent found Bonzo's Mask")
+            return
+        }
+        mc.displayGuiScreen(GuiInventory(mc.thePlayer))
+        sendInventoryClick(bonzoSlotIndex)
+        sendInventoryClick(5)
+        sendInventoryClick(bonzoSlotIndex)
+        mc.thePlayer.closeScreen()
+        mainHelmetSlotIndex = bonzoSlotIndex
+        addMessage("Main Helmet Slot is: $mainHelmetSlotIndex $bonzoSlotIndex")
+        mc.thePlayer.playSound("random.orb", 1.0f,0.5f)
+    }
+
+    fun sendInventoryClick(slot: Int){
+//        addMessage(mc.thePlayer.inventoryContainer.inventory[slot].displayName)
+        val itemStack = mc.thePlayer.inventoryContainer.inventory[slot]
+        mc.netHandler.addToSendQueue(C0EPacketClickWindow(GuiInventory(mc.thePlayer).inventorySlots.windowId, slot,0,0,itemStack,0))
+        mc.thePlayer.openContainer.slotClick(slot,0,0,mc.thePlayer)
+    }
+
 }

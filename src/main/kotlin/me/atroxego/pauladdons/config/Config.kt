@@ -65,6 +65,7 @@ object Config : Vigilant(
     var starredMobESP = false
     var starredMobESPColor : Color = Color.BLUE
     var terminalWaypoints = false
+    var monolithESP = false
     var deviceBeaconColor : Color = Color.BLUE
     var terminalBeaconColor : Color = Color.BLUE
     var leverBeaconColor : Color = Color.BLUE
@@ -91,6 +92,9 @@ object Config : Vigilant(
     var autoP3P5GhostBlocks = false
     var bonzoMaskTimer = false
     var autoMelody = false
+    var spiritMaskTimer = false
+    var autoBonzoMask = false
+    var autoBonzoMaskHealth = 0.3f
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -194,6 +198,16 @@ object Config : Vigilant(
                     name = "Auto Close Secret Chests"
                 )
             }
+            subcategory("Auto Bonzo"){
+                switch(
+                    Config::autoBonzoMask,
+                    name = "Auto Bonzo Mask"
+                )
+                percentSlider(
+                    Config::autoBonzoMaskHealth,
+                    name = "Percentage of health to swap at"
+                )
+            }
             subcategory("Terminal Waypoints"){
             switch(
                 Config::terminalWaypoints,
@@ -237,19 +251,23 @@ object Config : Vigilant(
                     Config::bonzoMaskTimer,
                     name = "Bonzo Mask Timer"
                 )
+                switch(
+                    Config::spiritMaskTimer,
+                    name = "Spirit Mask Timer"
+                )
             switch(
                 Config::autoP3P5GhostBlocks,
                 name = "Auto P3/P5 Ghost Blocks"
             )
             }
         }
-        category("Star Cult") {
+        category("Dwarven Mines") {
+            subcategory("Star Cult"){
             switch(
                 Config::starCultTimer,
                 name = "Star Cult Timer",
                 description = "Turns On and Off Cult Timer",
             )
-            subcategory("Notification Options"){
                 switch(
                     Config::cStarCultNotification,
                     name = "Chat Notification",
@@ -270,30 +288,14 @@ object Config : Vigilant(
                     description = "Displays notification on the screen about star cult being active"
                 )
             }
-
-        }
-        category("Auto Stuff") {
-            subcategory("Auto Daed Swap"){
+            subcategory("Monoliths"){
                 switch(
-                    Config::autoDaed,
-                    name = "Auto Daed Swap"
-                )
-                selector(
-                    Config::daedSwapHealthType,
-                    name = "Health Detection Type",
-                    options = listOf("Percentage", "Manual")
-                )
-                percentSlider(
-                    Config::percentageHealthDaed,
-                    name = "Percentage Boss Health",
-                    description = "Select at what percentage of health swap to daed",
-                )
-                text(
-                    Config::manualHealthDaed,
-                    name = "Manual Boss Health",
-                    description = "Select at what amount of health swap to daed, for example: '10.2M'"
+                    Config::monolithESP,
+                    name = "Monolith ESP"
                 )
             }
+        }
+        category("Auto Stuff") {
             subcategory("Auto Melody"){
                 switch(
                     Config::autoMelody,
@@ -462,7 +464,7 @@ object Config : Vigilant(
                 Config::autoExperimentsDelay,
                 name = "Click delay in ms",
                 min = 50,
-                max = 500,
+                max = 1000,
                 description = "I would leave it at around 200, less might crash"
             )
         }
@@ -497,6 +499,27 @@ object Config : Vigilant(
                 color(
                     Config::betterMiniColor,
                     name = "Strong Mini Color"
+                )
+            }
+            subcategory("Auto Daed Swap"){
+                switch(
+                    Config::autoDaed,
+                    name = "Auto Daed Swap"
+                )
+                selector(
+                    Config::daedSwapHealthType,
+                    name = "Health Detection Type",
+                    options = listOf("Percentage", "Manual")
+                )
+                percentSlider(
+                    Config::percentageHealthDaed,
+                    name = "Percentage Boss Health",
+                    description = "Select at what percentage of health swap to daed",
+                )
+                text(
+                    Config::manualHealthDaed,
+                    name = "Manual Boss Health",
+                    description = "Select at what amount of health swap to daed, for example: '10.2M'"
                 )
             }
         }
@@ -564,6 +587,7 @@ object Config : Vigilant(
         addDependency(Config::daedSwapHealthType, Config::autoDaed)
         addDependency(Config::percentageHealthDaed, Config::autoDaed)
         addDependency(Config::manualHealthDaed, Config::autoDaed)
+        addDependency(Config::autoBonzoMaskHealth, Config::autoBonzoMask)
         markDirty()
     }
 
@@ -571,7 +595,7 @@ object Config : Vigilant(
         private val categories = listOf(
             "Better Loot Share",
             "Dungeons",
-            "Star Cult",
+            "Dwarven Mines",
             "Auto Stuff",
             "Auto Thank You",
             "Better Fishing",
