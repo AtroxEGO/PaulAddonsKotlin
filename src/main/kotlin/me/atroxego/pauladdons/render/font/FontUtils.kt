@@ -34,7 +34,7 @@ object FontUtils {
             RenderUtils.renderTexture(textureBasic, position.toInt(), 0)
         } else {
             val textureMirrored = ResourceLocation(resourceMirrorLocation)
-            RenderUtils.renderTexture(textureMirrored, (position + 34).toInt(), 0)
+            RenderUtils.renderTexture(textureMirrored, (position + element.width/1.5).toInt(), 0)
         }
     }
 

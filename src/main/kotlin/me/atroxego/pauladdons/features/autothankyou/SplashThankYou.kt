@@ -27,7 +27,7 @@ object SplashThankYou {
     @SubscribeEvent
     fun tickTimer(event: TickEvent.PlayerTickEvent){
         if (countTicks) ticksWithoutMessage++
-        if (ticksWithoutMessage > 1000){
+        if (ticksWithoutMessage > 2000){
             lastTimeThanked = System.currentTimeMillis()
             countTicks = false
             ticksWithoutMessage = 0

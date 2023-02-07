@@ -80,6 +80,7 @@ object BonzoMask {
     fun onWorldChange(event: WorldEvent.Load?) {
         nextBonzoUse = 0.0
         timeWorldJoined = System.currentTimeMillis()/1000
+        displayedMessage = false
     }
 //Your ⚚ Bonzo's Mask saved your life!
     @SubscribeEvent
@@ -129,7 +130,6 @@ object BonzoMask {
                     addMessage("$prefix Automatically Equipped ${mc.thePlayer.inventoryContainer.inventory[5].displayName}")
                     } else if (!helmetEquipped.displayName.contains("Bonzo's Mask")){
                         swapToBonzo()
-                        addMessage("$prefix Automatically Equipped ${mc.thePlayer.inventoryContainer.inventory[5].displayName}")
                     }
                 }
                 if (healthPercent > 50 && mainHelmetSlotIndex != -1){
@@ -145,7 +145,7 @@ object BonzoMask {
             }
         }
     }
-
+    private var displayedMessage = false
     private var mainHelmetSlotIndex = -1
 
     fun swapToBonzo(){
@@ -157,7 +157,10 @@ object BonzoMask {
             break
         }
         if (bonzoSlotIndex == -1){
-            addMessage("$prefix Havent found Bonzo's Mask")
+            if (!displayedMessage) {
+                addMessage("$prefix Havent found Bonzo's Mask")
+                displayedMessage = true
+            }
             return
         }
         mc.displayGuiScreen(GuiInventory(mc.thePlayer))
@@ -166,8 +169,8 @@ object BonzoMask {
         sendInventoryClick(bonzoSlotIndex)
         mc.thePlayer.closeScreen()
         mainHelmetSlotIndex = bonzoSlotIndex
-        addMessage("Main Helmet Slot is: $mainHelmetSlotIndex $bonzoSlotIndex")
         mc.thePlayer.playSound("random.orb", 1.0f,0.5f)
+        addMessage("$prefix Automatically Equipped ${mc.thePlayer.inventoryContainer.inventory[5].displayName}")
     }
 
     fun sendInventoryClick(slot: Int){

@@ -4,6 +4,7 @@
   "minVersion": "0.7",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "MixinEntityLivingBase",
     "MixinGuiScreen",
     "MixinNetHandlerPlayClient",
     "MixinNetworkManager"
@@ -13,6 +14,7 @@
     "IMixinMinecraft",
     "IMixinRendererLivingEntity",
     "IMixinRenderManager",
+    "MixinLayerCape",
     "MixinRenderManager"
   ]
 }

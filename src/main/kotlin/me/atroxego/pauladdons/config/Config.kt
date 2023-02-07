@@ -95,6 +95,8 @@ object Config : Vigilant(
     var spiritMaskTimer = false
     var autoBonzoMask = false
     var autoBonzoMaskHealth = 0.3f
+    var realisticHeight = false
+    var realisticHeightType = 0
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -523,6 +525,17 @@ object Config : Vigilant(
                 )
             }
         }
+        category("Miscellaneous"){
+            switch(
+                Config::realisticHeight,
+                name = "Realistic Height"
+            )
+            selector(
+                Config::realisticHeightType,
+                name = "Realistic Height Type",
+                options = listOf("Only tripleB36", "Everyone"),
+            )
+        }
         category("GUI Locations"){
             button(
                 name = "Edit GUI Locations",
@@ -588,6 +601,7 @@ object Config : Vigilant(
         addDependency(Config::percentageHealthDaed, Config::autoDaed)
         addDependency(Config::manualHealthDaed, Config::autoDaed)
         addDependency(Config::autoBonzoMaskHealth, Config::autoBonzoMask)
+        addDependency(Config::realisticHeightType, Config::realisticHeight)
         markDirty()
     }
 
@@ -602,6 +616,7 @@ object Config : Vigilant(
             "Helmet Swapper",
             "Auto Experiments",
             "Slayer",
+            "Miscellaneous",
             "GUI Locations"
         )
         override fun getCategoryComparator(): Comparator<in Category> =

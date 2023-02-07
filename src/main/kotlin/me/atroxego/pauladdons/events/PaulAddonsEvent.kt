@@ -15,7 +15,7 @@ abstract class PaulAddonsEvent : Event() {
             MinecraftForge.EVENT_BUS.post(this)
         }.onFailure {
             it.printStackTrace()
-            UChat.chat("${PaulAddons.prefix} caught and logged an ${it::class.simpleName ?: "error"} at ${eventName}. Please report this on the Discord server at https://discord.gg/raMz6dNppdPacketEvent.")
+            UChat.chat("${PaulAddons.prefix} caught and logged an ${it::class.simpleName ?: "error"} at ${eventName}. Please report this on the Discord server at https://discord.gg/qVamggFna6.")
         }.getOrDefault(isCanceled)
     }
 }

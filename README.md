@@ -6,10 +6,7 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
 
 ## Changes
 
-- Added Slayer ESP
-- Added Auto Daedalus Axe Swapper
-- Added Bonzo Mask Timer
-- Added Auto P3/P5 Ghost Blocks
+- Added Realistic Height
 
 ## Features
 <details>
@@ -77,6 +74,7 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
 
 ### Other
 - Armor Swapper
+- Realistic Height
 </details>
 
 ## Commands

@@ -10,7 +10,7 @@ import javax.swing.JLabel
 import javax.swing.border.EmptyBorder
 
 object UpdateManager {
-    private const val currentVersion = 1.5
+    private const val currentVersion = 1.6
     fun checkUpdate(){
     logger.info("Checking for updates...")
     Multithreading.runAsync {

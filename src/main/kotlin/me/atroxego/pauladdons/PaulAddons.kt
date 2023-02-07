@@ -19,6 +19,7 @@ import me.atroxego.pauladdons.features.funnyFishing.BarnFishingTimer
 import me.atroxego.pauladdons.features.funnyFishing.FishingTracker
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.setupFishing
+import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter
 import me.atroxego.pauladdons.features.slayers.AutoDaed
 import me.atroxego.pauladdons.features.slayers.SlayerESP
 import me.atroxego.pauladdons.features.starcult.StarCult
@@ -62,7 +63,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "1.5"
+        const val VERSION = "1.6"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
 
@@ -112,6 +113,7 @@ class PaulAddons {
             TerminalWaypoints,
             StarredMobESP,
             BetterStonk,
+            ChaosmiteCounter,
             FishingTracker,
             SpiritMask,
             MonolithESP,
@@ -133,12 +135,14 @@ class PaulAddons {
         for (keyBinding in keyBindings) {
             ClientRegistry.registerKeyBinding(keyBinding)
         }
+
     }
     @EventHandler
     fun postInit(event: FMLPostInitializationEvent){
         PersistentSave.loadData()
         Config.loadData()
     }
+
 
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {

@@ -3,6 +3,7 @@ package me.atroxego.pauladdons.commands
 import PaulAddons
 import PaulAddons.Companion.mc
 import me.atroxego.pauladdons.config.Config
+import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter.chaosCounter
 import me.atroxego.pauladdons.gui.LocationEditGui
 import me.atroxego.pauladdons.utils.SBInfo
 import me.atroxego.pauladdons.utils.SBInfo.onSkyblock
@@ -29,6 +30,7 @@ class PaulAddonsCommand : CommandBase() {
             "gui" -> PaulAddons.currentGui = LocationEditGui()
             "edit" -> PaulAddons.currentGui = LocationEditGui()
             "save" -> Config.writeData()
+            "counter" -> chaosCounter = !chaosCounter
             "mode" -> mc.thePlayer.addChatMessage(ChatComponentText("mode: " + SBInfo.mode + " inSkyblock: " + onSkyblock))
             "sb" -> scoreboardData()
 //                    + " date: " +
