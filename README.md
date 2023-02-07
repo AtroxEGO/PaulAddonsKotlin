@@ -35,7 +35,7 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
 </details>
 
 <details>
-    <summary>Star Cult</summary>
+    <summary>Dwarven Mines</summary>
 
 ### Dwarven Mines
 - Star Cult Timer
@@ -76,7 +76,7 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
 
 ### Other
 - Armor & Helmet Swapper
-- Realistic Height
+- Realistic Height (Makes Players Very Small)
 </details>
 
 ## Commands
