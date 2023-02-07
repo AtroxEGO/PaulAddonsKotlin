@@ -13,7 +13,7 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
     <summary>Better Loot Share</summary>
 
 ### Better Loot Share
-- Glow On Mobs
+- ESP On Mobs
     - Renders an outline around selected Mobs
 - Mob Notification
     - Displays notification if selected mob is near
@@ -24,38 +24,40 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
 
 ### Dungeons
 - Starred Mob ESP
+- Auto Bonzo Mask
 - Better Stonk
 - Ghost Block
 - Auto Chest Closer
 - Terminal Waypoints
-- Helmet Swapper
+- Bonzo & Spirit Mask Timers
+- Remove Blindness
+- Auto P3 & P5 Ghost Blocks
 </details>
 
 <details>
     <summary>Star Cult</summary>
 
-### Star Cult
+### Dwarven Mines
 - Star Cult Timer
     - Displays a timer on your screen for star cult event
-- Auto Guild Notification
-    - Automatically sends notification in your guilds chat
+- Monolith ESP
 </details>
-
 <details>
-  <summary>Auto Hi</summary>
+  <summary>Slayers</summary>
 
-### Auto Hi
-- Friend Hi
+### Slayers
+- Auto Daedelus Axe Swapper
+- Slayer ESP
+</details>
+<details>
+  <summary>Auto Stuff</summary>
+
+### Auto Stuff
+- Auto Friend Hi
     - Sends a custom message to selected friends on their join
-- Guild Hi
-    - Sends a custom message to guild on your join (Once Per Day)
-</details>
-<details>
-  <summary>Auto Thanks</summary>
-
-### Auto Thanks
-- Auto Splash Thanks
-  - Automatically sends a custom message after a splash, for splashers ign use [IGN]
+- Auto Melody
+- Auto Experiments
+- Auto Splash Thank You
 </details>
 <details>
   <summary>Fishing Addons</summary>
@@ -63,7 +65,7 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
 ### Fishing Addons
 - Sea Creature Tracker
   - Displays a customizable list with your caught sea creatures
-- Barn Fishing Timer
+- Fishing Timer
   - Timer showing u time since last sea creatures kill
 - Funny Fishing
   - Should automatically fish (experimental)
@@ -73,7 +75,7 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
   <summary>Other</summary>
 
 ### Other
-- Armor Swapper
+- Armor & Helmet Swapper
 - Realistic Height
 </details>
 
