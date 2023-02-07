@@ -406,8 +406,7 @@ object Config : Vigilant(
             subcategory("Fishing Timer"){
             switch(
                 Config::barnFishingTimer,
-                name = "Barn Fishing Timer",
-                description = "Displays a timer since first rod cast until item change //Desc TODO im sleepy"
+                name = "Fishing Timer"
             )
             switch(
                 Config::displayBarnFishingTimerNotification,

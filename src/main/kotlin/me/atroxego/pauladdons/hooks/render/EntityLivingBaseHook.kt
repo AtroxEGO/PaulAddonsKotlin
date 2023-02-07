@@ -26,50 +26,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 
 class EntityLivingBaseHook(val entity: EntityLivingBase) {
 
-    val blackListedNames = arrayListOf(
-        "CryptDreadlord",
-        "LostAdventurer",
-        "Bonzo",
-        "Scarf",
-        "TheProfessor",
-        "Livid",
-        "Sadan",
-        "DiamondGuy",
-        "RedstoneWarrior",
-        "ShadowAssassin",
-        "KingMidas",
-        "FrozenAdventurer",
-        "CryptUndead",
-        "CryptSoulstealer",
-        "SkeletorPrime",
-        "Prince",
-        "Revoker",
-        "Psycho",
-        "Reaper",
-        "Parasite",
-        "Cannibal",
-        "Mute",
-        "Ooze",
-        "Putrid",
-        "Freak",
-        "Leech",
-        "Flamer",
-        "Tear",
-        "Skull",
-        "Mr.Dead",
-        "Vader",
-        "Frost",
-        "Walker",
-        "WanderingSoul",
-        "Undead",
-        "UndeadWarrior",
-        "UndeadPriest",
-        "UndeadMage",
-        "UndeadArcher",
-        "SpiritBear",
-        "Terracotta",
-    )
-
     fun isChild(cir: CallbackInfoReturnable<Boolean>) {
         if (entity is EntityPlayer){
             if (Config.realisticHeight){
