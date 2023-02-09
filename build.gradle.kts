@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "PaulAddons"
-version = "1.6"
+version = "1.7"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
@@ -68,10 +68,15 @@ dependencies {
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
+    implementation("org.json:json:20220924")
     implementation("gg.essential:universalcraft-1.8.9-forge:251")
     shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") { isTransitive = false }
     annotationProcessor("org.spongepowered:mixin:0.8.4-SNAPSHOT")
-
+//    shadowImpl(platform("io.ktor:ktor-bom:2.2.2"))
+//    shadowImpl("io.ktor:ktor-serialization-kotlinx-json-jvm")
+//    shadowImpl("io.ktor:ktor-client-core-jvm")
+//    shadowImpl("io.ktor:ktor-client-cio-jvm")
+//    shadowImpl("io.ktor:ktor-client-content-negotiation-jvm")
     shadowImpl("gg.essential:loader-launchwrapper:1.1.3")
     implementation("gg.essential:essential-1.8.9-forge:3662")
 }

@@ -97,6 +97,8 @@ object Config : Vigilant(
     var autoBonzoMaskHealth = 0.3f
     var realisticHeight = false
     var realisticHeightType = 0
+    var jerryKB = false
+    var autoBlazeDaggers = false
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -248,6 +250,11 @@ object Config : Vigilant(
                 switch(
                     Config::removeBlindness,
                     name = "Remove Blindness"
+                )
+                switch(
+                    Config::jerryKB,
+                    name = "Jerry Knockback",
+                    description = "Only recive vertical knockback"
                 )
                 switch(
                     Config::bonzoMaskTimer,
@@ -523,6 +530,10 @@ object Config : Vigilant(
                     description = "Select at what amount of health swap to daed, for example: '10.2M'"
                 )
             }
+            switch(
+                Config::autoBlazeDaggers,
+                name = "Auto Blaze Daggers"
+            )
         }
         category("Miscellaneous"){
             switch(

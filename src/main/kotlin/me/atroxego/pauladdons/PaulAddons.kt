@@ -1,4 +1,8 @@
 
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import me.atroxego.pauladdons.commands.PaulAddonsCommand
@@ -21,12 +25,13 @@ import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.setupFishing
 import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter
 import me.atroxego.pauladdons.features.slayers.AutoDaed
+import me.atroxego.pauladdons.features.slayers.AutoDaggers
 import me.atroxego.pauladdons.features.slayers.SlayerESP
 import me.atroxego.pauladdons.features.starcult.StarCult
 import me.atroxego.pauladdons.gui.GuiManager
 import me.atroxego.pauladdons.render.DisplayNotification
 import me.atroxego.pauladdons.utils.SBInfo
-import me.atroxego.pauladdons.utils.UpdateManager.checkUpdate
+import me.atroxego.pauladdons.utils.UpdateManager
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.settings.KeyBinding
@@ -63,10 +68,18 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "1.6"
+        const val VERSION = "1.7"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
+        var devMode = false
+        val modDir by lazy { File(File(mc.mcDataDir, "config"), "pauladdons") }
 
+        val IO = object : CoroutineScope {
+            override val coroutineContext = Dispatchers.IO + SupervisorJob() + CoroutineName("PaulAddons IO")
+        }
+
+        @JvmField
+        var jarFile: File? = null
         @JvmStatic
         lateinit var guiManager: GuiManager
 
@@ -87,16 +100,18 @@ class PaulAddons {
         directory.mkdirs()
         configDirectory = directory
         config = Config
+        jarFile = event.sourceFile
         guiManager = GuiManager
-        checkUpdate()
     }
 
     @EventHandler
     fun onInit(event: FMLInitializationEvent) {
         ClientCommandHandler.instance.registerCommand(PaulAddonsCommand())
+        UpdateManager.downloadDeleteTask()
         listOf(
             this,
             guiManager,
+            UpdateManager,
             MobNotification,
             StarCult,
             AutoHi,
@@ -116,6 +131,8 @@ class PaulAddons {
             ChaosmiteCounter,
             FishingTracker,
             SpiritMask,
+            Jerry,
+            AutoDaggers,
             MonolithESP,
             RemoveBlindness,
             AutoExperiments,

@@ -32,7 +32,7 @@ object FishingTracker {
         "You've discovered a Guardian Defender of the sea." to "Guardian Defender",
         "You have awoken the Deep Sea Protector, prepare for a battle!" to "Deep Sea Protector",
         "The Water Hydra has come to test your strength." to "Water Hydra",
-        "Sea Emperor arises from the depths." to "Sea Emperor",
+        "The Sea Emperor arises from the depths." to "Sea Emperor",
         "Phew! It's only a Scarecrow." to "Scarecrow",
         "You hear trotting from beneath the waves, you caught a Nightmare." to "Nightmare",
         "It must be a full moon, a Werewolf appears." to "Werewolf",

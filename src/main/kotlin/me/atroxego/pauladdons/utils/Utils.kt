@@ -20,6 +20,7 @@ import net.minecraft.util.MathHelper
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.common.MinecraftForge
 import java.io.File
+import java.io.IOException
 import java.util.*
 
 
@@ -97,6 +98,20 @@ object Utils {
         }
     }
 
+    /**
+     * @link https://stackoverflow.com/a/47925649
+     */
+    @Throws(IOException::class)
+    fun getJavaRuntime(): String {
+        val os = System.getProperty("os.name")
+        val java = "${System.getProperty("java.home")}${File.separator}bin${File.separator}${
+            if (os != null && os.lowercase().startsWith("windows")) "java.exe" else "java"
+        }"
+        if (!File(java).isFile) {
+            throw IOException("Unable to find suitable java runtime at $java")
+        }
+        return java
+    }
     fun interpolateRotation(par1: Float, par2: Float, par3: Float): Float {
         var f: Float = par2 - par1
         while (f < -180.0f) {

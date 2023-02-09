@@ -25,8 +25,17 @@
 
 package me.atroxego.pauladdons.features
 
+import PaulAddons
+import gg.essential.universal.UChat
 import net.minecraft.client.Minecraft
 
 abstract class Feature {
     protected val mc: Minecraft = Minecraft.getMinecraft()
+
+    protected fun printdev(text: String) {
+        if (PaulAddons.devMode) {
+            println("[SkySkipped DEV] $text")
+            UChat.chat("[SkySkipped DEV] $text")
+        }
+    }
 }
