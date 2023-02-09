@@ -532,7 +532,7 @@ object Config : Vigilant(
             }
             switch(
                 Config::autoBlazeDaggers,
-                name = "Auto Blaze Daggers"
+                name = "Auto Blaze Daggers (Not Avaiable For Now)"
             )
         }
         category("Miscellaneous"){
