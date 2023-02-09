@@ -5,6 +5,7 @@ import PaulAddons.Companion.prefix
 import gg.essential.api.utils.Multithreading
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.PacketEvent
+import me.atroxego.pauladdons.features.Feature
 import me.atroxego.pauladdons.utils.SBInfo
 import me.atroxego.pauladdons.utils.Utils
 import me.atroxego.pauladdons.utils.Utils.addMessage
@@ -21,58 +22,51 @@ import net.minecraft.world.World
 import net.minecraft.world.chunk.Chunk
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
-object AutoDaggers {
+object AutoDaggers : Feature() {
     private val customMobs = hashMapOf<Entity, EntityLivingBase>()
 
 
     @SubscribeEvent
     fun onSendPacket(event: PacketEvent.SendEvent){
-        if (SBInfo.mode != "crimson_isle") return
-        if (!Config.autoBlazeDaggers) return
-        if (event.packet !is C02PacketUseEntity) return
-        if (event.packet.action !=  C02PacketUseEntity.Action.ATTACK) return
-        val entity = event.packet.getEntityFromWorld(mc.theWorld)
-        if (entity !is EntityBlaze && entity !is EntityPigZombie && entity !is EntitySkeleton) return
-//        addMessage("Hit")
-        var mob = customMobs[entity]
-        if (mob == null) {
-//            addMessage("Mob null")
-            getMobsWithinAABB(entity)
-        }
-        mob = customMobs[entity]
-        if (mob != null){
-            val attunement = mob.customNameTag.stripColor().split(" ")[0]
-//            logger.info(attunement)
-//            addMessage(attunement)
-            when (attunement){
-                "ASHEN" -> {
-                    val daggerSlot = findDagger(1)
-                    handleDaggers(daggerSlot, attunement)
-                }
-                "AURIC" -> {
-                    val daggerSlot = findDagger(1)
-                    handleDaggers(daggerSlot, attunement)
-                }
-                "SPIRIT" -> {
-                    val daggerSlot = findDagger(2)
-                    handleDaggers(daggerSlot, attunement)
-                }
-                "CRYSTAL" -> {
-                    val daggerSlot = findDagger(2)
-                    handleDaggers(daggerSlot, attunement)
-                }
-                else -> addMessage("$prefix Encountered problem with reading $attunement attunement")
-            }
-        }
+//        if (SBInfo.mode != "crimson_isle") return
+//        if (!Config.autoBlazeDaggers) return
+//        if (event.packet !is C02PacketUseEntity) return
+//        if (event.packet.action !=  C02PacketUseEntity.Action.ATTACK) return
+//        val entity = event.packet.getEntityFromWorld(mc.theWorld)
+//        if (entity !is EntityBlaze && entity !is EntityPigZombie && entity !is EntitySkeleton) return
+//        var mob = customMobs[entity]
+//        if (mob == null) {
+//            getMobsWithinAABB(entity)
+//        }
+//        mob = customMobs[entity]
+//        if (mob != null){
+//            when (val attunement = mob.customNameTag.stripColor().split(" ")[0]){
+//                "ASHEN" -> {
+//                    val daggerSlot = findDagger(1)
+//                    handleDaggers(daggerSlot, attunement)
+//                }
+//                "AURIC" -> {
+//                    val daggerSlot = findDagger(1)
+//                    handleDaggers(daggerSlot, attunement)
+//                }
+//                "SPIRIT" -> {
+//                    val daggerSlot = findDagger(2)
+//                    handleDaggers(daggerSlot, attunement)
+//                }
+//                "CRYSTAL" -> {
+//                    val daggerSlot = findDagger(2)
+//                    handleDaggers(daggerSlot, attunement)
+//                }
+//                "IMMUNE" -> {}
+//                else -> addMessage("$prefix Encountered problem with reading $attunement attunement")
+//            }
+//            printdev("Current Mob Attunement ${mob.customNameTag.stripColor().split(" ")[0]}")
+//        }
     }
 
     fun handleDaggers(daggerSlot : Int, attunement : String){
-//        for (line in Utils.getItemLore(mc.thePlayer.inventory.mainInventory[daggerSlot]!!)){
-//            if (line == null) continue
-//            if (line.stripColor().startsWith("Attuned: ")) addMessage(" Needed Attunement: $attunement Current Attunement: ${line.stripColor().split(" ")[1]}")
-//        }
         if (mc.thePlayer.inventory.currentItem != daggerSlot){
-        addMessage("Dagger Slot: $daggerSlot Held Slot: ${mc.thePlayer.inventory.currentItem}")
+        printdev("Dagger Slot: $daggerSlot Held Slot: ${mc.thePlayer.inventory.currentItem}")
         if (daggerSlot == -1){
             addMessage("$prefix Haven't found dagger for $attunement attunement")
             return
@@ -84,13 +78,13 @@ object AutoDaggers {
             if (line == null) continue
             if (line.stripColor().startsWith("Attuned: ")) currentAttunement = line.stripColor().split(" ")[1]
         }
-        addMessage("Current Dagger Attunement: $currentAttunement")
+        printdev("Current Dagger Attunement: $currentAttunement")
         if (attunement.lowercase() == currentAttunement.lowercase()) return
-        Multithreading.runAsync{
-            Thread.sleep(100)
+//        Multithreading.runAsync{
+//            Thread.sleep(100)
             mc.playerController.sendUseItem(mc.thePlayer,mc.theWorld,mc.thePlayer.heldItem)
-            addMessage("Using Item")
-        }
+            printdev("Switching Attunements")
+//        }
     }
 
     fun findDagger(type: Int) : Int{

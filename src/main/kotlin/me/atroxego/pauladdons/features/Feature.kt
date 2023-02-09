@@ -34,8 +34,8 @@ abstract class Feature {
 
     protected fun printdev(text: String) {
         if (PaulAddons.devMode) {
-            println("[SkySkipped DEV] $text")
-            UChat.chat("[SkySkipped DEV] $text")
+            println("[PaulAddons DEV] $text")
+            UChat.chat("[PaulAddons DEV] $text")
         }
     }
 }
