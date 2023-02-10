@@ -51,6 +51,7 @@ import net.minecraft.entity.monster.EntitySkeleton
 import net.minecraft.item.ItemArmor
 import net.minecraft.item.ItemStack
 import net.minecraft.util.AxisAlignedBB
+import net.minecraft.util.BlockPos
 import net.minecraft.util.MathHelper
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.Vec3
@@ -81,6 +82,19 @@ object RenderUtils {
         val z = pos.zCoord - 0.5 - viewerZ
 
         drawFilledBoundingBox(AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1), color, 0.6f)
+    }
+
+    fun drawFishingBox(pos: BlockPos, color: Color, pt: Float) {
+        val viewer: Entity = mc.renderViewEntity
+        val viewerX: Double = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * pt
+        val viewerY: Double = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * pt
+        val viewerZ: Double = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * pt
+
+        val x = pos.x - viewerX
+        val y = pos.y - viewerY
+        val z = pos.z - viewerZ
+
+        drawFilledBoundingBox(AxisAlignedBB(x + 0.3, y + 0.3, z + 0.3, x + 0.7, y + 0.7, z + 0.7), color, 0.6f)
     }
 
     fun drawFilledBoundingBox(aabb: AxisAlignedBB, c: Color, alphaMultiplier: Float) {

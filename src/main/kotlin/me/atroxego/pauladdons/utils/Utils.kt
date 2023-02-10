@@ -4,6 +4,7 @@ import PaulAddons.Companion.mc
 import gg.essential.universal.wrappers.message.UTextComponent
 import me.atroxego.pauladdons.events.impl.MainReceivePacketEvent
 import me.atroxego.pauladdons.events.impl.PacketEvent
+import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.gui.inventory.GuiChest
@@ -14,14 +15,14 @@ import net.minecraft.entity.player.EnumPlayerModelParts
 import net.minecraft.inventory.ContainerChest
 import net.minecraft.item.ItemStack
 import net.minecraft.network.play.server.S02PacketChat
-import net.minecraft.util.ChatComponentText
-import net.minecraft.util.EnumChatFormatting
-import net.minecraft.util.MathHelper
+import net.minecraft.util.*
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.common.MinecraftForge
 import java.io.File
 import java.io.IOException
 import java.util.*
+import kotlin.math.atan2
+import kotlin.math.sqrt
 
 
 object Utils {
@@ -96,6 +97,18 @@ object Utils {
             MinecraftForge.EVENT_BUS.post(MainReceivePacketEvent(mc.netHandler, ReceivePacketEvent.packet))
             MinecraftForge.EVENT_BUS.post(ClientChatReceivedEvent(packet.type, packet.chatComponent))
         }
+    }
+
+    fun blockPosToYawPitch(blockPos: BlockPos, playerPos: Vec3): Pair<Float, Float> {
+        val diffX = blockPos.x - playerPos.xCoord - 0.5
+        val diffY = blockPos.y - (playerPos.yCoord + mc.thePlayer.getEyeHeight()) + 0.5
+        val diffZ = blockPos.z - playerPos.zCoord + 0.5
+        var yaw = (Math.toDegrees(atan2(diffZ, diffX))).toFloat() - 90.0f
+        val dist = sqrt(diffX * diffX + diffZ * diffZ)
+        val pitch = (-(Math.toDegrees(atan2(diffY, dist)))).toFloat()
+        return Pair(
+            mc.thePlayer.rotationYaw + MathHelper.wrapAngleTo180_float(yaw - mc.thePlayer.rotationYaw),
+            mc.thePlayer.rotationPitch + MathHelper.wrapAngleTo180_float(pitch - mc.thePlayer.rotationPitch) )
     }
 
     /**

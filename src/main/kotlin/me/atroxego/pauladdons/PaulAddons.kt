@@ -19,15 +19,15 @@ import me.atroxego.pauladdons.features.dungeons.*
 import me.atroxego.pauladdons.features.dungeons.BetterStonk.createGhostBlock
 import me.atroxego.pauladdons.features.dungeons.HelmetSwapper.helmetSwapper
 import me.atroxego.pauladdons.features.dwarfenMines.MonolithESP
+import me.atroxego.pauladdons.features.dwarfenMines.StarCult
 import me.atroxego.pauladdons.features.funnyFishing.BarnFishingTimer
 import me.atroxego.pauladdons.features.funnyFishing.FishingTracker
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
-import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.setupFishing
+import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.toggleFishing
 import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter
 import me.atroxego.pauladdons.features.slayers.AutoDaed
 import me.atroxego.pauladdons.features.slayers.AutoDaggers
 import me.atroxego.pauladdons.features.slayers.SlayerESP
-import me.atroxego.pauladdons.features.starcult.StarCult
 import me.atroxego.pauladdons.gui.GuiManager
 import me.atroxego.pauladdons.render.DisplayNotification
 import me.atroxego.pauladdons.utils.SBInfo
@@ -68,7 +68,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "1.8"
+        const val VERSION = "1.9"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
         var devMode = false
@@ -164,7 +164,7 @@ class PaulAddons {
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
         if (keyBindings[0]!!.isKeyDown) currentGui = Config.gui()
-        if (keyBindings[1]!!.isPressed) setupFishing()
+        if (keyBindings[1]!!.isPressed) toggleFishing()
         if (keyBindings[2]!!.isKeyDown) createGhostBlock()
         if (keyBindings[3]!!.isPressed) armorSwapper()
         if (keyBindings[4]!!.isPressed) helmetSwapper(1)

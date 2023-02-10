@@ -51,27 +51,18 @@ object UpdateManager {
                 val newJar = File(File(PaulAddons.modDir, "updates"), jarName)
                 println("Copying to mod folder")
                 val nameNoExtension = jarName.substringBeforeLast(".")
-                println("1")
                 val newExtension = jarName.substringAfterLast(".")
-                println("2")
                 val newLocation = File(
                     oldJar.parent,
                     "${if (oldJar.name.startsWith("!")) "!" else ""}${nameNoExtension}${if (oldJar.endsWith(".temp.jar") && newExtension == oldJar.extension) ".temp.jar" else ".$newExtension"}"
                 )
-                println("3")
                 newLocation.createNewFile()
-                println("4")
                 newJar.copyTo(newLocation, true)
-                println("5")
                 newJar.delete()
-                println("6")
                 if (oldJar.delete()) {
-                    println("10")
                     println("successfully deleted the files. skipping install tasks")
-                    println("11")
                     return@Thread
                 } else  println("Fricckers!")
-                println("9")
                 println("Running delete task")
                 val taskFile = File(File(PaulAddons.modDir, "updates"), "tasks").listFiles()?.last()
                 if (taskFile == null) {
@@ -158,9 +149,10 @@ object UpdateManager {
             val latestReleaseBody = jsonArray["body"].toString()
             val latestTag = jsonArray["tag_name"].toString()
             val uploader = jsonArray.getJSONObject("author").get("login").toString()
-            val currentVersion = PaulAddons.VERSION.toDouble()
+            val currentVersion = 1.9
             val latestVersion = latestTag.toDouble()
             println("$currentVersion < $latestVersion")
+            println("${PaulAddons.VERSION.toDouble()} ${PaulAddons.VERSION}")
             if (currentVersion < latestVersion) updateObj = GithubRelease(latestTag, uploader, latestReleaseBody)
         }
     }

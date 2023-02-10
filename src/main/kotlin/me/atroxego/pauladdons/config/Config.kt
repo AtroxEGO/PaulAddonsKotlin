@@ -50,7 +50,6 @@ object Config : Vigilant(
     var barnFishingTimer = false
     var displayBarnFishingTimerNotification = false
     var timestampOfBarnFishingNotification = 240
-    var funnyFishingMove = false
     var sensivity : Float = 0.015F
     var barnFishingTimerText = "Kill"
     var fishingTracker = false
@@ -430,21 +429,6 @@ object Config : Vigilant(
                 description = "When to display a notification in seconds",
                 min = 10,
                 max = 300
-            )
-            }
-            subcategory("Funny Fishing Options"){
-            switch(
-                Config::funnyFishingMove,
-                name = "Funny Fishing Move",
-                description = "Moves left and right if funny fishing enabled"
-            )
-            decimalSlider(
-                Config::sensivity,
-                name = "Sensivity",
-                decimalPlaces = 3,
-                min = 0.005f,
-                max = 0.03f
-
             )
             }
         }

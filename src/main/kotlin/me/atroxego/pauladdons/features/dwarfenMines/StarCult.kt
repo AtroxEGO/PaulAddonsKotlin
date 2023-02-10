@@ -1,4 +1,4 @@
-package me.atroxego.pauladdons.features.starcult
+package me.atroxego.pauladdons.features.dwarfenMines
 
 import PaulAddons
 import PaulAddons.Companion.mc

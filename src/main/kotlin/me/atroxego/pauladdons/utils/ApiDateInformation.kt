@@ -8,7 +8,7 @@ import me.atroxego.pauladdons.config.Cache.currentDay
 import me.atroxego.pauladdons.config.Cache.currentHour
 import me.atroxego.pauladdons.config.Cache.currentMinute
 import me.atroxego.pauladdons.config.Cache.currentTime
-import me.atroxego.pauladdons.features.starcult.StarCult
+import me.atroxego.pauladdons.features.dwarfenMines.StarCult
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
