@@ -8,6 +8,13 @@ import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.renderer.GlStateManager
 import java.awt.Color
 
+/**
+ * Taken from Skytils under GNU Affero General Public License v3.0
+ * Modified
+ * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
+ * @author Skytils
+ */
+
 class LocationButton(var element: GuiElement) : GuiButton(-1, 0, 0, null) {
     var x = 0f
     var y = 0f

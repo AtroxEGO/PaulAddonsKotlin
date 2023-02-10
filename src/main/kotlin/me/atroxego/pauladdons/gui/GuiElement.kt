@@ -4,6 +4,13 @@ import PaulAddons.Companion.mc
 import gg.essential.universal.UResolution
 import me.atroxego.pauladdons.utils.core.FloatPair
 
+/**
+ * Taken from Skytils under GNU Affero General Public License v3.0
+ * Modified
+ * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
+ * @author Skytils
+ */
+
 abstract class GuiElement(var name: String, var scale: Float, var pos: FloatPair) {
     @JvmOverloads
     constructor(name: String, fp: FloatPair = FloatPair(0, 0)) : this(name, 1.0f, fp)

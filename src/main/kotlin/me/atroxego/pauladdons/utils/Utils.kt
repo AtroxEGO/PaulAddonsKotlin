@@ -4,7 +4,6 @@ import PaulAddons.Companion.mc
 import gg.essential.universal.wrappers.message.UTextComponent
 import me.atroxego.pauladdons.events.impl.MainReceivePacketEvent
 import me.atroxego.pauladdons.events.impl.PacketEvent
-import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.gui.inventory.GuiChest

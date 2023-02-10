@@ -1,21 +1,13 @@
 package me.atroxego.pauladdons.features.slayers
 
-import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
-import gg.essential.api.utils.Multithreading
-import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.features.Feature
-import me.atroxego.pauladdons.utils.SBInfo
 import me.atroxego.pauladdons.utils.Utils
 import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.monster.EntityBlaze
-import net.minecraft.entity.monster.EntityPigZombie
-import net.minecraft.entity.monster.EntitySkeleton
-import net.minecraft.network.play.client.C02PacketUseEntity
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.util.MathHelper
 import net.minecraft.world.World

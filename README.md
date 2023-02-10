@@ -68,8 +68,8 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
   - Displays a customizable list with your caught sea creatures
 - Fishing Timer
   - Timer showing u time since last sea creatures kill
-- Funny Fishing
-  - Should automatically fish (experimental)
+- Auto Fishing
+  - Automatically Fishes and kills mobs
 </details>
 
 <details>

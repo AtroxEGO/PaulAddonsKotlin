@@ -5,6 +5,13 @@ import org.apache.commons.lang3.builder.EqualsBuilder
 import org.apache.commons.lang3.builder.HashCodeBuilder
 import org.apache.commons.lang3.mutable.MutableFloat
 
+/**
+ * Taken from Skytils under GNU Affero General Public License v3.0
+ * Modified
+ * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
+ * @author Skytils
+ */
+
 class FloatPair(x: Float, y: Float) {
     private val x: MutableFloat = MutableFloat(x)
     private val y: MutableFloat = MutableFloat(y)

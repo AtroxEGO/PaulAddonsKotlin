@@ -19,7 +19,7 @@ object FishingTracker {
     init {
         FishingTrackerGUIElement()
     }
-    private var seaCreatureMessages = mapOf(
+    public var seaCreatureMessages = mapOf(
         "A Squid appeared." to "Squid",
         "You caught a Sea Walker." to "Sea Walker",
         "You stumbled upon a Sea Guardian." to "Sea Guardian",

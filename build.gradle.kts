@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "PaulAddons"
-version = "1.9"
+version = "2.0"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
@@ -60,8 +60,6 @@ val shadowImpl: Configuration by configurations.creating {
 
 dependencies {
     // For serialization: remove if not needed
-//    implementation("me.cephetir:bladecore-loader-1.8.9-forge:1.1")
-//    implementation("me.cephetir:bladecore-1.8.9-forge:0.0.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
     implementation("gg.essential:vigilance-1.8.9-forge:273+pull-75")
@@ -72,11 +70,6 @@ dependencies {
     implementation("gg.essential:universalcraft-1.8.9-forge:251")
     shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") { isTransitive = false }
     annotationProcessor("org.spongepowered:mixin:0.8.4-SNAPSHOT")
-//    shadowImpl(platform("io.ktor:ktor-bom:2.2.2"))
-//    shadowImpl("io.ktor:ktor-serialization-kotlinx-json-jvm")
-//    shadowImpl("io.ktor:ktor-client-core-jvm")
-//    shadowImpl("io.ktor:ktor-client-cio-jvm")
-//    shadowImpl("io.ktor:ktor-client-content-negotiation-jvm")
     shadowImpl("gg.essential:loader-launchwrapper:1.1.3")
     implementation("gg.essential:essential-1.8.9-forge:3662")
 }

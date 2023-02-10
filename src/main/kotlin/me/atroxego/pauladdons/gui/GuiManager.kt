@@ -22,6 +22,13 @@ import java.io.File
 import java.io.Reader
 import java.io.Writer
 
+/**
+ * Taken from Skytils under GNU Affero General Public License v3.0
+ * Modified
+ * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
+ * @author Skytils
+ */
+
 object GuiManager : PersistentSave(File("config/".plus(PaulAddons.MODID), "guipositions.json")) {
     val GUIPOSITIONS = hashMapOf<String, FloatPair>()
     val GUISCALES = hashMapOf<String, Float>()

@@ -29,7 +29,7 @@ public abstract class MixinEntityLivingBase extends Entity implements ExtensionE
 
     @NotNull
     @Override
-    public EntityLivingBaseHook getSkytilsHook() {
+    public EntityLivingBaseHook getPaulAddonsHook() {
         return hook;
     }
 }

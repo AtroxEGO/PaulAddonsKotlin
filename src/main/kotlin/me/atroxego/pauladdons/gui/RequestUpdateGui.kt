@@ -17,6 +17,13 @@ import me.atroxego.pauladdons.gui.buttons.SimpleButton
 import me.atroxego.pauladdons.utils.UpdateManager
 import net.minecraft.client.gui.GuiMainMenu
 
+/**
+ * Taken from Skytils under GNU Affero General Public License v3.0
+ * Modified
+ * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
+ * @author Skytils
+ */
+
 class RequestUpdateGui : WindowScreen(ElementaVersion.V2, newGuiScale = 2) {
     init {
         val updateObj = UpdateManager.updateGetter.updateObj ?: error("Update object is null")
@@ -31,7 +38,7 @@ class RequestUpdateGui : WindowScreen(ElementaVersion.V2, newGuiScale = 2) {
                 y = SiblingConstraint()
             } childOf window
         val authorText =
-            UIText("Uploaded by: ${UpdateManager.updateGetter!!.updateObj!!.uploader}")
+            UIText("Uploaded by: ${UpdateManager.updateGetter.updateObj!!.uploader}")
                 .constrain {
                     x = CenterConstraint()
                     y = SiblingConstraint()

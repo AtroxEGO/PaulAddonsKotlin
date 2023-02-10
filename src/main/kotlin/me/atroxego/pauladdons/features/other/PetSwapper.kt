@@ -1,13 +1,10 @@
 package me.atroxego.pauladdons.features.other
 
 import PaulAddons.Companion.prefix
-import kotlinx.coroutines.processNextEventInCurrentThread
 import me.atroxego.pauladdons.features.Feature
 import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.stripColor
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.inventory.GuiChest
-import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.network.play.client.C0EPacketClickWindow
 import net.minecraftforge.client.event.GuiScreenEvent
 import net.minecraftforge.common.MinecraftForge

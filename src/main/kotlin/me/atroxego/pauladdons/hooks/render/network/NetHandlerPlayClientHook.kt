@@ -1,4 +1,4 @@
-package me.atroxego.pauladdons.hooks.network
+package me.atroxego.pauladdons.hooks.render.network
 
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import net.minecraft.network.Packet

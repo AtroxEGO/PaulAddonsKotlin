@@ -98,6 +98,10 @@ object Config : Vigilant(
     var realisticHeightType = 0
     var jerryKB = false
     var autoBlazeDaggers = false
+    var fishingMove = false
+    var fishingRotate = false
+    var fishingKilling = false
+    var fishingRecastDelay = 275
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -430,6 +434,27 @@ object Config : Vigilant(
                 min = 10,
                 max = 300
             )
+            }
+            subcategory("Auto Fishing"){
+                switch(
+                    Config::fishingRotate,
+                    name = "Fishing Rotations"
+                )
+                switch(
+                    Config::fishingMove,
+                    name = "Fishing Movement"
+                )
+                switch(
+                    Config::fishingKilling,
+                    name = "Fishing Killing",
+                    description = "Needs Fire Veil Wand"
+                )
+                slider(
+                    Config::fishingRecastDelay,
+                    name = "Recast Delay",
+                    min = 200,
+                    max = 500
+                )
             }
         }
         category("Helmet Swapper"){

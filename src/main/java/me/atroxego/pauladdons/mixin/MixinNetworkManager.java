@@ -2,7 +2,7 @@ package me.atroxego.pauladdons.mixin;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import me.atroxego.pauladdons.hooks.network.NetworkManagerHookKt;
+import me.atroxego.pauladdons.hooks.render.network.NetworkManagerHookKt;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import org.spongepowered.asm.mixin.Mixin;

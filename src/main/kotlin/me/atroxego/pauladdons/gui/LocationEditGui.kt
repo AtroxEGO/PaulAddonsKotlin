@@ -14,6 +14,13 @@ import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.Display
 import java.awt.Color
 
+/**
+ * Taken from Skytils under GNU Affero General Public License v3.0
+ * Modified
+ * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
+ * @author Skytils
+ */
+
 class LocationEditGui : GuiScreen() {
     private var xOffset = 0f
     private var yOffset = 0f

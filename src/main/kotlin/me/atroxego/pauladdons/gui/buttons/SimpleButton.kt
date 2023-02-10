@@ -28,6 +28,13 @@ import gg.essential.universal.USound
 import gg.essential.vigilance.utils.onLeftClick
 import java.awt.Color
 
+/**
+ * Taken from Skytils under GNU Affero General Public License v3.0
+ * Modified
+ * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
+ * @author Skytils
+ */
+
 class SimpleButton @JvmOverloads constructor(val t: String, val h: Boolean = false, val w: Boolean = false) :
     UIBlock(Color(0, 0, 0, 80)) {
 

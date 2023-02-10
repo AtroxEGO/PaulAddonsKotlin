@@ -8,6 +8,13 @@ import net.minecraft.client.gui.GuiButton
 import org.lwjgl.input.Mouse
 import java.awt.Color
 
+/**
+ * Taken from Skytils under GNU Affero General Public License v3.0
+ * Modified
+ * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
+ * @author Skytils
+ */
+
 class ResizeButton(var x: Float, var y: Float, var element: GuiElement, val corner: Corner) :
     GuiButton(-1, 0, 0, null) {
     private var cornerOffsetX = 0f

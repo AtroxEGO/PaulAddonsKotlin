@@ -18,7 +18,7 @@
 
 package me.atroxego.pauladdons.mixin;
 
-import me.atroxego.pauladdons.hooks.network.NetHandlerPlayClientHookKt;
+import me.atroxego.pauladdons.hooks.render.network.NetHandlerPlayClientHookKt;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.Packet;

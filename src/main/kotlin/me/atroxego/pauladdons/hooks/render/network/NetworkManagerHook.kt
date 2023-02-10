@@ -1,4 +1,4 @@
-package me.atroxego.pauladdons.hooks.network
+package me.atroxego.pauladdons.hooks.render.network
 
 import io.netty.channel.ChannelHandlerContext
 import me.atroxego.pauladdons.events.impl.PacketEvent
