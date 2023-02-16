@@ -24,9 +24,6 @@
  */
 
 package me.atroxego.pauladdons.events.impl
-
-import me.atroxego.pauladdons.events.Cancellable
-import me.atroxego.pauladdons.events.ICancellable
 import me.atroxego.pauladdons.events.PaulAddonsEvent
 import net.minecraft.client.model.ModelBase
 import net.minecraft.entity.EntityLivingBase
@@ -35,4 +32,4 @@ data class RenderEntityModelEvent(
     val entity: EntityLivingBase,
     val model: ModelBase,
     val partialTicks: Float
-) : PaulAddonsEvent(), ICancellable by Cancellable()
+) : PaulAddonsEvent()

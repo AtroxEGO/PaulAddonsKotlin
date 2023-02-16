@@ -8,7 +8,8 @@
     "MixinEntityLivingBase",
     "MixinGuiScreen",
     "MixinNetHandlerPlayClient",
-    "MixinNetworkManager"
+    "MixinNetworkManager",
+    "MixinPlayerAttackEntity"
   ],
   "client": [
     "GuiMainMenuMixin",

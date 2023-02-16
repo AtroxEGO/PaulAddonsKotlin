@@ -10,6 +10,8 @@ abstract class PaulAddonsEvent : Event() {
         this::class.simpleName
     }
 
+
+
     fun postAndCatch(): Boolean {
         return runCatching {
             MinecraftForge.EVENT_BUS.post(this)

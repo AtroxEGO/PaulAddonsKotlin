@@ -1,6 +1,6 @@
 package me.atroxego.pauladdons.hooks.render
 
-import me.atroxego.pauladdons.events.impl.FishingHookHooked
+import me.atroxego.pauladdons.events.impl.FishingHookHookedEvent
 import net.minecraft.entity.Entity
 
 class FishEntityHooked {
@@ -8,7 +8,7 @@ class FishEntityHooked {
     companion object {
         @JvmStatic
         fun fishEntityHooked(entity: Entity) {
-            FishingHookHooked(entity).postAndCatch()
+            FishingHookHookedEvent(entity).postAndCatch()
         }
     }
 }

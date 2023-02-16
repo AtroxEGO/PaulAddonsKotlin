@@ -7,7 +7,10 @@ import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.features.dungeons.Jerry.toggleJerry
 import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter.chaosCounter
 import me.atroxego.pauladdons.features.other.PetSwapper
+import me.atroxego.pauladdons.features.other.Ping
+import me.atroxego.pauladdons.features.other.Ping.sendPing
 import me.atroxego.pauladdons.gui.LocationEditGui
+import me.atroxego.pauladdons.utils.PlayerRotation
 import me.atroxego.pauladdons.utils.SBInfo
 import me.atroxego.pauladdons.utils.SBInfo.onSkyblock
 import me.atroxego.pauladdons.utils.Utils.addMessage
@@ -51,6 +54,10 @@ class PaulAddonsCommand : CommandBase() {
                 MinecraftForge.EVENT_BUS.register(PetSwapper(args[1]))
 
             }
+            "ping" -> {
+                addMessage("${Ping.ping}")
+                sendPing()
+            }
             "dev" -> {
                 PaulAddons.devMode = !PaulAddons.devMode
                 addMessage("$prefix Developer mode: ${PaulAddons.devMode}")
@@ -59,6 +66,7 @@ class PaulAddonsCommand : CommandBase() {
             "mode" -> mc.thePlayer.addChatMessage(ChatComponentText("mode: " + SBInfo.mode + " inSkyblock: " + onSkyblock))
             "sb" -> scoreboardData()
             "jerry" -> toggleJerry()
+            "lookat" -> PlayerRotation(PlayerRotation.Rotation(args[1].toFloat(), args[2].toFloat()), 0)
             else -> mc.thePlayer.addChatMessage(ChatComponentText(
                 """
                     §9PaulAddons §f:: §aUsage:

@@ -346,7 +346,7 @@ object FunnyFishing : Feature() {
         if (!Config.funnyFishing) return
         if (!Config.fishingKilling) return
         for (mobMessage in FishingTracker.seaCreatureMessages){
-            if (event.message.unformattedText.stripColor() == mobMessage.key){
+            if (event.message.unformattedText.stripColor().lowercase() == mobMessage.key.lowercase()){
                 killing = true
                 when (getFireVeil()){
                     -1 -> addMessage("$prefix Haven't Found Fire Veil Wand!")

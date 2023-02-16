@@ -25,7 +25,7 @@ object FishingTracker {
         "You stumbled upon a Sea Guardian." to "Sea Guardian",
         "It looks like you've disrupted the Sea Witch's brewing session. Watch out, she's furious!" to "Sea Witch",
         "You reeled in a Sea Archer." to "Sea Archer",
-        "The Rider Of The Deep has emerged." to "Rider Of The Deep",
+        "The Rider of the Deep has emerged." to "Rider Of The Deep",
         "Huh? A Catfish!" to "Catfish",
         "Is this even a fish? It's the Carrot King!" to "Carrot King",
         "Gross! A Sea Leech!" to "Sea Leech",
@@ -229,7 +229,7 @@ object FishingTracker {
     @SubscribeEvent
     fun listenForSeaCreatureCatches(event: ClientChatReceivedEvent) {
         for (mobMessage in seaCreatureMessages) {
-            if (event.message.unformattedText.startsWith(mobMessage.key)) {
+            if (event.message.unformattedText.startsWith(mobMessage.key, true)) {
                 when (mobMessage.value) {
                     "Yeti" -> lastTimeCatched["Yeti"] = System.currentTimeMillis() / 1000.toDouble()
                     "Reindrake" -> lastTimeCatched["Reindrake"] = System.currentTimeMillis() / 1000.toDouble()

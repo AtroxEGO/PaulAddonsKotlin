@@ -110,6 +110,26 @@ object Utils {
             mc.thePlayer.rotationPitch + MathHelper.wrapAngleTo180_float(pitch - mc.thePlayer.rotationPitch) )
     }
 
+    fun VecToYawPitch(vec: Vec3, playerPos: Vec3): Pair<Float, Float> {
+        val diffX = vec.xCoord - playerPos.xCoord
+        val diffY = vec.yCoord - (playerPos.yCoord + mc.thePlayer.getEyeHeight()) + 0.5
+        val diffZ = vec.zCoord - playerPos.zCoord
+        var yaw = (Math.toDegrees(atan2(diffZ, diffX))).toFloat() - 90.0f
+        val dist = sqrt(diffX * diffX + diffZ * diffZ)
+        val pitch = (-(Math.toDegrees(atan2(diffY, dist)))).toFloat()
+        return Pair(
+            mc.thePlayer.rotationYaw + MathHelper.wrapAngleTo180_float(yaw - mc.thePlayer.rotationYaw),
+            mc.thePlayer.rotationPitch + MathHelper.wrapAngleTo180_float(pitch - mc.thePlayer.rotationPitch) )
+    }
+
+    fun findItemInHotbar(name: String) : Int{
+        for (slot in 0..8){
+            val itemStack = mc.thePlayer.inventory.mainInventory[slot] ?: continue
+            if (itemStack.displayName.stripColor().contains(name)) return slot
+        }
+        return -1
+    }
+
     /**
      * @link https://stackoverflow.com/a/47925649
      */

@@ -76,7 +76,6 @@ object StarredMobESP : Feature() {
                     Config.starredMobESPColor.rgb,
                     1.0f
                 )
-                event.cancel()
             }
         }
     }
