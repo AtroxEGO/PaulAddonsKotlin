@@ -6,8 +6,7 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
 
 ## Changes
 
-- Added Jerry (Recive Only Vertical Knockback) /pa jerry
-- Added Auto Blaze Daggers
+- Added Auto Dojo
 
 ## Features
 <details>
