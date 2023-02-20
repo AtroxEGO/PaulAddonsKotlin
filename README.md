@@ -6,7 +6,12 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
 
 ## Changes
 
-- Added Auto Dojo
+- Added Auto Totem for fishing macro
+- Improved Auto Experiments
+- Improved Auto Dojo
+- Jerry won't work if you're holding Bonzo's Staff
+- Fishing timer will work with macro now
+- Added Dropship Notification
 
 ## Features
 <details>
