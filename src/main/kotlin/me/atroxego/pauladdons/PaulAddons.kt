@@ -25,6 +25,7 @@ import me.atroxego.pauladdons.features.funnyFishing.FishingTracker
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.toggleFishing
 import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter
+import me.atroxego.pauladdons.features.kuudra.Dropships
 import me.atroxego.pauladdons.features.other.AutoDojo
 import me.atroxego.pauladdons.features.other.AutoDojo.dojoToggle
 import me.atroxego.pauladdons.features.other.Ping
@@ -71,7 +72,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "2.1"
+        const val VERSION = "2.2"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
         var devMode = false
@@ -119,6 +120,7 @@ class PaulAddons {
             StarCult,
             AutoHi,
             AutoDaed,
+            Dropships,
             AutoP3GhostBlocks,
             AutoChestCloser,
             ESP,

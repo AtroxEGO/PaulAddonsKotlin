@@ -5,6 +5,8 @@ import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.features.dungeons.Jerry.toggleJerry
+import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.getBlocksForTotem
+import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.placeTotem
 import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter.chaosCounter
 import me.atroxego.pauladdons.features.other.PetSwapper
 import me.atroxego.pauladdons.features.other.Ping
@@ -58,6 +60,10 @@ class PaulAddonsCommand : CommandBase() {
                 addMessage("${Ping.ping}")
                 sendPing()
             }
+            "place" -> {
+                placeTotem()
+            }
+            "checktotem" -> getBlocksForTotem()
             "dev" -> {
                 PaulAddons.devMode = !PaulAddons.devMode
                 addMessage("$prefix Developer mode: ${PaulAddons.devMode}")
@@ -72,6 +78,7 @@ class PaulAddonsCommand : CommandBase() {
                     §9PaulAddons §f:: §aUsage:
                     §9PaulAddons §f:: §a/pa §f- §aOpens GUI
                     §9PaulAddons §f:: §a/pa jerry §f- §aToggles Jerry Knockback
+                    §9PaulAddons §f:: §a/pa pet [index or name] §f- §aEquips given pet
                     §9PaulAddons §f:: §a/pa hud §f- §aEdit GUI Locations
                     """.trimIndent()
             ))

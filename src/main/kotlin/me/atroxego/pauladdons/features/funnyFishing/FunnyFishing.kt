@@ -9,13 +9,16 @@ import me.atroxego.pauladdons.render.RenderUtils
 import me.atroxego.pauladdons.utils.PlayerRotation
 import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.blockPosToYawPitch
+import me.atroxego.pauladdons.utils.Utils.findItemInHotbar
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import net.minecraft.client.settings.KeyBinding
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.EntityFishHook
+import net.minecraft.init.Blocks
 import net.minecraft.init.Items
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
 import net.minecraft.network.play.server.S14PacketEntity
 import net.minecraft.network.play.server.S2APacketParticles
 import net.minecraft.util.*
@@ -31,29 +34,35 @@ import java.awt.Color
 
 
 object FunnyFishing : Feature() {
-    private var raytrace: MovingObjectPosition? = null
+    private var mainLookAtBlock: MovingObjectPosition? = null
     private var startingPosition: Vec3? = null
     private var rotateCooldown = 0L
     private var movementCooldown = 0L
     private var lastTimeHitEntity = 0L
     private var collidingEntity: EntityLivingBase? = null
+    private var lastTimeTotemPlaced = 0L
+    private var lastTimeReeled = 0L
 
     fun toggleFishing() {
         if (!Config.funnyFishing) {
-            raytrace = mc.thePlayer.rayTrace(100.0, 1.0f)
+            mainLookAtBlock = mc.thePlayer.rayTrace(100.0, 1.0f)
             val rodSlot = getFishingRod()
             if (rodSlot == -1) {
                 mc.thePlayer.addChatMessage(ChatComponentText("$prefix Haven't detected rod in hotbar"))
                 return
             }
             mc.thePlayer.inventory.currentItem = rodSlot
-            mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
+            reelIn(false)
             startingPosition = mc.thePlayer.positionVector
 //            startingPosition = Vec3(-361.5,63.0,266.5)
             rotateCooldown = System.currentTimeMillis()
             movementCooldown = System.currentTimeMillis()
+            if (!BarnFishingTimer.timerRunning){
+                BarnFishingTimer.timerRunning = true
+                BarnFishingTimer.timerStartTime = System.currentTimeMillis()
+            }
         } else {
-            raytrace = null
+            mainLookAtBlock = null
         }
         Config.funnyFishing = !Config.funnyFishing
         addMessage("$prefix Auto Fishing: ${if (Config.funnyFishing) "§aOn" else "§cOff"}")
@@ -99,6 +108,7 @@ object FunnyFishing : Feature() {
                     }"
                 )
                 reelIn(true)
+
             }
         }
     }
@@ -123,6 +133,10 @@ object FunnyFishing : Feature() {
             }
         }
         if (!Config.funnyFishing) return
+        if (placingTotem) return
+        if (System.currentTimeMillis() - lastTimeReeled > 30000){
+            reelIn(true)
+        }
         if (mc.thePlayer.inventory.currentItem != getFishingRod() && !killing) {
             addMessage("$prefix Detected slot change, disabling")
             Config.funnyFishing = false
@@ -135,15 +149,21 @@ object FunnyFishing : Feature() {
                 reelIn(true)
             }
         }
-
+        if (Config.fishingTotem){
+            if (!isTotemInRange() && System.currentTimeMillis() - lastTimeTotemPlaced > 10000) {
+                printdev("Placing Totem")
+                placeTotem()
+                lastTimeTotemPlaced = System.currentTimeMillis()
+            }
+        }
         if (Config.fishingRotate){
             if (System.currentTimeMillis() - rotateCooldown >= 5000) {
                 printdev("Rotating")
-                printdev("Coords: ${raytrace!!.blockPos.x}")
+                printdev("Coords: ${mainLookAtBlock!!.blockPos.x}")
                 val pitchOffset = ((Math.random() * (2.5 - -2.5)) + -2.5).toFloat()
                 val yawOffset = ((Math.random() * (2.5 - -2.5)) + -2.5).toFloat()
                 val yawAndPitch = blockPosToYawPitch(
-                    BlockPos(raytrace!!.blockPos.x + 1, raytrace!!.blockPos.y, raytrace!!.blockPos.z),
+                    BlockPos(mainLookAtBlock!!.blockPos.x + 1, mainLookAtBlock!!.blockPos.y, mainLookAtBlock!!.blockPos.z),
                     mc.thePlayer.positionVector
                 )
                 printdev("OffsetP: $pitchOffset OffsetY: $yawOffset")
@@ -160,6 +180,85 @@ object FunnyFishing : Feature() {
                 movementCooldown = System.currentTimeMillis()
             }
         }
+    }
+
+    private fun isTotemInRange() : Boolean{
+        for (entity in mc.theWorld.loadedEntityList){
+            if (mc.thePlayer.getDistanceToEntity(entity) > 10) continue
+            if (!entity.hasCustomName()) continue
+            if (!entity.customNameTag.stripColor().contains("Totem of Corruption")) continue
+            return true
+        }
+        return false
+    }
+var placingTotem = false
+     fun placeTotem(){
+        val blockForTotem = getBlocksForTotem()
+        val totemSlot = findItemInHotbar("Totem of Corruption")
+        if (totemSlot == -1){
+            addMessage("$prefix Haven't Found Totem in your hotbar")
+            return
+        }
+        if (blockForTotem == null){
+            addMessage("$prefix Haven't Found any proper blocks for totem")
+            return
+        }
+        placingTotem = true
+        Multithreading.runAsync{
+            mc.thePlayer.inventory.currentItem = totemSlot
+            var yawAndPitch = blockPosToYawPitch(
+                blockForTotem,
+                mc.thePlayer.positionVector
+            )
+            PlayerRotation(
+                PlayerRotation.Rotation(yawAndPitch.first, yawAndPitch.second),
+                600L
+            )
+            Thread.sleep(300)
+            val raytrace = mc.thePlayer.rayTrace(5.0,1.0f) ?: return@runAsync
+            mc.netHandler.addToSendQueue(
+                C08PacketPlayerBlockPlacement(
+                    raytrace.blockPos,
+                    1,mc.thePlayer.heldItem,
+                    0.5F,1.0F,0.5F)
+            )
+            Thread.sleep(200)
+            mc.thePlayer.inventory.currentItem = getFishingRod()
+            yawAndPitch = blockPosToYawPitch(
+                mainLookAtBlock!!.blockPos,
+                mc.thePlayer.positionVector
+            )
+            PlayerRotation(
+                PlayerRotation.Rotation(yawAndPitch.first, yawAndPitch.second),
+                500L
+            )
+            Thread.sleep(200)
+            mc.playerController.sendUseItem(mc.thePlayer,mc.theWorld,mc.thePlayer.heldItem)
+            placingTotem = false
+        }
+    }
+
+    fun getBlocksForTotem(): BlockPos? {
+        for (offsetX in -2..2) {
+            for (offsetZ in -2..2) {
+            if (offsetX == 0 && offsetZ == 0) continue
+                val blockPos = BlockPos(
+                    mc.thePlayer.posX + offsetX,
+                    mc.thePlayer.posY - 1,
+                    mc.thePlayer.posZ + offsetZ
+                )
+                val blockAtBlockPos = mc.theWorld.getChunkFromBlockCoords(BlockPos(blockPos)).getBlock(BlockPos(blockPos))
+                val blockOverBlockPos = mc.theWorld.getChunkFromBlockCoords(BlockPos(blockPos)).getBlock(BlockPos(blockPos.add(0,1,0)))
+//                addMessage(blockAtBlockPos.registryName)
+                if (blockAtBlockPos != Blocks.air && blockAtBlockPos != Blocks.water && blockAtBlockPos != Blocks.flowing_water && blockAtBlockPos != Blocks.lava && blockAtBlockPos != Blocks.flowing_lava && blockOverBlockPos == Blocks.air)
+                {
+
+                    printdev("Found Proper Block: ${blockPos} Block Type: ${blockAtBlockPos}")
+                    return blockPos
+                }
+            }
+        }
+        return null
     }
 
     private fun movePlayer() {
@@ -310,11 +409,16 @@ object FunnyFishing : Feature() {
 ////                printdev(collidingEntity!!.name)
 //            }
 //        }
-        RenderUtils.drawFishingBox(raytrace!!.blockPos, Color(236, 204, 8, 255), event.partialTicks)
+        RenderUtils.drawFishingBox(mainLookAtBlock!!.blockPos, Color(236, 204, 8, 255), event.partialTicks)
     }
 
     private fun reelIn(recast: Boolean) {
         playersFishHook = null
+        if (!BarnFishingTimer.timerRunning){
+            BarnFishingTimer.timerRunning = true
+            BarnFishingTimer.timerStartTime = System.currentTimeMillis()
+        }
+        lastTimeReeled = System.currentTimeMillis()
         Multithreading.runAsync {
             var randomCooldown = ((Math.random() * (100 - 50)) + 50).toLong()
             printdev("$randomCooldown")

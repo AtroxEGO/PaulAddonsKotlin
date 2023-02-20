@@ -20,6 +20,8 @@ object AutoDaggers : Feature() {
 
     @SubscribeEvent
     fun onSendPacket(event: PacketEvent.SendEvent){
+//        if (event.packet !is C08PacketPlayerBlockPlacement) return
+//        printdev(event.packet.placedBlockOffsetX.toString())
 //        if (SBInfo.mode != "crimson_isle") return
 //        if (!Config.autoBlazeDaggers) return
 //        if (event.packet !is C02PacketUseEntity) return

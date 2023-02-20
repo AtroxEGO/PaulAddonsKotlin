@@ -9,6 +9,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import kotlin.math.absoluteValue
 
 object Ping : Feature(){
+    var lastPingTime = -1L
+    var ping = -1.0
 
     @SubscribeEvent
     fun onPacket(event: PacketEvent.ReceiveEvent){
@@ -32,6 +34,4 @@ object Ping : Feature(){
         )
     }
 
-    var lastPingTime = -1L
-    var ping = -1.0
 }

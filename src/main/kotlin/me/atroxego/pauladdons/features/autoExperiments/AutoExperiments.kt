@@ -80,9 +80,13 @@ object AutoExperiments {
             val lower: IInventory = container.lowerChestInventory
 
             if (currentSolver == SolverType.CHRONOMATRON) {
-                if (Config.autoCloseExperiments && lower.getStackInSlot(4).stackSize >= 13) {
-                    mc.thePlayer.closeScreen()
-                    return
+                try {
+                    if (Config.autoCloseExperiments && lower.getStackInSlot(4).stackSize >= 13) {
+                        mc.thePlayer.closeScreen()
+                        return
+                    }
+                } catch (e: Exception){
+                    e.printStackTrace()
                 }
                 val timerStack = lower.getStackInSlot(lower.sizeInventory - 5) ?: return
                 val isClock = timerStack.item == Items.clock
@@ -105,7 +109,8 @@ object AutoExperiments {
                         chronomatronStartSeq = false
                         addToChronomatron = false
                         lastChronomatronSize = chronomatronOrder.size
-                        chronomatronOrder.clear()
+//                        chronomatronOrder.clear()
+//                        addMessage("Clearing")
                     }
 
                     if (stainedHardenedClayName != null) {
@@ -119,6 +124,7 @@ object AutoExperiments {
                     }
                 } else if (isClock) {
                     chronomatronStartSeq = true
+
 
                 }
             } else {
@@ -195,7 +201,7 @@ object AutoExperiments {
                         clicking = false
                         return@runAsync
                     }
-                    Thread.sleep(250)
+                    Thread.sleep(300)
                     for (turn in 0 until chronomatronOrder.size){
                         val block = chronomatronOrder[turn]
                         for (index in 0..lower.sizeInventory){
@@ -209,7 +215,8 @@ object AutoExperiments {
                         }
                     }
                 }
-                Thread.sleep(700)
+                Thread.sleep(800)
+                    chronomatronOrder.clear()
                 clicking = false
             }
         }

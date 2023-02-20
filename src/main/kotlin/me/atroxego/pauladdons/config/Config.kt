@@ -50,7 +50,6 @@ object Config : Vigilant(
     var barnFishingTimer = false
     var displayBarnFishingTimerNotification = false
     var timestampOfBarnFishingNotification = 240
-    var sensivity : Float = 0.015F
     var barnFishingTimerText = "Kill"
     var fishingTracker = false
     var fishingTrackerType = 0
@@ -101,7 +100,9 @@ object Config : Vigilant(
     var fishingMove = false
     var fishingRotate = false
     var fishingKilling = false
+    var fishingTotem = false
     var fishingRecastDelay = 275
+    var dropshipNotification = false
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -446,8 +447,12 @@ object Config : Vigilant(
                 )
                 switch(
                     Config::fishingKilling,
-                    name = "Fishing Killing",
+                    name = "Auto Killing",
                     description = "Needs Fire Veil Wand"
+                )
+                switch(
+                    Config::fishingTotem,
+                    name = "Auto Totem"
                 )
                 slider(
                     Config::fishingRecastDelay,
@@ -545,6 +550,10 @@ object Config : Vigilant(
             )
         }
         category("Miscellaneous"){
+            switch(
+                Config::dropshipNotification,
+                name = "Dropship Notification"
+            )
             switch(
                 Config::realisticHeight,
                 name = "Realistic Height"
