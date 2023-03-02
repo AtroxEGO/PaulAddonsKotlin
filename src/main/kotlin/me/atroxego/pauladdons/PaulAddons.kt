@@ -1,3 +1,20 @@
+/*
+ * Paul Addons - Hypixel Skyblock QOL Mod
+ * Copyright (C) 2023  AtroxEGO
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -9,7 +26,8 @@ import me.atroxego.pauladdons.commands.PaulAddonsCommand
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.config.PersistentSave
 import me.atroxego.pauladdons.features.armorSwapper.ArmorSwapper.armorSwapper
-import me.atroxego.pauladdons.features.autoExperiments.AutoExperiments
+import me.atroxego.pauladdons.features.autoExperiments.AutoChromanotron
+import me.atroxego.pauladdons.features.autoExperiments.AutoSequencer
 import me.atroxego.pauladdons.features.autoHi.AutoHi
 import me.atroxego.pauladdons.features.autoMelody.AutoMelody
 import me.atroxego.pauladdons.features.autothankyou.SplashThankYou
@@ -72,7 +90,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "2.2"
+        const val VERSION = "2.3"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
         var devMode = false
@@ -142,7 +160,8 @@ class PaulAddons {
             AutoDaggers,
             MonolithESP,
             RemoveBlindness,
-            AutoExperiments,
+            AutoChromanotron,
+            AutoSequencer,
             BarnFishingTimer,
             DisplayNotification
         ).forEach(MinecraftForge.EVENT_BUS::register)

@@ -24,7 +24,7 @@ import net.minecraft.client.gui.GuiMainMenu
  * @author Skytils
  */
 
-class RequestUpdateGui : WindowScreen(ElementaVersion.V2, newGuiScale = 2) {
+class RequestUpdateGui : WindowScreen(ElementaVersion.V1, newGuiScale = 2) {
     init {
         val updateObj = UpdateManager.updateGetter.updateObj ?: error("Update object is null")
         UIText("Paul Addons ${updateObj.tagName} is available!")

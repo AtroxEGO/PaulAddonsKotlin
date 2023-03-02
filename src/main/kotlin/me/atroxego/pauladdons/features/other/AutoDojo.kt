@@ -1,3 +1,22 @@
+/*
+ * Paul Addons - Hypixel Skyblock QOL Mod
+ * Copyright (C) 2023  AtroxEGO
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+
 package me.atroxego.pauladdons.features.other
 
 import PaulAddons.Companion.prefix
@@ -98,9 +117,12 @@ object AutoDojo : Feature() {
                 dojoType = DojoType.MASTERY
                 printdev("Test Of Mastery")
                 addMessage("$prefix Current Dojo: Mastery")
-                val bowSlot = findItemInHotbar("Bow")
-                if (bowSlot != -1) mc.thePlayer.inventory.currentItem = bowSlot
-                mc.netHandler.addToSendQueue(C08PacketPlayerBlockPlacement(mc.thePlayer.heldItem))
+                Multithreading.runAsync{
+                    Thread.sleep(200)
+                    val bowSlot = findItemInHotbar("Bow")
+                    if (bowSlot != -1) mc.thePlayer.inventory.currentItem = bowSlot
+                    mc.netHandler.addToSendQueue(C08PacketPlayerBlockPlacement(mc.thePlayer.heldItem))
+                }
             }
             "TestofDisciplineOBJECTIVES" -> {
                 dojoType = DojoType.DISCIPLINE
@@ -119,7 +141,6 @@ object AutoDojo : Feature() {
 
     @SubscribeEvent
     fun onPlayerEntityAttack(event: PlayerAttackEntityEvent){
-//        printdev("Attack")
         if (!autoDojoToggle) return
         if (event.targetEntity !is EntityZombie) return
         val target = event.targetEntity
@@ -169,6 +190,7 @@ object AutoDojo : Feature() {
         if (dojoType != DojoType.MASTERY) return
         if (event.packet !is S23PacketBlockChange) return
         val packet = event.packet
+        if (packet.blockState == null) return
         if (mc.thePlayer.getDistanceSqToCenter(packet.blockPosition) < 2.0.pow(10.0)) {
             val state = Block.getStateId(packet.blockState)
             if (state == 16419) masteryBlocks.add(MasteryBlock(packet.blockPosition, System.currentTimeMillis() + 3000))

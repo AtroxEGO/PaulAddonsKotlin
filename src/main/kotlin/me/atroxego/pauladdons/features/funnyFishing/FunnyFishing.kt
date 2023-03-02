@@ -1,3 +1,22 @@
+/*
+ * Paul Addons - Hypixel Skyblock QOL Mod
+ * Copyright (C) 2023  AtroxEGO
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+
 package me.atroxego.pauladdons.features.funnyFishing
 
 import PaulAddons.Companion.prefix
@@ -7,6 +26,7 @@ import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.features.Feature
 import me.atroxego.pauladdons.render.RenderUtils
 import me.atroxego.pauladdons.utils.PlayerRotation
+import me.atroxego.pauladdons.utils.Utils.VecToYawPitch
 import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.blockPosToYawPitch
 import me.atroxego.pauladdons.utils.Utils.findItemInHotbar
@@ -119,6 +139,7 @@ object FunnyFishing : Feature() {
         rotateCooldown = 0
         lastTimeHitEntity = 0L
         playersFishHook = null
+        placingTotem = false
     }
 
     @SubscribeEvent
@@ -149,6 +170,7 @@ object FunnyFishing : Feature() {
                 reelIn(true)
             }
         }
+
         if (Config.fishingTotem){
             if (!isTotemInRange() && System.currentTimeMillis() - lastTimeTotemPlaced > 10000) {
                 printdev("Placing Totem")
@@ -206,15 +228,19 @@ var placingTotem = false
         placingTotem = true
         Multithreading.runAsync{
             mc.thePlayer.inventory.currentItem = totemSlot
-            var yawAndPitch = blockPosToYawPitch(
-                blockForTotem,
+            var yawAndPitch = VecToYawPitch(
+                Vec3(
+                    if (blockForTotem.x > 0) blockForTotem.x - 0.5 else blockForTotem.x + 0.5,
+                    blockForTotem.y.toDouble(),
+                    if (blockForTotem.z > 0) blockForTotem.z - 0.5 else blockForTotem.z + 0.5
+                ),
                 mc.thePlayer.positionVector
             )
             PlayerRotation(
                 PlayerRotation.Rotation(yawAndPitch.first, yawAndPitch.second),
                 600L
             )
-            Thread.sleep(300)
+            Thread.sleep(500)
             val raytrace = mc.thePlayer.rayTrace(5.0,1.0f) ?: return@runAsync
             mc.netHandler.addToSendQueue(
                 C08PacketPlayerBlockPlacement(

@@ -6,7 +6,7 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
 
 ## Changes
 
-- Added Auto Dojo
+- Changed Auto Experiments to work on packets (Much Better)
 
 ## Features
 <details>

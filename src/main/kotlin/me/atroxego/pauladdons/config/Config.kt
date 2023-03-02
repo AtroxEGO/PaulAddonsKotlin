@@ -1,3 +1,22 @@
+/*
+ * Paul Addons - Hypixel Skyblock QOL Mod
+ * Copyright (C) 2023  AtroxEGO
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+
 package me.atroxego.pauladdons.config
 
 import PaulAddons
@@ -93,7 +112,7 @@ object Config : Vigilant(
     var spiritMaskTimer = false
     var autoBonzoMask = false
     var autoBonzoMaskHealth = 0.3f
-    var realisticHeight = false
+    var realisticHeight = true
     var realisticHeightType = 0
     var jerryKB = false
     var autoBlazeDaggers = false
@@ -487,7 +506,7 @@ object Config : Vigilant(
                 name = "Click delay in ms",
                 min = 50,
                 max = 1000,
-                description = "I would leave it at around 200, less might crash"
+                description = "Too low will casue macro to not click a block at the end"
             )
         }
         category("Slayer"){

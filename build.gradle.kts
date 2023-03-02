@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "PaulAddons"
-version = "2.2"
+version = "2.3"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
@@ -62,15 +62,16 @@ dependencies {
     // For serialization: remove if not needed
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
-    implementation("gg.essential:vigilance-1.8.9-forge:273+pull-75")
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
     implementation("org.json:json:20220924")
-    implementation("gg.essential:universalcraft-1.8.9-forge:251")
     shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") { isTransitive = false }
     annotationProcessor("org.spongepowered:mixin:0.8.4-SNAPSHOT")
     shadowImpl("gg.essential:loader-launchwrapper:1.1.3")
+//    implementation("gg.essential:universalcraft-1.8.9-forge:254")
+//    implementation("gg.essential:vigilance-1.8.9-forge:280")
+    implementation("gg.essential:loader-launchwrapper:1.1.3")
     implementation("gg.essential:essential-1.8.9-forge:3662")
 }
 

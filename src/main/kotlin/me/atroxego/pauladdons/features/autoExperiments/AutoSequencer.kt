@@ -19,23 +19,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
 
-object AutoExperiments {
+object AutoSequencer {
 
     var currentSolver = SolverType.NONE
 
     enum class SolverType {
         NONE, CHRONOMATRON, ULTRASEQUENCER
     }
-
-    // Chronomatron
-
-    private var addToChronomatron = false
-    private var chronomatronStartSeq = false
-    private val chronomatronOrder: ArrayList<String> = ArrayList()
-    private val chronomatronIndexOrder: ArrayList<Int> = ArrayList()
-    private var chronomatronReplayIndex = 0
-    private var lastChronomatronSize = 0
-    private const val millisLastClick: Long = 0
 
     // Ultrasequencer
 
@@ -56,7 +46,6 @@ object AutoExperiments {
     fun onGuiOpen(event: GuiOpenEvent) {
         if (!Config.autoExperiments) return
         if (event.gui !is GuiChest) return
-        chronomatronOrder.clear()
         currentSolver = SolverType.NONE;
 //        if (!Utils.inSkyblock) return
         val openChestName = Utils.getGuiName(event.gui);
@@ -70,67 +59,10 @@ object AutoExperiments {
 
     fun processInventoryContents(fromTick: Boolean) {
         if (currentSolver != SolverType.CHRONOMATRON && !fromTick) return
-        //add config
-//        if (!Utils.inSkyblock) return
-//        mc.thePlayer.addChatMessage(ChatComponentText("Checking if in Skyblock"))
-
         if (Minecraft.getMinecraft().currentScreen is GuiChest) {
             val chest: GuiChest = Minecraft.getMinecraft().currentScreen as GuiChest
             val container = chest.inventorySlots as ContainerChest
             val lower: IInventory = container.lowerChestInventory
-
-            if (currentSolver == SolverType.CHRONOMATRON) {
-                try {
-                    if (Config.autoCloseExperiments && lower.getStackInSlot(4).stackSize >= 13) {
-                        mc.thePlayer.closeScreen()
-                        return
-                    }
-                } catch (e: Exception){
-                    e.printStackTrace()
-                }
-                val timerStack = lower.getStackInSlot(lower.sizeInventory - 5) ?: return
-                val isClock = timerStack.item == Items.clock
-                var stainedHardenedClayName: String? = null
-                var stainedHardenedClayIndex: Int? = null
-                if (isClock) clickCorrect()
-                for (index in 0..lower.sizeInventory) {
-                    val stack = lower.getStackInSlot(index)
-                    if (stack != null && stack.item == Item.getItemFromBlock(Blocks.stained_hardened_clay)) {
-                        if (stack.tagCompound != null && stack.tagCompound.hasKey("ench")) {
-                            if (stainedHardenedClayName != null && !stack.displayName.equals(stainedHardenedClayName)) return
-                            stainedHardenedClayName = stack.displayName
-                            stainedHardenedClayIndex = index
-                        }
-                    }
-                }
-
-                if (timerStack.item == Item.getItemFromBlock(Blocks.glowstone) || (isClock && (!addToChronomatron || chronomatronOrder.size < lastChronomatronSize + 1))) {
-                    if (chronomatronStartSeq) {
-                        chronomatronStartSeq = false
-                        addToChronomatron = false
-                        lastChronomatronSize = chronomatronOrder.size
-//                        chronomatronOrder.clear()
-//                        addMessage("Clearing")
-                    }
-
-                    if (stainedHardenedClayName != null) {
-                        if (addToChronomatron) {
-                            chronomatronOrder.add(stainedHardenedClayName)
-                            }
-                        addToChronomatron = false
-                    } else {
-                        addToChronomatron = true
-                        chronomatronReplayIndex = 0
-                    }
-                } else if (isClock) {
-                    chronomatronStartSeq = true
-
-
-                }
-            } else {
-                chronomatronStartSeq = true
-                addToChronomatron = true
-            }
 
             if (currentSolver == SolverType.ULTRASEQUENCER) {
                 val timerStack = lower.getStackInSlot(lower.sizeInventory - 5) ?: return
@@ -152,7 +84,7 @@ object AutoExperiments {
                         }
                     }
                 }
-                if (ultraSequencerOrder.size > 9){
+                if (ultraSequencerOrder.size > 9 && Config.autoCloseExperiments){
                     mc.thePlayer.closeScreen()
                     return
                 }
@@ -195,43 +127,22 @@ object AutoExperiments {
                         Thread.sleep(Config.autoExperimentsDelay.toLong())
                     }
                 }
-                if (currentSolver == SolverType.CHRONOMATRON) {
-                    val timerStack = lower.getStackInSlot(lower.sizeInventory - 5)
-                    if (timerStack == null || timerStack.item != Items.clock){
-                        clicking = false
-                        return@runAsync
-                    }
-                    Thread.sleep(300)
-                    for (turn in 0 until chronomatronOrder.size){
-                        val block = chronomatronOrder[turn]
-                        for (index in 0..lower.sizeInventory){
-                            val stack = lower.getStackInSlot(index)
-                            if (stack.displayName == block){
-                                mc.netHandler.addToSendQueue(C0EPacketClickWindow(container.windowId,index,0,0,null,0))
-//                                container.slotClick(index, 0, 0, mc.thePlayer) // MM NOT SURE ABOUT THAT
-                                Thread.sleep(Config.autoExperimentsDelay.toLong())
-                                break
-                            }
-                        }
-                    }
-                }
                 Thread.sleep(800)
-                    chronomatronOrder.clear()
                 clicking = false
             }
         }
     }
 
-        @SubscribeEvent
-        fun onTick(event: ClientTickEvent) {
-            if (!Config.autoExperiments) return
-            if (Minecraft.getMinecraft().currentScreen !is GuiChest) {
-                currentSolver = SolverType.NONE
-                clicking = false
-            }
-            if (event.phase != TickEvent.Phase.END) {
-                return
-            }
-            processInventoryContents(true)
+    @SubscribeEvent
+    fun onTick(event: ClientTickEvent) {
+        if (!Config.autoExperiments) return
+        if (Minecraft.getMinecraft().currentScreen !is GuiChest) {
+            currentSolver = SolverType.NONE
+            clicking = false
         }
+        if (event.phase != TickEvent.Phase.END) {
+            return
+        }
+        processInventoryContents(true)
+    }
 }

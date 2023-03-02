@@ -167,7 +167,7 @@ object UpdateManager {
             val latestReleaseBody = jsonArray["body"].toString()
             val latestTag = jsonArray["tag_name"].toString()
             val uploader = jsonArray.getJSONObject("author").get("login").toString()
-            val currentVersion = 2.2
+            val currentVersion = 2.3
             val latestVersion = latestTag.toDouble()
             println("$currentVersion < $latestVersion")
             println("${PaulAddons.VERSION.toDouble()} ${PaulAddons.VERSION}")
