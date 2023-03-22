@@ -143,7 +143,7 @@ object BonzoMask {
                 val healthPercent = (health/maxHealth * 100).roundToInt()
 //                addMessage("Health: $health Max Health: $maxHealth Percent: $healthPercent")
                 val helmetEquipped = mc.thePlayer.inventoryContainer.inventory[5]
-                if (healthPercent < Config.autoBonzoMaskHealth * 100 || keyBindings[2]!!.isPressed){
+                if (healthPercent < Config.autoBonzoMaskHealth * 100){
                     if (helmetEquipped == null){
                     swapToBonzo()
                     addMessage("$prefix Automatically Equipped ${mc.thePlayer.inventoryContainer.inventory[5].displayName}")
@@ -151,7 +151,7 @@ object BonzoMask {
                         swapToBonzo()
                     }
                 }
-                if (healthPercent > 50 && mainHelmetSlotIndex != -1){
+                if (healthPercent > Config.autoBonzoMaskHealth * 100 && mainHelmetSlotIndex != -1 && helmetEquipped.displayName.contains("Bonzo's Mask")){
                     addMessage("$prefix Switched back to ${mc.thePlayer.inventoryContainer.inventory[mainHelmetSlotIndex].displayName}")
                     mc.displayGuiScreen(GuiInventory(mc.thePlayer))
                     sendInventoryClick(mainHelmetSlotIndex)

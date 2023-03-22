@@ -158,7 +158,7 @@ object UpdateManager {
         @Volatile
         var updateObj: GithubRelease? = null
 
-        suspend fun run() {
+        fun run() {
             println("Checking Updates...")
             val response =
                 "{data:${HttpUtils.sendGet("https://api.github.com/repos/AtroxEGO/PaulAddonsKotlin/releases", null)}}"
@@ -167,7 +167,7 @@ object UpdateManager {
             val latestReleaseBody = jsonArray["body"].toString()
             val latestTag = jsonArray["tag_name"].toString()
             val uploader = jsonArray.getJSONObject("author").get("login").toString()
-            val currentVersion = 2.3
+            val currentVersion = 2.4 // TODO: Change This Every Version Cuz Idk Why PA.Version doesnt update
             val latestVersion = latestTag.toDouble()
             println("$currentVersion < $latestVersion")
             println("${PaulAddons.VERSION.toDouble()} ${PaulAddons.VERSION}")

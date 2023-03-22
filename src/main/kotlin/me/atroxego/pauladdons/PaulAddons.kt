@@ -25,12 +25,9 @@ import kotlinx.serialization.modules.SerializersModule
 import me.atroxego.pauladdons.commands.PaulAddonsCommand
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.config.PersistentSave
-import me.atroxego.pauladdons.features.armorSwapper.ArmorSwapper.armorSwapper
+import me.atroxego.pauladdons.features.other.ArmorSwapper.armorSwapper
 import me.atroxego.pauladdons.features.autoExperiments.AutoChromanotron
 import me.atroxego.pauladdons.features.autoExperiments.AutoSequencer
-import me.atroxego.pauladdons.features.autoHi.AutoHi
-import me.atroxego.pauladdons.features.autoMelody.AutoMelody
-import me.atroxego.pauladdons.features.autothankyou.SplashThankYou
 import me.atroxego.pauladdons.features.betterlootshare.ESP
 import me.atroxego.pauladdons.features.betterlootshare.MobNotification
 import me.atroxego.pauladdons.features.dungeons.*
@@ -44,9 +41,8 @@ import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.toggleFishing
 import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter
 import me.atroxego.pauladdons.features.kuudra.Dropships
-import me.atroxego.pauladdons.features.other.AutoDojo
+import me.atroxego.pauladdons.features.other.*
 import me.atroxego.pauladdons.features.other.AutoDojo.dojoToggle
-import me.atroxego.pauladdons.features.other.Ping
 import me.atroxego.pauladdons.features.slayers.AutoDaed
 import me.atroxego.pauladdons.features.slayers.AutoDaggers
 import me.atroxego.pauladdons.features.slayers.SlayerESP
@@ -90,7 +86,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "2.3"
+        const val VERSION = "2.4"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
         var devMode = false

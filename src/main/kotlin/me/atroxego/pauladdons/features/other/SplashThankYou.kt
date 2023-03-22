@@ -17,7 +17,7 @@
  */
 
 
-package me.atroxego.pauladdons.features.autothankyou
+package me.atroxego.pauladdons.features.other
 
 import PaulAddons.Companion.mc
 import me.atroxego.pauladdons.config.Config

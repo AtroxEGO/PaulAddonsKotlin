@@ -50,13 +50,6 @@ object DisplayNotification {
         if (event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE && event.type != RenderGameOverlayEvent.ElementType.JUMPBAR) return
         val fontRenderer = mc.fontRendererObj
         val text = notificationText
-//        var altText = "§k§lW"
-//        var amountOfLetters = getStringWidth(text)*4 / getStringWidth("W")
-//        do {
-//            altText += "W"
-//            amountOfLetters--
-//        }while (amountOfLetters > 0)
-//        logger.info(altText)
         val scale = 4.0 / (1080/ mc.displayHeight)
         val scaleReset = scale.pow(-1.0)
         val x = (mc.displayWidth / (scale * 4) - fontRenderer.getStringWidth(text) / 2).toFloat()
@@ -77,6 +70,5 @@ object DisplayNotification {
             fontRenderer.drawString(altText, altX, yBot, 0xFFFFFF, true)
             GL11.glScaled(scaleResetOther,scaleResetOther,scaleResetOther)
         } else return
-//        MobNotification.notificationMob.value.plus("§l").plus(MobNotification.notificationMob.key)
     }
 }

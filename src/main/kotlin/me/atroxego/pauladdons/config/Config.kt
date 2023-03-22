@@ -103,12 +103,16 @@ object Config : Vigilant(
     var slayerESPType = 2
     var bossESP = false
     var autoDaed = false
+    var autoDaedArmorSwap = false
+    var autoDaedPetNameOne = ""
+    var autoDaedPetNameTwo = ""
     var daedSwapHealthType = 0
     var percentageHealthDaed = 0f
     var manualHealthDaed = "150k"
     var autoP3P5GhostBlocks = false
     var bonzoMaskTimer = false
     var autoMelody = false
+    var autoMelodyCooldown = 10
     var spiritMaskTimer = false
     var autoBonzoMask = false
     var autoBonzoMaskHealth = 0.3f
@@ -332,6 +336,13 @@ object Config : Vigilant(
                 switch(
                     Config::autoMelody,
                     name = "Auto Melody"
+                )
+                slider(
+                    Config::autoMelodyCooldown,
+                    name = "Melody Click Cooldown in Ticks",
+                    description = "10 should be good",
+                    min = 0,
+                    max = 20
                 )
             }
             subcategory("Auto Hi") {
@@ -562,6 +573,20 @@ object Config : Vigilant(
                     name = "Manual Boss Health",
                     description = "Select at what amount of health swap to daed, for example: '10.2M'"
                 )
+                switch(
+                    Config::autoDaedArmorSwap,
+                    name = "Auto Armor Swap"
+                )
+                text(
+                    Config::autoDaedPetNameOne,
+                    name = "Auto Pet When Killing",
+                    description = "Pet name macro should switch to when killing boss, leave empty to disable"
+                )
+                text(
+                    Config::autoDaedPetNameTwo,
+                    name = "Auto Pet After Killing",
+                    description = "Pet name macro should switch to after killing boss, leave empty to disable"
+                )
             }
             switch(
                 Config::autoBlazeDaggers,
@@ -649,6 +674,10 @@ object Config : Vigilant(
         addDependency(Config::manualHealthDaed, Config::autoDaed)
         addDependency(Config::autoBonzoMaskHealth, Config::autoBonzoMask)
         addDependency(Config::realisticHeightType, Config::realisticHeight)
+        addDependency(Config::autoMelodyCooldown, Config::autoMelody)
+        addDependency(Config::autoDaedPetNameOne, Config::autoDaed)
+        addDependency(Config::autoDaedPetNameTwo, Config::autoDaed)
+        addDependency(Config::autoDaedArmorSwap, Config::autoDaed)
         markDirty()
     }
 

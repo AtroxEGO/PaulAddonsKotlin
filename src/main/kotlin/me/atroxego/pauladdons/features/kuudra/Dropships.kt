@@ -36,7 +36,9 @@ object Dropships {
     fun onChat(event: PacketEvent.ReceiveEvent){
         if (!Config.dropshipNotification) return
         if (event.packet !is S45PacketTitle) return
+        if (event.packet.type == null) return
         if (event.packet.type.name != "TITLE") return
+        if (event.packet.message == null) return
         if (event.packet.message.unformattedText.stripColor() == "DROPSHIP INCOMING") dropshipTimeMessage = System.currentTimeMillis() + timeOffset
     }
 

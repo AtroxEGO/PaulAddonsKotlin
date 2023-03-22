@@ -207,9 +207,6 @@ object GuiManager : PersistentSave(File("config/".plus(PaulAddons.MODID), "guipo
     override fun setDefault(writer: Writer) {
         writer.write("{}")
     }
-
-    // this class sucks lol (why is there a thing called floatpair)
-    // was going to make guielement serializable but it's too much effort
     @Serializable
     private data class GuiElementLocation(val x: Float, val y: Float, val scale: Float)
 }

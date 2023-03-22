@@ -17,7 +17,7 @@
  */
 
 
-package me.atroxego.pauladdons.features.armorSwapper
+package me.atroxego.pauladdons.features.other
 
 import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix

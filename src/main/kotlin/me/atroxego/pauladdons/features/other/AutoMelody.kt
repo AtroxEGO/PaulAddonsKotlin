@@ -17,10 +17,12 @@
  */
 
 
-package me.atroxego.pauladdons.features.autoMelody
+package me.atroxego.pauladdons.features.other
 
 import PaulAddons.Companion.mc
+import gg.essential.universal.UChat
 import me.atroxego.pauladdons.config.Config
+import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.utils.Utils
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.inventory.GuiChest
@@ -28,7 +30,9 @@ import net.minecraft.init.Blocks
 import net.minecraft.inventory.ContainerChest
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.Item
+import net.minecraft.network.Packet
 import net.minecraft.network.play.client.C0EPacketClickWindow
+import net.minecraft.network.play.server.S2FPacketSetSlot
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent
@@ -39,7 +43,7 @@ object AutoMelody {
         var delay = 0
     }
     var melodyOpen = false
-    private val notes = listOf(Note(37),Note(38), Note(39),Note(40),Note(41),Note(42),Note(43))
+    private val notes = listOf(Note(37), Note(38), Note(39), Note(40), Note(41), Note(42), Note(43))
 
     @SubscribeEvent
     fun onGuiOpen(event: GuiOpenEvent) {
@@ -56,29 +60,29 @@ object AutoMelody {
     }
 
     @SubscribeEvent
-    fun onTick(event: PlayerTickEvent){
+    fun onTick(event: PlayerTickEvent) {
         if (!Config.autoMelody) return
         if (!melodyOpen) return
         if (Minecraft.getMinecraft().currentScreen !is GuiChest) {
             melodyOpen = false
             return
         }
-        for (note in notes){
+        for (note in notes) {
             if (note.delay > 0) note.delay--
             val chest: GuiChest = Minecraft.getMinecraft().currentScreen as GuiChest
             val container = chest.inventorySlots as ContainerChest
             val lower: IInventory = container.lowerChestInventory
             val itemStack = lower.getStackInSlot(note.slot) ?: return
 
-            if (itemStack.item == Item.getItemFromBlock(Blocks.stained_hardened_clay)){
+            if (itemStack.item == Item.getItemFromBlock(Blocks.stained_hardened_clay)) {
                 note.clicked = false
                 note.delay = 0
             }
-            if (itemStack.item == Item.getItemFromBlock(Blocks.quartz_block)){
+            if (itemStack.item == Item.getItemFromBlock(Blocks.quartz_block)) {
                 if (note.clicked || note.delay != 0) return
-                if (lower.getStackInSlot(note.slot - 9).item == Item.getItemFromBlock(Blocks.wool)) note.delay = 7
+                if (lower.getStackInSlot(note.slot - 9).item == Item.getItemFromBlock(Blocks.wool)) note.delay = Config.autoMelodyCooldown
                 else note.clicked = true
-                mc.netHandler.addToSendQueue(C0EPacketClickWindow(container.windowId,note.slot,0,0,null,0))
+                mc.netHandler.addToSendQueue(C0EPacketClickWindow(container.windowId, note.slot, 0, 0, null, 0))
             }
         }
     }

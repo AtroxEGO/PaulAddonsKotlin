@@ -22,8 +22,12 @@ package me.atroxego.pauladdons.features.slayers
 import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
 import gg.essential.api.utils.Multithreading
+import gg.essential.universal.UChat
 import gg.essential.universal.UScreen
 import me.atroxego.pauladdons.config.Config
+import me.atroxego.pauladdons.features.other.ArmorSwapper
+import me.atroxego.pauladdons.features.other.ArmorSwapper.armorSwapper
+import me.atroxego.pauladdons.features.other.PetSwapper
 import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import net.minecraft.client.Minecraft
@@ -37,6 +41,7 @@ import net.minecraft.world.World
 import net.minecraft.world.chunk.Chunk
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import java.util.*
@@ -48,6 +53,7 @@ object AutoDaed {
     var dead = false
     var switching = false
     var lastHealth = -1.0
+    var switched = false
     @SubscribeEvent
     fun checkForBoss(event: RenderWorldLastEvent){
         if (!Config.autoDaed) return
@@ -89,6 +95,14 @@ object AutoDaed {
                     if (healthNumber <= maxBossHealth * Config.percentageHealthDaed){
                         val slotWithDead = lookForDead()
                         if (switching) return
+                        if (!switched){
+                            if (Config.autoDaedArmorSwap) armorSwapper()
+                            if (Config.autoDaedPetNameOne != ""){
+                                mc.thePlayer.sendChatMessage("/pets")
+                                MinecraftForge.EVENT_BUS.register(PetSwapper(Config.autoDaedPetNameOne))
+                            }
+                            switched = true
+                        }
                         if (slotWithDead == null){
                             if (System.currentTimeMillis()/1000 - lastTimeChecked < 5 && lastTimeChecked > 0) return
                             addMessage("$prefix Haven't Found Daed")
@@ -111,6 +125,14 @@ object AutoDaed {
                     if (healthNumber <= healthNumberToSwapAt) {
                         val slotWithDead = lookForDead()
                         if (switching) return
+                        if (!switched){
+                            if (Config.autoDaedArmorSwap) armorSwapper()
+                            if (Config.autoDaedPetNameOne != ""){
+                                mc.thePlayer.sendChatMessage("/pets")
+                                MinecraftForge.EVENT_BUS.register(PetSwapper(Config.autoDaedPetNameOne))
+                            }
+                            switched = true
+                        }
                         if (slotWithDead == null){
                             if (System.currentTimeMillis()/1000 - lastTimeChecked < 5 && lastTimeChecked > 0) return
                             addMessage("$prefix Haven't Found Daed")
@@ -156,6 +178,7 @@ object AutoDaed {
         lastTimeSwitched = -1
         customMobs.clear()
         bossActive = false
+        switched = false
         lastTimeChecked = -1
         maxBossHealth = -1.0
     }
@@ -203,21 +226,28 @@ object AutoDaed {
     }
 
     fun switchBack(){
+        if (switched){
+            if (Config.autoDaedArmorSwap) armorSwapper()
+            if (Config.autoDaedPetNameTwo != ""){
+                mc.thePlayer.sendChatMessage("/pets")
+                MinecraftForge.EVENT_BUS.register(PetSwapper(Config.autoDaedPetNameTwo))
+            }
+            switched = false
+        }
         if (slotWithMainWeapon == -1) return
-//        addMessage(slotWithMainWeapon.toString())
         if (slotWithMainWeapon in 0..7){
             mc.thePlayer.inventory.currentItem = slotWithMainWeapon
         } else {
-        mc.displayGuiScreen(GuiInventory(mc.thePlayer))
-        val windowId = GuiInventory(mc.thePlayer).inventorySlots.windowId
-        var itemStack = mc.thePlayer.inventory.mainInventory[slotWithMainWeapon]
-        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotWithMainWeapon,0,0,itemStack,0))
-        itemStack = mc.thePlayer.inventory.mainInventory[mc.thePlayer.inventory.currentItem]
-        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, mc.thePlayer.inventory.currentItem + 36,0,0,itemStack,0))
-        itemStack = mc.thePlayer.inventory.mainInventory[slotWithMainWeapon]
-        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotWithMainWeapon,0,0,itemStack,0))
-        slotWithMainWeapon = -1
-        mc.thePlayer.closeScreen()
+            mc.displayGuiScreen(GuiInventory(mc.thePlayer))
+            val windowId = GuiInventory(mc.thePlayer).inventorySlots.windowId
+            var itemStack = mc.thePlayer.inventory.mainInventory[slotWithMainWeapon]
+            mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotWithMainWeapon,0,0,itemStack,0))
+            itemStack = mc.thePlayer.inventory.mainInventory[mc.thePlayer.inventory.currentItem]
+            mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, mc.thePlayer.inventory.currentItem + 36,0,0,itemStack,0))
+            itemStack = mc.thePlayer.inventory.mainInventory[slotWithMainWeapon]
+            mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotWithMainWeapon,0,0,itemStack,0))
+            slotWithMainWeapon = -1
+            mc.thePlayer.closeScreen()
         }
     }
 
