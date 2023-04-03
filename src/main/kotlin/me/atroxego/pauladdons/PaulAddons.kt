@@ -25,7 +25,6 @@ import kotlinx.serialization.modules.SerializersModule
 import me.atroxego.pauladdons.commands.PaulAddonsCommand
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.config.PersistentSave
-import me.atroxego.pauladdons.features.other.ArmorSwapper.armorSwapper
 import me.atroxego.pauladdons.features.autoExperiments.AutoChromanotron
 import me.atroxego.pauladdons.features.autoExperiments.AutoSequencer
 import me.atroxego.pauladdons.features.betterlootshare.ESP
@@ -42,6 +41,7 @@ import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.toggleFishing
 import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter
 import me.atroxego.pauladdons.features.kuudra.Dropships
 import me.atroxego.pauladdons.features.other.*
+import me.atroxego.pauladdons.features.other.ArmorSwapper.armorSwapper
 import me.atroxego.pauladdons.features.other.AutoDojo.dojoToggle
 import me.atroxego.pauladdons.features.slayers.AutoDaed
 import me.atroxego.pauladdons.features.slayers.AutoDaggers
@@ -56,6 +56,7 @@ import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.client.registry.ClientRegistry
+import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.ModMetadata
@@ -74,7 +75,8 @@ import java.io.File
     version = PaulAddons.VERSION,
     useMetadata = true,
     clientSideOnly = true,
-    acceptedMinecraftVersions = "[1.8.9]"
+    acceptedMinecraftVersions = "[1.8.9]",
+    dependencies= "before:*",
 )
 class PaulAddons {
 
@@ -86,7 +88,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "2.4"
+        const val VERSION = "2.5"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
         var devMode = false
@@ -113,6 +115,7 @@ class PaulAddons {
 
     @EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
+        println(Loader.instance().configDir)
         metadata = event.modMetadata
         val directory = File(event.modConfigurationDirectory, event.modMetadata.modId)
         directory.mkdirs()
@@ -129,6 +132,7 @@ class PaulAddons {
         listOf(
             this,
             guiManager,
+            SBInfo,
             UpdateManager,
             MobNotification,
             StarCult,
@@ -136,10 +140,10 @@ class PaulAddons {
             AutoDaed,
             Dropships,
             AutoP3GhostBlocks,
+            M7DragonTimers,
             AutoChestCloser,
             ESP,
             SlayerESP,
-            SBInfo,
             BonzoMask,
             AutoMelody,
             SplashThankYou,

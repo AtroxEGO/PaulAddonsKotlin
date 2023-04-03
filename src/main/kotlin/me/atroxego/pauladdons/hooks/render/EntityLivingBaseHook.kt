@@ -1,5 +1,7 @@
 package me.atroxego.pauladdons.hooks.render
 
+import PaulAddons
+import gg.essential.universal.UChat
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.utils.SBInfo
 import me.atroxego.pauladdons.utils.Utils

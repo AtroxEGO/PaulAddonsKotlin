@@ -23,6 +23,7 @@ import PaulAddons
 import PaulAddons.Companion.keyBindings
 import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
+import gg.essential.universal.UChat
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
@@ -152,13 +153,12 @@ object BonzoMask {
                     }
                 }
                 if (healthPercent > Config.autoBonzoMaskHealth * 100 && mainHelmetSlotIndex != -1 && helmetEquipped.displayName.contains("Bonzo's Mask")){
-                    addMessage("$prefix Switched back to ${mc.thePlayer.inventoryContainer.inventory[mainHelmetSlotIndex].displayName}")
-                    mc.displayGuiScreen(GuiInventory(mc.thePlayer))
                     sendInventoryClick(mainHelmetSlotIndex)
                     sendInventoryClick(5)
                     sendInventoryClick(mainHelmetSlotIndex)
                     mc.thePlayer.closeScreen()
                     mainHelmetSlotIndex = -1
+                    addMessage("$prefix Switched back to ${mc.thePlayer.inventoryContainer.inventory[mainHelmetSlotIndex]?.displayName}")
                     mc.thePlayer.playSound("random.orb", 1.0f,0.5f)
                 }
             }

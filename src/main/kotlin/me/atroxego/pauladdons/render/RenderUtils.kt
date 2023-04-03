@@ -588,7 +588,11 @@ object RenderUtils {
         y: Double,
         z: Double,
         partialTicks: Float,
-        matrixStack: UMatrixStack
+        matrixStack: UMatrixStack,
+        scale: Float = 1f,
+        background: Boolean = true,
+        shadow: Boolean = true,
+        distance: Boolean = true
     ) {
         matrixStack.push()
         GlStateManager.alphaFunc(516, 0.1f)
@@ -609,21 +613,23 @@ object RenderUtils {
             renderY = y
             renderZ = z
         }
-        drawNametag(renderX, renderY, renderZ, str, Color.WHITE, partialTicks, matrixStack)
+        drawNametag(renderX, renderY, renderZ, str, Color.WHITE, partialTicks, matrixStack, scale = scale, background = background, shadow = shadow)
         matrixStack.rotate(-mc.renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
         matrixStack.rotate(mc.renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
         matrixStack.translate(0.0, -0.25, 0.0)
         matrixStack.rotate(-mc.renderManager.playerViewX, 1.0f, 0.0f, 0.0f)
         matrixStack.rotate(mc.renderManager.playerViewY, 0.0f, 1.0f, 0.0f)
-        drawNametag(
-            renderX,
-            renderY,
-            renderZ,
-            "${ChatColor.YELLOW}${dist.roundToInt()}m",
-            Color.WHITE,
-            partialTicks,
-            matrixStack
-        )
+        if (distance) {
+            drawNametag(
+                renderX,
+                renderY,
+                renderZ,
+                "${ChatColor.YELLOW}${dist.roundToInt()}m",
+                Color.WHITE,
+                partialTicks,
+                matrixStack
+            )
+        }
         matrixStack.pop()
     }
 

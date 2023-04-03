@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(EntityLivingBase.class)
+@Mixin(value = EntityLivingBase.class, priority = 999)
 public abstract class MixinEntityLivingBase extends Entity implements ExtensionEntityLivingBase {
 
     @Unique
@@ -22,7 +22,7 @@ public abstract class MixinEntityLivingBase extends Entity implements ExtensionE
         super(worldIn);
     }
 
-    @Inject(method = "isChild", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "isChild", at = @At(value = "HEAD"), cancellable = true)
     private void setChildState(CallbackInfoReturnable<Boolean> cir) {
         hook.isChild(cir);
     }

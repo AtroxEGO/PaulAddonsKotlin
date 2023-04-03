@@ -51,7 +51,6 @@ class PetSwapper(private val arg: String) : Feature() {
                 printdev(petName)
             }
             if (!foundPet) addMessage("$prefix Haven't found pet $arg")
-            foundPet = false
         } else {
             // Select Pet From Index
             val slot = if (arg.toInt() % 8 == 0) arg.toInt() + 2 else arg.toInt()

@@ -17,8 +17,12 @@
  */
 package me.atroxego.pauladdons.utils
 
+import PaulAddons
 import PaulAddons.Companion.json
 import PaulAddons.Companion.mc
+import gg.essential.universal.UChat
+import gg.essential.universal.UPacket.sendChatMessage
+import gg.essential.universal.wrappers.message.UTextComponent
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
@@ -33,6 +37,7 @@ import me.atroxego.pauladdons.events.impl.SendChatMessageEvent
 import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import me.atroxego.pauladdons.utils.Utils.stripControlCodes
+import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.inventory.ContainerChest
 import net.minecraft.network.play.client.C01PacketChatMessage
@@ -44,6 +49,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
+import java.awt.TextComponent
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -58,7 +64,7 @@ object SBInfo {
 
     private val timePattern = ".+(am|pm)".toRegex()
 
-    var onSkyblock = false
+    var onSkyblock = false //TODO: False
     var location = ""
     var date = ""
     var time = ""
@@ -104,9 +110,7 @@ object SBInfo {
 
     @SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = true)
     fun onChatMessage(event: PacketEvent.ReceiveEvent) {
-//                mc.thePlayer.addChatMessage(ChatComponentText("a"))
         if (event.packet is S02PacketChat) {
-//            if(event.packet.chatComponent.unformattedText.contains("❤") && event.packet.chatComponent.unformattedText.contains("❈") && event.packet.chatComponent.unformattedText.contains("✎")) addMessage(event.packet.chatComponent.formattedText)
             val unformatted = event.packet.chatComponent.unformattedText
             if (unformatted.startsWith("{") && unformatted.endsWith("}")) {
                 try {
@@ -125,7 +129,6 @@ object SBInfo {
 
     @SubscribeEvent
     fun onPacket(event: PacketEvent.SendEvent) {
-//            mc.thePlayer.addChatMessage(ChatComponentText("a"))
         if (event.packet is C01PacketChatMessage) {
             if (event.packet.message.startsWith("/locraw")) {
                 lastLocRaw = System.currentTimeMillis()
@@ -137,20 +140,17 @@ object SBInfo {
     fun onTick(event: ClientTickEvent) {
         if (event.phase != TickEvent.Phase.START || mc.thePlayer == null || mc.theWorld == null) return
         val scoreObjective = mc.thePlayer.worldScoreboard.getObjectiveInDisplaySlot(1)
-        if (scoreObjective != null) onSkyblock = scoreObjective.displayName.stripColor().startsWith("SKYBLOCK")
+        if (scoreObjective != null) onSkyblock = scoreObjective.displayName.stripColor().contains("SKYBLOCK") || scoreObjective.displayName.stripColor().contains("SKIBLOCK")
         if (!onSkyblock) return
         val currentTime = System.currentTimeMillis()
-        if (locraw == null && currentTime - joinedWorld > 1300 && currentTime - lastLocRaw > 15000) {
+        if (locraw == null && currentTime - joinedWorld > 1300 && currentTime - lastLocRaw > 1000) { // TODO: if locraw == null
             lastLocRaw = System.currentTimeMillis()
             mc.thePlayer.sendChatMessage("/locraw")
         }
-//        addMessage("a")
         try {
             val lines = ScoreboardUtil.fetchScoreboardLines().map { it.stripControlCodes() }
             if (lines.size >= 5) {
-                //§707/14/20
                 date = lines[2].stripControlCodes().trim()
-                //§74:40am
                 val matcher = timePattern.find(lines[3])
                 if (matcher != null) {
                     time = matcher.groupValues[0].stripControlCodes().trim()

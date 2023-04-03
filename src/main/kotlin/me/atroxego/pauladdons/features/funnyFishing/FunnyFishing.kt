@@ -24,12 +24,15 @@ import gg.essential.api.utils.Multithreading
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.features.Feature
+import me.atroxego.pauladdons.features.other.InstaSell
+import me.atroxego.pauladdons.features.other.PetSwapper
 import me.atroxego.pauladdons.render.RenderUtils
 import me.atroxego.pauladdons.utils.PlayerRotation
 import me.atroxego.pauladdons.utils.Utils.VecToYawPitch
 import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.blockPosToYawPitch
 import me.atroxego.pauladdons.utils.Utils.findItemInHotbar
+import me.atroxego.pauladdons.utils.Utils.fullInventory
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import net.minecraft.client.settings.KeyBinding
 import net.minecraft.entity.Entity
@@ -46,6 +49,7 @@ import net.minecraft.world.World
 import net.minecraft.world.chunk.Chunk
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent
@@ -62,6 +66,7 @@ object FunnyFishing : Feature() {
     private var collidingEntity: EntityLivingBase? = null
     private var lastTimeTotemPlaced = 0L
     private var lastTimeReeled = 0L
+    private var lastTimeSold = 0L
 
     fun toggleFishing() {
         if (!Config.funnyFishing) {
@@ -138,6 +143,7 @@ object FunnyFishing : Feature() {
         Config.funnyFishing = false
         rotateCooldown = 0
         lastTimeHitEntity = 0L
+        lastTimeSold = 0L
         playersFishHook = null
         placingTotem = false
     }
@@ -155,6 +161,10 @@ object FunnyFishing : Feature() {
         }
         if (!Config.funnyFishing) return
         if (placingTotem) return
+        if (fullInventory() && System.currentTimeMillis() - lastTimeSold > 10000 && Config.funnyFishingAutoSell){
+            mc.thePlayer.sendChatMessage("/bz")
+            MinecraftForge.EVENT_BUS.register(InstaSell())
+        }
         if (System.currentTimeMillis() - lastTimeReeled > 30000){
             reelIn(true)
         }
@@ -278,7 +288,6 @@ var placingTotem = false
 //                addMessage(blockAtBlockPos.registryName)
                 if (blockAtBlockPos != Blocks.air && blockAtBlockPos != Blocks.water && blockAtBlockPos != Blocks.flowing_water && blockAtBlockPos != Blocks.lava && blockAtBlockPos != Blocks.flowing_lava && blockOverBlockPos == Blocks.air)
                 {
-
                     printdev("Found Proper Block: ${blockPos} Block Type: ${blockAtBlockPos}")
                     return blockPos
                 }
@@ -386,7 +395,7 @@ var placingTotem = false
             KeyBinding.setKeyBindState(Keyboard.KEY_S, false)
             KeyBinding.setKeyBindState(Keyboard.KEY_A, false)
             KeyBinding.setKeyBindState(Keyboard.KEY_D, false)
-            Thread.sleep((((Math.random() * (300 - 100)) + 100).toLong()))
+            Thread.sleep((((Math.random() * (500 - 400)) + 400).toLong()))
             KeyBinding.setKeyBindState(Keyboard.KEY_LSHIFT, false)
             return@runAsync
         }

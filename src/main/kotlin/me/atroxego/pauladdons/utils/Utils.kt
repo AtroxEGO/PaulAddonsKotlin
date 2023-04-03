@@ -90,6 +90,14 @@ object Utils {
 //        }
     }
 
+    fun fullInventory() : Boolean {
+        val inventory = mc.thePlayer.inventory.mainInventory
+        for (i in 0..35){
+            if (inventory[i] == null) return false
+        }
+        return true
+    }
+
     fun addMessage(message: String){
         mc.thePlayer.addChatMessage(ChatComponentText(message))
     }

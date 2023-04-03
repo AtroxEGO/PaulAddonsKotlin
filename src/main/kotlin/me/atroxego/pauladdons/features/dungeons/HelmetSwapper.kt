@@ -21,7 +21,9 @@ package me.atroxego.pauladdons.features.dungeons
 
 import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
+import gg.essential.universal.UChat
 import me.atroxego.pauladdons.config.Config
+import me.atroxego.pauladdons.utils.Utils.addMessage
 import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.network.play.client.C0EPacketClickWindow
 import net.minecraft.util.ChatComponentText
@@ -30,12 +32,18 @@ import net.minecraft.util.ChatComponentText
 object HelmetSwapper {
     var helmetOneLocation = -1
     var helmetTwoLocation = -1
+    var lastTimeSwapped = 0L
 
     fun helmetSwapper(helmetOption: Int){
-        mc.displayGuiScreen(GuiInventory(mc.thePlayer))
-        swapHelmet(helmetOption)
-        mc.thePlayer.closeScreen()
-        mc.thePlayer.playSound("random.orb",1.0f,0.5f)
+        if (System.currentTimeMillis() - lastTimeSwapped > 300){
+            mc.displayGuiScreen(GuiInventory(mc.thePlayer))
+            swapHelmet(helmetOption)
+            mc.thePlayer.closeScreen()
+            mc.thePlayer.playSound("random.orb",1.0f,0.5f)
+            lastTimeSwapped = System.currentTimeMillis()
+        } else {
+            mc.thePlayer.addChatMessage(ChatComponentText("$prefix Slow down a bit!"))
+        }
     }
 
     private fun swapHelmet(helmetOption: Int) {
@@ -50,7 +58,7 @@ object HelmetSwapper {
             if (itemStack.displayName.contains(helmetToLookFor)) {
                 val slotIndex = if (helmetOption == 1) helmetOneLocation else helmetTwoLocation
                 if (slotIndex == -1) break
-                val helmetName = mc.thePlayer.inventory.getStackInSlot(slotIndex).displayName
+                val helmetName = mc.thePlayer.inventoryContainer.inventory[slotIndex]?.displayName
                 sendClick(slotIndex)
                 mc.thePlayer.openContainer.slotClick(slotIndex,0,0,mc.thePlayer)
                 sendClick(i)
@@ -96,7 +104,7 @@ object HelmetSwapper {
                     )
                 )
                 mc.thePlayer.openContainer.slotClick(i,0,0,mc.thePlayer)
-                mc.thePlayer.addChatMessage(ChatComponentText("$prefix Equipped ${itemStack.displayName}"))
+                mc.thePlayer.addChatMessage(ChatComponentText("$prefix Equippedd ${itemStack.displayName}"))
                 if (helmetOption == 1){
                     helmetOneLocation = i
                 } else helmetTwoLocation = i

@@ -1,5 +1,4 @@
-- Auto Bonzo Mask Improvement
-- Auto Harp Improvement
-- Added Option for Pet And Armor Swap To Daedelus Swap
-- Fixed Few Bugs
-- Fixed Api For Star Cult
+- Added notifications as part of movable GUI
+- Added 1x1 Hitboxes to Coco and Mushrooms
+- Added Auto Inventory Sell to Fishing Macro
+- Fixed Few Features Not Working Correctly

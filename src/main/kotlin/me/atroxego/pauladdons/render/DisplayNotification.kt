@@ -2,7 +2,10 @@ package me.atroxego.pauladdons.render
 
 import PaulAddons.Companion.mc
 import gg.essential.api.utils.Multithreading
+import me.atroxego.pauladdons.gui.GuiElement
+import me.atroxego.pauladdons.utils.Utils.stripColor
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.ScaledResolution
 import net.minecraftforge.client.GuiIngameForge
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -14,6 +17,7 @@ object DisplayNotification {
     var renderNotification = false
     var notificationText = ""
     var displayTopAndBottomLines = false
+    val altText = "§k§lIWONDERWHOANDWHYISREADINGTHAT"
     var color: Color = Color.WHITE
     fun displayNotification(text:String,duration:Long,topAndBottomLines:Boolean) {
         val soundName = "random.orb"
@@ -43,32 +47,47 @@ object DisplayNotification {
             renderNotification = false
         }
     }
-    @SubscribeEvent
-    fun renderGameOverlay(event: RenderGameOverlayEvent.Post) {
-        if (!renderNotification) return
-        if (Minecraft.getMinecraft().ingameGUI !is GuiIngameForge) return
-        if (event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE && event.type != RenderGameOverlayEvent.ElementType.JUMPBAR) return
-        val fontRenderer = mc.fontRendererObj
-        val text = notificationText
-        val scale = 4.0 / (1080/ mc.displayHeight)
-        val scaleReset = scale.pow(-1.0)
-        val x = (mc.displayWidth / (scale * 4) - fontRenderer.getStringWidth(text) / 2).toFloat()
-        val y = (mc.displayHeight / (scale * 4) - 17).toFloat()
-        GL11.glScaled(scale,scale,scale)
-        fontRenderer.drawString(text, x, y, color.rgb, true)
-        GL11.glScaled(scaleReset,scaleReset,scaleReset)
 
-        if (displayTopAndBottomLines){
-            val altText = "§k§lIWONDERWHOANDWHYISREADINGTHAT"
-            val scaleOther = 1.0 / (1080/ mc.displayHeight)
-            val scaleResetOther = scaleOther.pow(-1.0)
-            val yTop = (y + mc.displayHeight / (scaleOther * 4) * 0.5 - 3).toFloat()
-            val yBot = (y + mc.displayHeight / (scaleOther * 4) * 0.7).toFloat()
-            val altX = (mc.displayWidth / (scaleOther * 4) - fontRenderer.getStringWidth(altText) / 2).toFloat()
-            GL11.glScaled(scaleOther,scaleOther,scaleOther)
-            fontRenderer.drawString(altText, altX, yTop, 0xFFFFFF, true)
-            fontRenderer.drawString(altText, altX, yBot, 0xFFFFFF, true)
-            GL11.glScaled(scaleResetOther,scaleResetOther,scaleResetOther)
-        } else return
+    init {
+        NotificationGUIElement()
+    }
+
+    class NotificationGUIElement : GuiElement("Notifications"){
+        override fun render() {
+            if (renderNotification){
+                GL11.glPushMatrix()
+                GL11.glScaled(4.0,4.0,4.0)
+                GL11.glTranslated(230/8.0 - fr.getStringWidth(notificationText.stripColor()).toDouble() / 2,0.0,0.0)
+                fr.drawString(notificationText, 0f, 4f, color.rgb, true)
+                GL11.glPopMatrix()
+                if (displayTopAndBottomLines){
+                    fr.drawString(altText, 17f, 0f, 0xFFFFFF, true)
+                    fr.drawString(altText, 17f, 60f, 0xFFFFFF, true)
+                }
+            }
+        }
+
+        override fun demoRender() {
+            val text = "§4Notification"
+            fr.drawString(altText, 17f, 0f, 0xFFFFFF, true)
+            GL11.glPushMatrix()
+            GL11.glScaled(4.0,4.0,4.0)
+            GL11.glTranslated(230/8.0 - fr.getStringWidth(text.stripColor()).toDouble() / 2,0.0,0.0)
+            fr.drawString(text, 0f, 4f, color.rgb, true)
+            GL11.glPopMatrix()
+            fr.drawString(altText, 17f, 60f, 0xFFFFFF, true)
+        }
+
+        override val toggled: Boolean
+            get() = true
+        override val height: Int
+            get() = 60
+        override val width: Int
+            get() = 230
+
+        init {
+            PaulAddons.guiManager.registerElement(this)
+        }
+
     }
 }

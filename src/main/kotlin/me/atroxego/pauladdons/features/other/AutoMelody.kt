@@ -30,14 +30,19 @@ import net.minecraft.init.Blocks
 import net.minecraft.inventory.ContainerChest
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.Item
+import net.minecraft.item.ItemBlock
 import net.minecraft.network.Packet
 import net.minecraft.network.play.client.C0EPacketClickWindow
 import net.minecraft.network.play.server.S2FPacketSetSlot
 import net.minecraftforge.client.event.GuiOpenEvent
+import net.minecraftforge.client.event.GuiScreenEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent
 
 object AutoMelody {
+
+
+    private var lastInv = 0
     class Note (var slot: Int){
         var clicked = false
         var delay = 0
@@ -60,30 +65,47 @@ object AutoMelody {
     }
 
     @SubscribeEvent
-    fun onTick(event: PlayerTickEvent) {
+    fun onRender(event: GuiScreenEvent.BackgroundDrawnEvent) {
         if (!Config.autoMelody) return
         if (!melodyOpen) return
         if (Minecraft.getMinecraft().currentScreen !is GuiChest) {
             melodyOpen = false
             return
         }
-        for (note in notes) {
-            if (note.delay > 0) note.delay--
-            val chest: GuiChest = Minecraft.getMinecraft().currentScreen as GuiChest
-            val container = chest.inventorySlots as ContainerChest
-            val lower: IInventory = container.lowerChestInventory
-            val itemStack = lower.getStackInSlot(note.slot) ?: return
-
-            if (itemStack.item == Item.getItemFromBlock(Blocks.stained_hardened_clay)) {
-                note.clicked = false
-                note.delay = 0
-            }
-            if (itemStack.item == Item.getItemFromBlock(Blocks.quartz_block)) {
-                if (note.clicked || note.delay != 0) return
-                if (lower.getStackInSlot(note.slot - 9).item == Item.getItemFromBlock(Blocks.wool)) note.delay = Config.autoMelodyCooldown
-                else note.clicked = true
-                mc.netHandler.addToSendQueue(C0EPacketClickWindow(container.windowId, note.slot, 0, 0, null, 0))
+        val container = mc.thePlayer.openContainer ?: return
+        val newHash = container.inventorySlots.subList(0,36).joinToString("") { it?.stack?.displayName ?: "" }.hashCode()
+        if (lastInv == newHash) return
+        lastInv = newHash
+        for (ii in 0..6) {
+            val slot = container.inventorySlots[37 + ii]
+            if ((slot.stack?.item as? ItemBlock)?.block === Blocks.quartz_block) {
+                mc.playerController.windowClick(
+                    container.windowId,
+                    slot.slotNumber,
+                    2,
+                    3,
+                    mc.thePlayer
+                )
+                break
             }
         }
+//        for (note in notes) {
+//            if (note.delay > 0) note.delay--
+//            val chest: GuiChest = Minecraft.getMinecraft().currentScreen as GuiChest
+//            val container = chest.inventorySlots as ContainerChest
+//            val lower: IInventory = container.lowerChestInventory
+//            val itemStack = lower.getStackInSlot(note.slot) ?: return
+//
+//            if (itemStack.item == Item.getItemFromBlock(Blocks.stained_hardened_clay)) {
+//                note.clicked = false
+//                note.delay = 0
+//            }
+//            if (itemStack.item == Item.getItemFromBlock(Blocks.quartz_block)) {
+//                if (note.clicked || note.delay != 0) return
+//                if (lower.getStackInSlot(note.slot - 9).item == Item.getItemFromBlock(Blocks.wool)) note.delay = Config.autoMelodyCooldown
+//                else note.clicked = true
+//                mc.netHandler.addToSendQueue(C0EPacketClickWindow(container.windowId, note.slot, 0, 0, null, 0))
+//            }
+//        }
     }
 }

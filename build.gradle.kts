@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") version "1.8.20"
 
     // For serialization: remove if not needed
-    kotlin("plugin.serialization") version "1.7.10"
+    kotlin("plugin.serialization") version "1.8.20"
 
     idea
     java
@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "PaulAddons"
-version = "2.4"
+version = "2.5"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
@@ -60,12 +60,13 @@ val shadowImpl: Configuration by configurations.creating {
 
 dependencies {
     // For serialization: remove if not needed
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    shadowImpl("com.squareup.okhttp3:okhttp:4.10.0")
+    shadowImpl ("com.moandjiezana.toml:toml4j:0.7.2")
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
-    implementation("org.json:json:20220924")
+    implementation("org.json:json:20230227")
     shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") { isTransitive = false }
     annotationProcessor("org.spongepowered:mixin:0.8.4-SNAPSHOT")
     shadowImpl("gg.essential:loader-launchwrapper:1.1.3")

@@ -49,7 +49,11 @@ object Ping : Feature(){
     }
 
     fun sendPing() {
-        mc.thePlayer.sendQueue.networkManager.sendPacket(C16PacketClientStatus(C16PacketClientStatus.EnumState.REQUEST_STATS), { lastPingTime = System.nanoTime()}
+        if (mc.thePlayer == null) return
+        mc.thePlayer.sendQueue.networkManager.sendPacket(
+            C16PacketClientStatus(
+            C16PacketClientStatus.EnumState.REQUEST_STATS),
+            { lastPingTime = System.nanoTime() }
         )
     }
 

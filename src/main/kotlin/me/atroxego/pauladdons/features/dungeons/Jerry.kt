@@ -33,6 +33,7 @@ object Jerry : Feature() {
     @SubscribeEvent
     fun onPacket(event: PacketEvent.ReceiveEvent){
         if (!Config.jerryKB) return
+        if (mc.thePlayer == null) return
         val heldItem = mc.thePlayer.heldItem
         if (heldItem != null && heldItem.displayName.stripColor().contains("Bonzo's Staff")) return
         try {

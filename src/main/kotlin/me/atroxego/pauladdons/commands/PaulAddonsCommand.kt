@@ -3,6 +3,8 @@ package me.atroxego.pauladdons.commands
 import PaulAddons
 import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
+import gg.essential.universal.UPacket
+import gg.essential.universal.wrappers.message.UTextComponent
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.features.dungeons.Jerry.toggleJerry
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.getBlocksForTotem
@@ -20,6 +22,7 @@ import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.scoreboardData
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
+import net.minecraft.network.play.client.C01PacketChatMessage
 import net.minecraft.util.BlockPos
 import net.minecraft.util.ChatComponentText
 import net.minecraftforge.common.MinecraftForge
@@ -55,10 +58,9 @@ class PaulAddonsCommand : CommandBase() {
                 }
                 mc.thePlayer.sendChatMessage("/pets")
                 MinecraftForge.EVENT_BUS.register(PetSwapper(args[1]))
-
             }
             "test" -> {
-                getDateInformation()
+                mc.netHandler.addToSendQueue(C01PacketChatMessage("/locraw"))
             }
             "ping" -> {
                 addMessage("${Ping.ping}")

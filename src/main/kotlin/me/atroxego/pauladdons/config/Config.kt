@@ -78,11 +78,13 @@ object Config : Vigilant(
     var fishingTrackerWinter = false
     var fishingTrackerTimeSince = false
     var helmetToSwapNameOne = "Rabbit Hat"
-    var helmetToSwapNameTwo = "Bonzo Mask"
+    var helmetToSwapNameTwo = "Bonzo's Mask"
+    var dragonTimers = false
     var starredMobESP = false
     var starredMobESPColor : Color = Color.BLUE
     var terminalWaypoints = false
     var monolithESP = false
+    var funnyFishingAutoSell = false
     var deviceBeaconColor : Color = Color.BLUE
     var terminalBeaconColor : Color = Color.BLUE
     var leverBeaconColor : Color = Color.BLUE
@@ -97,6 +99,7 @@ object Config : Vigilant(
     var autoExperimentsDelay = 200
     var miniESP = false
     var slayerESP = false
+    var betterFarmingHitboxes = false
     var bossESPColor : Color = Color.BLUE
     var worseMiniColor : Color = Color.BLUE
     var betterMiniColor : Color = Color.BLUE
@@ -291,10 +294,10 @@ object Config : Vigilant(
                     Config::spiritMaskTimer,
                     name = "Spirit Mask Timer"
                 )
-            switch(
-                Config::autoP3P5GhostBlocks,
-                name = "Auto P3/P5 Ghost Blocks"
-            )
+                switch(
+                    Config::autoP3P5GhostBlocks,
+                    name = "Auto P3/P5 Ghost Blocks"
+                )
             }
         }
         category("Dwarven Mines") {
@@ -336,13 +339,6 @@ object Config : Vigilant(
                 switch(
                     Config::autoMelody,
                     name = "Auto Melody"
-                )
-                slider(
-                    Config::autoMelodyCooldown,
-                    name = "Melody Click Cooldown in Ticks",
-                    description = "10 should be good",
-                    min = 0,
-                    max = 20
                 )
             }
             subcategory("Auto Hi") {
@@ -484,6 +480,11 @@ object Config : Vigilant(
                     Config::fishingTotem,
                     name = "Auto Totem"
                 )
+                switch(
+                    Config::funnyFishingAutoSell,
+                    name = "Auto Sell To Bazaar",
+                    description = "If inv full insta sells to bazaar"
+                )
                 slider(
                     Config::fishingRecastDelay,
                     name = "Recast Delay",
@@ -601,6 +602,11 @@ object Config : Vigilant(
             switch(
                 Config::realisticHeight,
                 name = "Realistic Height"
+            )
+            switch(
+                Config::betterFarmingHitboxes,
+                name = "Better Farming Hitboxes",
+                description = "Changes Coco and Mushroom Hitboxes to 1x1 (Mushroom needs game restart to update)"
             )
             selector(
                 Config::realisticHeightType,
