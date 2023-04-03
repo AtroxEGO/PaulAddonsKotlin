@@ -6,7 +6,11 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
 
 ## Changes
 
-- Changed Auto Experiments to work on packets (Much Better)
+- Auto Bonzo Mask Improvement
+- Auto Harp Improvement
+- Added Option for Pet And Armor Swap To Daedelus Swap
+- Fixed Few Bugs
+- Fixed Api For Star Cult
 
 ## Features
 <details>
