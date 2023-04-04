@@ -3,8 +3,6 @@ package me.atroxego.pauladdons.commands
 import PaulAddons
 import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
-import gg.essential.universal.UPacket
-import gg.essential.universal.wrappers.message.UTextComponent
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.features.dungeons.Jerry.toggleJerry
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.getBlocksForTotem
@@ -14,7 +12,6 @@ import me.atroxego.pauladdons.features.other.PetSwapper
 import me.atroxego.pauladdons.features.other.Ping
 import me.atroxego.pauladdons.features.other.Ping.sendPing
 import me.atroxego.pauladdons.gui.LocationEditGui
-import me.atroxego.pauladdons.utils.ApiDateInformation.getDateInformation
 import me.atroxego.pauladdons.utils.PlayerRotation
 import me.atroxego.pauladdons.utils.SBInfo
 import me.atroxego.pauladdons.utils.SBInfo.onSkyblock

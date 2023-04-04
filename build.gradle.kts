@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "PaulAddons"
-version = "2.5"
+version = "2.6"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
@@ -61,7 +61,7 @@ val shadowImpl: Configuration by configurations.creating {
 dependencies {
     // For serialization: remove if not needed
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
-    shadowImpl("com.squareup.okhttp3:okhttp:4.10.0")
+//    shadowImpl("com.squareup.okhttp3:okhttp:4.10.0")
     shadowImpl ("com.moandjiezana.toml:toml4j:0.7.2")
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")

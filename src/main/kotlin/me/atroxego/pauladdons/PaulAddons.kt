@@ -33,7 +33,6 @@ import me.atroxego.pauladdons.features.dungeons.*
 import me.atroxego.pauladdons.features.dungeons.BetterStonk.createGhostBlock
 import me.atroxego.pauladdons.features.dungeons.HelmetSwapper.helmetSwapper
 import me.atroxego.pauladdons.features.dwarfenMines.MonolithESP
-import me.atroxego.pauladdons.features.dwarfenMines.StarCult
 import me.atroxego.pauladdons.features.funnyFishing.BarnFishingTimer
 import me.atroxego.pauladdons.features.funnyFishing.FishingTracker
 import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing
@@ -88,7 +87,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "2.5"
+        const val VERSION = "2.6"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
         var devMode = false
@@ -135,7 +134,6 @@ class PaulAddons {
             SBInfo,
             UpdateManager,
             MobNotification,
-            StarCult,
             AutoHi,
             AutoDaed,
             Dropships,

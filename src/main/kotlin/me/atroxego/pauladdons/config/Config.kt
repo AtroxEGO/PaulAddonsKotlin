@@ -680,7 +680,6 @@ object Config : Vigilant(
         addDependency(Config::manualHealthDaed, Config::autoDaed)
         addDependency(Config::autoBonzoMaskHealth, Config::autoBonzoMask)
         addDependency(Config::realisticHeightType, Config::realisticHeight)
-        addDependency(Config::autoMelodyCooldown, Config::autoMelody)
         addDependency(Config::autoDaedPetNameOne, Config::autoDaed)
         addDependency(Config::autoDaedPetNameTwo, Config::autoDaed)
         addDependency(Config::autoDaedArmorSwap, Config::autoDaed)

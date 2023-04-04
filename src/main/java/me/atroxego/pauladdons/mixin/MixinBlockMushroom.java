@@ -1,5 +1,6 @@
 package me.atroxego.pauladdons.mixin;
 
+//import com.moandjiezana.toml.Toml;
 import com.moandjiezana.toml.Toml;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockMushroom;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.io.File;
 
 
-@Mixin(BlockMushroom.class)
+@Mixin(value = BlockMushroom.class, priority = 1100)
 public class MixinBlockMushroom extends Block {
 
     public MixinBlockMushroom(Material p_i46399_1_, MapColor p_i46399_2_) {
@@ -23,10 +24,15 @@ public class MixinBlockMushroom extends Block {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     public void changeHitbox(CallbackInfo ci) {
-            Toml toml = new Toml().read(new File(Minecraft.getMinecraft().mcDataDir + "/config/pauladdons","config.toml"));
-            boolean shouldChangeHitbox = toml.getBoolean("miscellaneous.better_farming_hitboxes");
-            if (shouldChangeHitbox){
-                this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+            File config = new File(Minecraft.getMinecraft().mcDataDir + "/config/pauladdons","config.toml");
+            if (config.exists()){
+                Toml toml = new Toml().read(config);
+                if (toml.contains("miscellaneous.better_farming_hitboxes")){
+                    boolean shouldChangeHitbox = toml.getBoolean("miscellaneous.better_farming_hitboxes");
+                    if (shouldChangeHitbox){
+                        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+                    }
+                }
             }
     }
 
