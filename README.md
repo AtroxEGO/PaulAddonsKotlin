@@ -6,11 +6,15 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
 
 ## Changes
 
-- Auto Bonzo Mask Improvement
-- Auto Harp Improvement
-- Added Option for Pet And Armor Swap To Daedelus Swap
-- Fixed Few Bugs
-- Fixed Api For Star Cult
+Slayer:
+- Added Auto Orb
+- Added Blaze Totem Timer
+- Added Blocking Necromancy GUI when fighting boss
+
+Auto Fishing:
+- Added Golden Fish Support
+- Added Vanilla Fish Support
+- Fixed falling off cliffs
 
 ## Features
 <details>

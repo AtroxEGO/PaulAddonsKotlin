@@ -23,15 +23,18 @@ import PaulAddons.Companion.mc
 import gg.essential.universal.wrappers.message.UTextComponent
 import me.atroxego.pauladdons.events.impl.MainReceivePacketEvent
 import me.atroxego.pauladdons.events.impl.PacketEvent
+import me.atroxego.pauladdons.features.slayers.AutoOrb
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.gui.inventory.GuiChest
+import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EnumPlayerModelParts
 import net.minecraft.inventory.ContainerChest
 import net.minecraft.item.ItemStack
+import net.minecraft.network.play.client.C0EPacketClickWindow
 import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.util.*
 import net.minecraftforge.client.event.ClientChatReceivedEvent
@@ -156,6 +159,27 @@ object Utils {
         }
         return -1
     }
+
+    fun findItemInInventory(name: String) : Int{
+        for (slot in 9..35){
+            val itemStack = mc.thePlayer.inventory.getStackInSlot(slot) ?: continue
+            if (itemStack.displayName.stripColor().contains(name)) return slot
+        }
+        return -1
+    }
+
+    fun switchToItemInInventory(slotIndex: Int){
+        mc.displayGuiScreen(GuiInventory(mc.thePlayer))
+        val windowId = GuiInventory(mc.thePlayer).inventorySlots.windowId
+        var itemStack = mc.thePlayer.inventory.mainInventory[slotIndex]
+        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotIndex,0,0,itemStack,0))
+        itemStack = mc.thePlayer.inventory.mainInventory[mc.thePlayer.inventory.currentItem]
+        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, mc.thePlayer.inventory.currentItem + 36,0,0,itemStack,0))
+        itemStack = mc.thePlayer.inventory.mainInventory[slotIndex]
+        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotIndex,0,0,itemStack,0))
+        mc.thePlayer.closeScreen()
+    }
+
 
     /**
      * @link https://stackoverflow.com/a/47925649

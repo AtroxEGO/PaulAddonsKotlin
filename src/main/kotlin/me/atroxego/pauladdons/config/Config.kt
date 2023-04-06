@@ -37,7 +37,6 @@ object Config : Vigilant(
     var glowOnMob = false
     var glowColor : Color = Color.BLUE
     var disableVisible = false
-    var starCultTimer = false
     var espSelector = 2
     var mobNotification = false
     var customESPMobs = "MobOne, MobTwo"
@@ -50,9 +49,6 @@ object Config : Vigilant(
     var nutterNotification = false
     var yetiNotification = false
     var espOnNotifiedMobs = false
-    var gcStarCultNofification = false
-    var cStarCultNotification = false
-    var screenStarCultNotification = false
     var autoFriendHi = false
     var autoHiFriends = "PlayerOne, PlayerTwo"
     var autoFriendHiCooldown = 3
@@ -60,12 +56,14 @@ object Config : Vigilant(
     var autoHiCustomCommand = "/msg [IGN] Hi [IGN]!"
     var autoGuildHi = false
     var lastGuildHi = 0
+    var autoDojo = false
     var autoGuildHiCustomMessage = "Hi Guild!"
     var autoGuildHiFrequency = 0
     var autoThankYou = false
     var thankYouMessage = "Thank you [IGN]! <3"
-    var starCultGuildMessage = "[Paul Addons] Star Cult Wee Woo"
     var funnyFishing = false
+    var vanillaTrophyMode = false
+    var focusOnGoldenFish = false
     var barnFishingTimer = false
     var displayBarnFishingTimerNotification = false
     var timestampOfBarnFishingNotification = 240
@@ -105,6 +103,8 @@ object Config : Vigilant(
     var betterMiniColor : Color = Color.BLUE
     var slayerESPType = 2
     var bossESP = false
+    var autoOrb = false
+    var stopOpeningNecromancyGUI = false
     var autoDaed = false
     var autoDaedArmorSwap = false
     var autoDaedPetNameOne = ""
@@ -115,7 +115,6 @@ object Config : Vigilant(
     var autoP3P5GhostBlocks = false
     var bonzoMaskTimer = false
     var autoMelody = false
-    var autoMelodyCooldown = 10
     var spiritMaskTimer = false
     var autoBonzoMask = false
     var autoBonzoMaskHealth = 0.3f
@@ -129,6 +128,7 @@ object Config : Vigilant(
     var fishingTotem = false
     var fishingRecastDelay = 275
     var dropshipNotification = false
+    var totemTimer = false
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -301,32 +301,6 @@ object Config : Vigilant(
             }
         }
         category("Dwarven Mines") {
-            subcategory("Star Cult"){
-            switch(
-                Config::starCultTimer,
-                name = "Star Cult Timer",
-                description = "Turns On and Off Cult Timer",
-            )
-                switch(
-                    Config::cStarCultNotification,
-                    name = "Chat Notification",
-                    description = "Displays a message in chat about star cult being active"
-                )
-                switch(
-                    Config::gcStarCultNofification,
-                    name = "Guild Chat Notification",
-                    description = "Sends a text in guild chat about star cult being active"
-                )
-                text(
-                    Config::starCultGuildMessage,
-                    name = "Star Cult Guild Message"
-                )
-                switch(
-                    Config::screenStarCultNotification,
-                    name = "Screen Notification",
-                    description = "Displays notification on the screen about star cult being active"
-                )
-            }
             subcategory("Monoliths"){
                 switch(
                     Config::monolithESP,
@@ -406,6 +380,10 @@ object Config : Vigilant(
                     )
                 }
             }
+            switch(
+                Config::autoDojo,
+                name = "Auto Dojo"
+            )
         }
         category("Better Fishing"){
             switch(
@@ -479,6 +457,16 @@ object Config : Vigilant(
                 switch(
                     Config::fishingTotem,
                     name = "Auto Totem"
+                )
+                checkbox(
+                    Config::vanillaTrophyMode,
+                    name = "Vanilla Trophy Mode",
+                    description = "Put Starter Lava Rod in your inventory but not the hotbar"
+                )
+                checkbox(
+                    Config::focusOnGoldenFish,
+                    name = "Golden Fish Mode",
+                    description = "Tries To Automatically Fish Up Golden Fishes"
                 )
                 switch(
                     Config::funnyFishingAutoSell,
@@ -590,6 +578,20 @@ object Config : Vigilant(
                 )
             }
             switch(
+                Config::autoOrb,
+                name = "Auto Orb",
+                description = "Automatically Places Power Orb For You During Slayer Fight"
+            )
+            switch(
+                Config::stopOpeningNecromancyGUI,
+                name = "Stop Opening Necromancy GUI",
+                description = "Stops You From Shift Right Clicking During Slayer Fight"
+            )
+            switch(
+                Config::totemTimer,
+                name = "Blaze Totem Timer"
+            )
+            switch(
                 Config::autoBlazeDaggers,
                 name = "Auto Blaze Daggers (Not Avaiable For Now)"
             )
@@ -623,7 +625,6 @@ object Config : Vigilant(
                 PaulAddons.currentGui = LocationEditGui()
             }
         }
-        addDependency(Config::starCultGuildMessage, Config::starCultTimer)
         addDependency(Config::thankYouMessage,Config::autoThankYou)
         addDependency(Config::starredMobESPColor,Config::starredMobESP)
         addDependency(Config::starredESPType ,Config::starredMobESP )
@@ -631,9 +632,6 @@ object Config : Vigilant(
         addDependency(Config::glowColor, Config::glowOnMob)
         addDependency(Config::espSelector, Config::glowOnMob)
         addDependency(Config::disableVisible, Config::glowOnMob)
-        addDependency(Config::gcStarCultNofification, Config::starCultTimer)
-        addDependency(Config::cStarCultNotification, Config::starCultTimer)
-        addDependency(Config::screenStarCultNotification, Config::starCultTimer)
         addDependency(Config::customESPMobs, Config::glowOnMob)
         addDependency(Config::glowOnMob, Config::betterLootShare)
         addDependency(Config::espOnNotifiedMobs, Config::glowOnMob)

@@ -11,6 +11,7 @@ import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter.chaosCounter
 import me.atroxego.pauladdons.features.other.PetSwapper
 import me.atroxego.pauladdons.features.other.Ping
 import me.atroxego.pauladdons.features.other.Ping.sendPing
+import me.atroxego.pauladdons.features.slayers.TotemTimer
 import me.atroxego.pauladdons.gui.LocationEditGui
 import me.atroxego.pauladdons.utils.PlayerRotation
 import me.atroxego.pauladdons.utils.SBInfo
@@ -57,16 +58,12 @@ class PaulAddonsCommand : CommandBase() {
                 MinecraftForge.EVENT_BUS.register(PetSwapper(args[1]))
             }
             "test" -> {
-                mc.netHandler.addToSendQueue(C01PacketChatMessage("/locraw"))
+                TotemTimer.delay = args[1].toInt()
             }
             "ping" -> {
                 addMessage("${Ping.ping}")
                 sendPing()
             }
-            "place" -> {
-                placeTotem()
-            }
-            "checktotem" -> getBlocksForTotem()
             "dev" -> {
                 PaulAddons.devMode = !PaulAddons.devMode
                 addMessage("$prefix Developer mode: ${PaulAddons.devMode}")

@@ -41,10 +41,7 @@ import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter
 import me.atroxego.pauladdons.features.kuudra.Dropships
 import me.atroxego.pauladdons.features.other.*
 import me.atroxego.pauladdons.features.other.ArmorSwapper.armorSwapper
-import me.atroxego.pauladdons.features.other.AutoDojo.dojoToggle
-import me.atroxego.pauladdons.features.slayers.AutoDaed
-import me.atroxego.pauladdons.features.slayers.AutoDaggers
-import me.atroxego.pauladdons.features.slayers.SlayerESP
+import me.atroxego.pauladdons.features.slayers.*
 import me.atroxego.pauladdons.gui.GuiManager
 import me.atroxego.pauladdons.render.DisplayNotification
 import me.atroxego.pauladdons.utils.SBInfo
@@ -83,11 +80,11 @@ class PaulAddons {
         val mc: Minecraft = Minecraft.getMinecraft()
         var currentGui: GuiScreen? = null
         lateinit var configDirectory: File
-        var keyBindings = arrayOfNulls<KeyBinding>(7)
+        var keyBindings = arrayOfNulls<KeyBinding>(6)
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "2.6"
+        const val VERSION = "2.7"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
         var devMode = false
@@ -132,6 +129,8 @@ class PaulAddons {
             this,
             guiManager,
             SBInfo,
+            TotemTimer,
+            AutoOrb,
             UpdateManager,
             MobNotification,
             AutoHi,
@@ -161,7 +160,8 @@ class PaulAddons {
             AutoChromanotron,
             AutoSequencer,
             BarnFishingTimer,
-            DisplayNotification
+            DisplayNotification,
+            StopNecromancyMenu,
         ).forEach(MinecraftForge.EVENT_BUS::register)
         Runtime.getRuntime().addShutdownHook(Thread {
             Config.markDirty()
@@ -171,9 +171,8 @@ class PaulAddons {
         keyBindings[1] = KeyBinding("Funny Fishing", Keyboard.KEY_L, "PaulAddons")
         keyBindings[2] = KeyBinding("Ghost Block", Keyboard.KEY_G, "PaulAddons")
         keyBindings[3] = KeyBinding("Armor Swapper", Keyboard.KEY_O, "PaulAddons")
-        keyBindings[4] = KeyBinding("Auto Dojo", Keyboard.KEY_U, "PaulAddons")
-        keyBindings[5] = KeyBinding("Swap Helmet #1", Keyboard.KEY_I, "PaulAddons")
-        keyBindings[6] = KeyBinding("Swap Helmet #2", Keyboard.KEY_P, "PaulAddons")
+        keyBindings[4] = KeyBinding("Swap Helmet #1", Keyboard.KEY_I, "PaulAddons")
+        keyBindings[5] = KeyBinding("Swap Helmet #2", Keyboard.KEY_P, "PaulAddons")
         for (keyBinding in keyBindings) {
             ClientRegistry.registerKeyBinding(keyBinding)
         }
@@ -192,9 +191,8 @@ class PaulAddons {
         if (keyBindings[1]!!.isPressed) toggleFishing()
         if (keyBindings[2]!!.isKeyDown) createGhostBlock()
         if (keyBindings[3]!!.isPressed) armorSwapper()
-        if (keyBindings[4]!!.isPressed) dojoToggle()
-        if (keyBindings[5]!!.isPressed) helmetSwapper(1)
-        if (keyBindings[6]!!.isPressed) helmetSwapper(2)
+        if (keyBindings[4]!!.isPressed) helmetSwapper(1)
+        if (keyBindings[5]!!.isPressed) helmetSwapper(2)
         if (event.phase != TickEvent.Phase.START || currentGui == null) return
         mc.displayGuiScreen(currentGui)
         currentGui = null

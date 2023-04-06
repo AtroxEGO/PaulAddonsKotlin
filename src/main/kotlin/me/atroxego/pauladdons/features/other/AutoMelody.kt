@@ -102,7 +102,7 @@ object AutoMelody {
 //            }
 //            if (itemStack.item == Item.getItemFromBlock(Blocks.quartz_block)) {
 //                if (note.clicked || note.delay != 0) return
-//                if (lower.getStackInSlot(note.slot - 9).item == Item.getItemFromBlock(Blocks.wool)) note.delay = Config.autoMelodyCooldown
+//                if (lower.getStackInSlot(note.slot - 9).item == Item.getItemFromBlock(Blocks.wool)) note.delay = 10
 //                else note.clicked = true
 //                mc.netHandler.addToSendQueue(C0EPacketClickWindow(container.windowId, note.slot, 0, 0, null, 0))
 //            }

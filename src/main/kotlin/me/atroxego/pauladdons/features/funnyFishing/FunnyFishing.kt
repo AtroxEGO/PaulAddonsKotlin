@@ -19,8 +19,10 @@
 
 package me.atroxego.pauladdons.features.funnyFishing
 
+import PaulAddons
 import PaulAddons.Companion.prefix
 import gg.essential.api.utils.Multithreading
+import gg.essential.universal.UChat
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.features.Feature
@@ -32,11 +34,14 @@ import me.atroxego.pauladdons.utils.Utils.VecToYawPitch
 import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.blockPosToYawPitch
 import me.atroxego.pauladdons.utils.Utils.findItemInHotbar
+import me.atroxego.pauladdons.utils.Utils.findItemInInventory
 import me.atroxego.pauladdons.utils.Utils.fullInventory
 import me.atroxego.pauladdons.utils.Utils.stripColor
+import me.atroxego.pauladdons.utils.Utils.switchToItemInInventory
 import net.minecraft.client.settings.KeyBinding
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.EntityFishHook
 import net.minecraft.init.Blocks
@@ -67,6 +72,9 @@ object FunnyFishing : Feature() {
     private var lastTimeTotemPlaced = 0L
     private var lastTimeReeled = 0L
     private var lastTimeSold = 0L
+    private var rodSlotIndex = -1
+    private var lookForGolenFish = false
+    private var goldenFishEntity : EntityArmorStand? = null
 
     fun toggleFishing() {
         if (!Config.funnyFishing) {
@@ -79,7 +87,6 @@ object FunnyFishing : Feature() {
             mc.thePlayer.inventory.currentItem = rodSlot
             reelIn(false)
             startingPosition = mc.thePlayer.positionVector
-//            startingPosition = Vec3(-361.5,63.0,266.5)
             rotateCooldown = System.currentTimeMillis()
             movementCooldown = System.currentTimeMillis()
             if (!BarnFishingTimer.timerRunning){
@@ -132,8 +139,26 @@ object FunnyFishing : Feature() {
                         )
                     }"
                 )
-                reelIn(true)
+                if(Config.vanillaTrophyMode){
+                    reelIn(false)
+                    val starterRodSlotIndex = findItemInInventory("Starter Lava Rod")
+                    if (starterRodSlotIndex == -1){
+                        UChat.chat("$prefix Haven't found Starter Lava Rod")
+                        reelIn(false)
+                    } else {
+                        Multithreading.runAsync {
+                            rodSlotIndex = starterRodSlotIndex
+                            switchToItemInInventory(starterRodSlotIndex)
+                            Thread.sleep(1500)
+                            reelIn(false)
+                            Thread.sleep(1500)
+                            switchToItemInInventory(rodSlotIndex)
+                        }
+                    }
 
+
+//                    reelIn(false)
+                } else reelIn(true)
             }
         }
     }
@@ -146,8 +171,10 @@ object FunnyFishing : Feature() {
         lastTimeSold = 0L
         playersFishHook = null
         placingTotem = false
+        goldenFishEntity = null
+        lookForGolenFish = false
     }
-
+    //TODO: Fix Lag?
     @SubscribeEvent
     fun onPlayerTick(event: PlayerTickEvent) {
         if (collidingEntity != null) {
@@ -161,7 +188,23 @@ object FunnyFishing : Feature() {
         }
         if (!Config.funnyFishing) return
         if (placingTotem) return
+        if (goldenFishEntity != null) {
+            if (System.currentTimeMillis() - lastTimeReeled > 5000){
+                printdev("No activity with Golden Fish, Recasting")
+                reelIn(true)
+            }
+            val yawAndPitch = VecToYawPitch(
+                goldenFishEntity!!.positionVector.addVector(0.0, goldenFishEntity!!.eyeHeight.toDouble(),0.0),
+                mc.thePlayer.positionVector,
+            )
+            PlayerRotation(
+                PlayerRotation.Rotation(yawAndPitch.first, yawAndPitch.second),
+                150L
+            )
+            return
+        }
         if (fullInventory() && System.currentTimeMillis() - lastTimeSold > 10000 && Config.funnyFishingAutoSell){
+            lastTimeSold = System.currentTimeMillis()
             mc.thePlayer.sendChatMessage("/bz")
             MinecraftForge.EVENT_BUS.register(InstaSell())
         }
@@ -285,7 +328,6 @@ var placingTotem = false
                 )
                 val blockAtBlockPos = mc.theWorld.getChunkFromBlockCoords(BlockPos(blockPos)).getBlock(BlockPos(blockPos))
                 val blockOverBlockPos = mc.theWorld.getChunkFromBlockCoords(BlockPos(blockPos)).getBlock(BlockPos(blockPos.add(0,1,0)))
-//                addMessage(blockAtBlockPos.registryName)
                 if (blockAtBlockPos != Blocks.air && blockAtBlockPos != Blocks.water && blockAtBlockPos != Blocks.flowing_water && blockAtBlockPos != Blocks.lava && blockAtBlockPos != Blocks.flowing_lava && blockOverBlockPos == Blocks.air)
                 {
                     printdev("Found Proper Block: ${blockPos} Block Type: ${blockAtBlockPos}")
@@ -438,14 +480,25 @@ var placingTotem = false
     @SubscribeEvent
     fun onWorldRender(event: RenderWorldLastEvent) {
         if (!Config.funnyFishing) return
-//        if (playersFishHook != null){
-//            getMobsWithinAABB(playersFishHook!!)
-//            if (collidingEntity != null){
-////                printdev(collidingEntity!!.name)
-//            }
-//        }
+        if (Config.focusOnGoldenFish) {
+            if (lookForGolenFish && goldenFishEntity == null) {
+                printdev("Looking for Golden Fish Entity")
+                for (entity in mc.theWorld.loadedEntityList){
+                    if (mc.thePlayer.getDistanceToEntity(entity) > 7) continue
+                    if (entity !is EntityArmorStand) continue
+                    if (entity.getCurrentArmor(0) == null && entity.getCurrentArmor(1) == null && entity.getCurrentArmor(2) == null && entity.getCurrentArmor(3) != null) {
+                        goldenFishEntity = entity
+                        printdev("Golden Fish Entity Found")
+                    }
+                }
+            }
+        }
         RenderUtils.drawFishingBox(mainLookAtBlock!!.blockPos, Color(236, 204, 8, 255), event.partialTicks)
     }
+
+    //You spot a Golden Fish surface from beneath the lava!
+    //The Golden Fish escapes your hook but looks weakened.
+    //TROPHY FISH! You caught a Golden Fish
 
     private fun reelIn(recast: Boolean) {
         playersFishHook = null
@@ -483,6 +536,30 @@ var placingTotem = false
     @SubscribeEvent
     fun onChat(event: ClientChatReceivedEvent){
         if (!Config.funnyFishing) return
+        if (event.message.unformattedText.stripColor() == "You spot a Golden Fish surface from beneath the lava!") {
+            printdev("Start Looking For Golden Fish")
+            lookForGolenFish = true
+            reelIn(false)
+            Multithreading.runAsync {
+                Thread.sleep(1000)
+                printdev("Attempting To Hook Golden Fish")
+                reelIn(false)
+            }
+        }
+        if (event.message.unformattedText.stripColor().startsWith("The Golden Fish is weak!")) reelIn(false)
+        if (event.message.unformattedText.stripColor().startsWith("TROPHY FISH! You caught a Golden Fish")) {
+            goldenFishEntity = null
+            lookForGolenFish = false
+            Multithreading.runAsync {
+                Thread.sleep(1500)
+                printdev("Recasting into lava")
+                reelIn(false)
+            }
+        }
+        if (event.message.unformattedText.stripColor() == "The Golden Fish escapes your hook but looks weakened." && Config.focusOnGoldenFish) {
+            printdev("Recasting on Golden Fish")
+            reelIn(false)
+        }
         if (!Config.fishingKilling) return
         for (mobMessage in FishingTracker.seaCreatureMessages){
             if (event.message.unformattedText.stripColor().lowercase() == mobMessage.key.lowercase()){

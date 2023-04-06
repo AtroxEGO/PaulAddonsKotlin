@@ -140,7 +140,8 @@ object SBInfo {
     fun onTick(event: ClientTickEvent) {
         if (event.phase != TickEvent.Phase.START || mc.thePlayer == null || mc.theWorld == null) return
         val scoreObjective = mc.thePlayer.worldScoreboard.getObjectiveInDisplaySlot(1)
-        if (scoreObjective != null) onSkyblock = scoreObjective.displayName.stripColor().contains("SKYBLOCK") || scoreObjective.displayName.stripColor().contains("SKIBLOCK")
+        onSkyblock = if (scoreObjective != null) scoreObjective.displayName.stripColor().contains("SKYBLOCK") || scoreObjective.displayName.stripColor().contains("SKIBLOCK")
+        else false
         if (!onSkyblock) return
         val currentTime = System.currentTimeMillis()
         if (locraw == null && currentTime - joinedWorld > 1300 && currentTime - lastLocRaw > 1000) { // TODO: if locraw == null

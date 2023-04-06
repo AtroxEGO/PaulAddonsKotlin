@@ -140,7 +140,7 @@ object BonzoMask {
             if(event.packet.chatComponent.unformattedText.contains("❤") && event.packet.chatComponent.unformattedText.contains("❈") && event.packet.chatComponent.unformattedText.contains("✎") && !event.packet.chatComponent.unformattedText.contains(":")){
             val unformatted = event.packet.chatComponent.unformattedText
                 val health = unformatted.split("/")[0].replace(",","").stripColor().toDouble()
-                val maxHealth = unformatted.split(" ")[0].split("/")[1].replace("❤","").replace(",","").stripColor().toDouble()
+                val maxHealth = unformatted.split(" ")[0].split("/")[1].replace("❤","").replace(",","").split("+")[0].stripColor().toDouble()
                 val healthPercent = (health/maxHealth * 100).roundToInt()
 //                addMessage("Health: $health Max Health: $maxHealth Percent: $healthPercent")
                 val helmetEquipped = mc.thePlayer.inventoryContainer.inventory[5]

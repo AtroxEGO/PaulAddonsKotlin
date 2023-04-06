@@ -21,6 +21,7 @@ package me.atroxego.pauladdons.features.other
 
 import PaulAddons.Companion.prefix
 import gg.essential.api.utils.Multithreading
+import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.events.impl.PlayerAttackEntityEvent
 import me.atroxego.pauladdons.events.impl.RenderEntityModelEvent
@@ -54,15 +55,10 @@ import kotlin.math.pow
 object AutoDojo : Feature() {
     var skeletonEntity : EntityLivingBase? = null
     var lookCooldown = 0L
-    var autoDojoToggle = false
+    var autoDojoToggle = Config.autoDojo
     var dojoType : DojoType = DojoType.NONE
     enum class DojoType {
         NONE, CONTROL, FORCE, MASTERY, DISCIPLINE
-    }
-
-    fun dojoToggle(){
-        autoDojoToggle = !autoDojoToggle
-        addMessage("$prefix Auto Dojo: ${if (autoDojoToggle) "§aOn" else "§cOff"}")
     }
 
     @SubscribeEvent
@@ -77,9 +73,9 @@ object AutoDojo : Feature() {
         }
         if (event.entity is EntitySkeleton && event.entity.skeletonType == 1 && event.entity.getDistanceToEntity(mc.thePlayer) < 25) {
                 if (dojoType == DojoType.CONTROL && skeletonEntity != null){
-                    var x = skeletonEntity!!.posX + (skeletonEntity!!.posX - skeletonEntity!!.lastTickPosX) * (ping / 20)
-                    var y = skeletonEntity!!.posY + (skeletonEntity!!.posY - skeletonEntity!!.lastTickPosY)
-                    var z = skeletonEntity!!.posZ + (skeletonEntity!!.posZ - skeletonEntity!!.lastTickPosZ) * (ping / 20)
+                    val x = skeletonEntity!!.posX + (skeletonEntity!!.posX - skeletonEntity!!.lastTickPosX) * (ping / 20)
+                    val y = skeletonEntity!!.posY + (skeletonEntity!!.posY - skeletonEntity!!.lastTickPosY)
+                    val z = skeletonEntity!!.posZ + (skeletonEntity!!.posZ - skeletonEntity!!.lastTickPosZ) * (ping / 20)
                     drawBox(Vec3(x, y, z),Color.cyan,event.partialTicks)
                     if (System.currentTimeMillis() - lookCooldown < 40) return
                     lookCooldown = System.currentTimeMillis()
