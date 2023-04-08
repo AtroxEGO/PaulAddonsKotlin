@@ -1,15 +1,11 @@
 package me.atroxego.pauladdons.features.slayers
 
-import gg.essential.api.utils.Multithreading
-import gg.essential.universal.UChat
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.features.Feature
 import me.atroxego.pauladdons.utils.Utils
 import me.atroxego.pauladdons.utils.Utils.stripColor
-import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import org.lwjgl.input.Keyboard
 
 object StopNecromancyMenu : Feature(){
 

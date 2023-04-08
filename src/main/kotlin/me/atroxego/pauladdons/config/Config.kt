@@ -62,7 +62,7 @@ object Config : Vigilant(
     var autoThankYou = false
     var thankYouMessage = "Thank you [IGN]! <3"
     var funnyFishing = false
-    var vanillaTrophyMode = false
+    var specialTropyMode = 0
     var focusOnGoldenFish = false
     var barnFishingTimer = false
     var displayBarnFishingTimerNotification = false
@@ -124,11 +124,12 @@ object Config : Vigilant(
     var autoBlazeDaggers = false
     var fishingMove = false
     var fishingRotate = false
-    var fishingKilling = false
+    var fishingKilling = 0
     var fishingTotem = false
     var fishingRecastDelay = 275
     var dropshipNotification = false
     var totemTimer = false
+    var funnyFishingAutoHook = false
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -449,24 +450,30 @@ object Config : Vigilant(
                     Config::fishingMove,
                     name = "Fishing Movement"
                 )
-                switch(
+                selector(
                     Config::fishingKilling,
                     name = "Auto Killing",
-                    description = "Needs Fire Veil Wand"
+                    options = listOf("Disabled", "Fire Veil Wand", "Wither Impact")
                 )
                 switch(
                     Config::fishingTotem,
                     name = "Auto Totem"
                 )
-                checkbox(
-                    Config::vanillaTrophyMode,
-                    name = "Vanilla Trophy Mode",
-                    description = "Put Starter Lava Rod in your inventory but not the hotbar"
+                selector(
+                    Config::specialTropyMode,
+                    name = "Special Trophy Mode",
+                    description = "Select Special Modes For Special Trophy Fishes",
+                    options = listOf("None", "Vanille Trophy", "Slug Fish Trophy")
                 )
                 checkbox(
                     Config::focusOnGoldenFish,
-                    name = "Golden Fish Mode",
+                    name = "Catch Golden Fishes",
                     description = "Tries To Automatically Fish Up Golden Fishes"
+                )
+                checkbox(
+                    Config::funnyFishingAutoHook,
+                    name = "Auto Hook Lava Flames [BETA]",
+                    description = "Uses Grapple Hook to hook Lava Flames that u fish up"
                 )
                 switch(
                     Config::funnyFishingAutoSell,

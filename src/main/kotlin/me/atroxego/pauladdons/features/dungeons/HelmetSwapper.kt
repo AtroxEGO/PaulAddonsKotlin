@@ -21,9 +21,7 @@ package me.atroxego.pauladdons.features.dungeons
 
 import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
-import gg.essential.universal.UChat
 import me.atroxego.pauladdons.config.Config
-import me.atroxego.pauladdons.utils.Utils.addMessage
 import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.network.play.client.C0EPacketClickWindow
 import net.minecraft.util.ChatComponentText

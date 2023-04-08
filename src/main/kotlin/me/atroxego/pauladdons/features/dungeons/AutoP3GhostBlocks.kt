@@ -77,7 +77,7 @@ object AutoP3GhostBlocks {
         if (!Config.autoP3P5GhostBlocks) return
         if (mc.thePlayer == null || mc.theWorld == null) return
         if (!inDungeon) return
-        if (System.currentTimeMillis()/1000 - lastTimeGhostBLocksDone < 30) return
+        if (System.currentTimeMillis()/1000 - lastTimeGhostBLocksDone < 10) return
         try {
             if(!Utils.getScoreboardLines()[3].contains("F7") && !Utils.getScoreboardLines()[3].contains("M7")) return
             lastTimeGhostBLocksDone = System.currentTimeMillis()/1000

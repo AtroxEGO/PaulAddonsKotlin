@@ -1,6 +1,5 @@
 package me.atroxego.pauladdons.features.slayers
 
-import PaulAddons
 import PaulAddons.Companion.prefix
 import gg.essential.api.utils.Multithreading
 import gg.essential.universal.UChat
@@ -11,9 +10,7 @@ import me.atroxego.pauladdons.utils.Utils.findItemInHotbar
 import me.atroxego.pauladdons.utils.Utils.findItemInInventory
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import me.atroxego.pauladdons.utils.Utils.switchToItemInInventory
-import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement
-import net.minecraft.network.play.client.C0EPacketClickWindow
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 

@@ -22,10 +22,8 @@ package me.atroxego.pauladdons.features.slayers
 import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
 import gg.essential.api.utils.Multithreading
-import gg.essential.universal.UChat
 import gg.essential.universal.UScreen
 import me.atroxego.pauladdons.config.Config
-import me.atroxego.pauladdons.features.other.ArmorSwapper
 import me.atroxego.pauladdons.features.other.ArmorSwapper.armorSwapper
 import me.atroxego.pauladdons.features.other.PetSwapper
 import me.atroxego.pauladdons.utils.Utils.addMessage

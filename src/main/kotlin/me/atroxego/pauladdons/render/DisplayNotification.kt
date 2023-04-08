@@ -1,17 +1,12 @@
 package me.atroxego.pauladdons.render
 
+import PaulAddons
 import PaulAddons.Companion.mc
 import gg.essential.api.utils.Multithreading
 import me.atroxego.pauladdons.gui.GuiElement
 import me.atroxego.pauladdons.utils.Utils.stripColor
-import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.ScaledResolution
-import net.minecraftforge.client.GuiIngameForge
-import net.minecraftforge.client.event.RenderGameOverlayEvent
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import org.lwjgl.opengl.GL11
 import java.awt.Color
-import kotlin.math.pow
 
 object DisplayNotification {
     var renderNotification = false

@@ -20,10 +20,8 @@
 package me.atroxego.pauladdons.features.dungeons
 
 import PaulAddons
-import PaulAddons.Companion.keyBindings
 import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
-import gg.essential.universal.UChat
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.features.betterlootshare.ESP.logger

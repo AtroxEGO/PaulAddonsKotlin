@@ -1,10 +1,7 @@
 package me.atroxego.pauladdons.features.other
 
 import gg.essential.api.utils.Multithreading
-import gg.essential.universal.UChat
 import me.atroxego.pauladdons.features.Feature
-import me.atroxego.pauladdons.utils.Utils
-import me.atroxego.pauladdons.utils.Utils.stripColor
 import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.network.play.client.C0EPacketClickWindow
 import net.minecraftforge.client.event.GuiScreenEvent

@@ -55,7 +55,6 @@ import kotlin.math.pow
 object AutoDojo : Feature() {
     var skeletonEntity : EntityLivingBase? = null
     var lookCooldown = 0L
-    var autoDojoToggle = Config.autoDojo
     var dojoType : DojoType = DojoType.NONE
     enum class DojoType {
         NONE, CONTROL, FORCE, MASTERY, DISCIPLINE
@@ -63,7 +62,7 @@ object AutoDojo : Feature() {
 
     @SubscribeEvent
     fun onEntityRender(event: RenderEntityModelEvent){
-        if (!autoDojoToggle) return
+        if (!Config.autoDojo) return
         // Test Of Control
         if (dojoType == DojoType.CONTROL && skeletonEntity == null){
             if (event.entity is EntitySkeleton && event.entity.skeletonType == 1 && event.entity.getDistanceToEntity(mc.thePlayer) < 25) {
@@ -92,10 +91,11 @@ object AutoDojo : Feature() {
         dojoType = DojoType.NONE
     }
 
+    var lastJerryState = false
 
     @SubscribeEvent
     fun detectDojo(event: ClientChatReceivedEvent){
-//        if (!autoDojoToggle) return
+        if (!Config.autoDojo) return
         if (SBInfo.mode != "crimson_isle") return
         val message = event.message.unformattedText.stripColor()
         when (message.replace(" ", "")) {
@@ -103,6 +103,8 @@ object AutoDojo : Feature() {
                 dojoType = DojoType.CONTROL
                 printdev("Test Of Control")
                 addMessage("$prefix Current Dojo: Control")
+                lastJerryState = Config.jerryKB
+                Config.jerryKB = true
             }
             "TestofForceOBJECTIVES" -> {
                 dojoType = DojoType.FORCE
@@ -128,6 +130,7 @@ object AutoDojo : Feature() {
         }
         if (message.replace(" ","").contains("YourRank:")){
                 printdev("Clearing")
+                Config.jerryKB = lastJerryState
                 dojoType = DojoType.NONE
                 skeletonEntity = null
                 masteryBlocks.clear()
@@ -137,7 +140,7 @@ object AutoDojo : Feature() {
 
     @SubscribeEvent
     fun onPlayerEntityAttack(event: PlayerAttackEntityEvent){
-        if (!autoDojoToggle) return
+        if (!Config.autoDojo) return
         if (event.targetEntity !is EntityZombie) return
         val target = event.targetEntity
         when (dojoType){
@@ -182,7 +185,7 @@ object AutoDojo : Feature() {
 
     @SubscribeEvent
     fun onblockChangePacket(event: PacketEvent.ReceiveEvent){
-        if (!autoDojoToggle) return
+        if (!Config.autoDojo) return
         if (dojoType != DojoType.MASTERY) return
         if (event.packet !is S23PacketBlockChange) return
         val packet = event.packet
@@ -196,7 +199,7 @@ object AutoDojo : Feature() {
     @SubscribeEvent
     fun onTick(event: TickEvent.PlayerTickEvent){
         if (dojoType != DojoType.MASTERY) return
-        if (!autoDojoToggle) return
+        if (!Config.autoDojo) return
         if (masteryBlocks.isEmpty()) return
 //                printdev("Found Closest")
 

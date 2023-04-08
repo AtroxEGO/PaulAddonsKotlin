@@ -19,15 +19,15 @@
 
 package me.atroxego.pauladdons.features.funnyFishing
 
-import PaulAddons
 import PaulAddons.Companion.prefix
 import gg.essential.api.utils.Multithreading
 import gg.essential.universal.UChat
 import me.atroxego.pauladdons.config.Config
+import me.atroxego.pauladdons.config.Config.funnyFishingAutoHook
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.features.Feature
 import me.atroxego.pauladdons.features.other.InstaSell
-import me.atroxego.pauladdons.features.other.PetSwapper
+import me.atroxego.pauladdons.features.other.WardrobeEquipper
 import me.atroxego.pauladdons.render.RenderUtils
 import me.atroxego.pauladdons.utils.PlayerRotation
 import me.atroxego.pauladdons.utils.Utils.VecToYawPitch
@@ -38,11 +38,12 @@ import me.atroxego.pauladdons.utils.Utils.findItemInInventory
 import me.atroxego.pauladdons.utils.Utils.fullInventory
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import me.atroxego.pauladdons.utils.Utils.switchToItemInInventory
+import net.minecraft.block.BlockDynamicLiquid
+import net.minecraft.block.BlockStaticLiquid
 import net.minecraft.client.settings.KeyBinding
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityArmorStand
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.EntityFishHook
 import net.minecraft.init.Blocks
 import net.minecraft.init.Items
@@ -75,6 +76,8 @@ object FunnyFishing : Feature() {
     private var rodSlotIndex = -1
     private var lookForGolenFish = false
     private var goldenFishEntity : EntityArmorStand? = null
+    private var seenFlames = mutableListOf<Int>()
+    private var enemyEntity: EntityArmorStand? = null
 
     fun toggleFishing() {
         if (!Config.funnyFishing) {
@@ -139,11 +142,11 @@ object FunnyFishing : Feature() {
                         )
                     }"
                 )
-                if(Config.vanillaTrophyMode){
+                if(Config.specialTropyMode == 1){
                     reelIn(false)
                     val starterRodSlotIndex = findItemInInventory("Starter Lava Rod")
                     if (starterRodSlotIndex == -1){
-                        UChat.chat("$prefix Haven't found Starter Lava Rod")
+                        UChat.chat("$prefix Haven't found Starter Lava Rod, make sure it's not in the hotbar")
                         reelIn(false)
                     } else {
                         Multithreading.runAsync {
@@ -155,9 +158,21 @@ object FunnyFishing : Feature() {
                             switchToItemInInventory(rodSlotIndex)
                         }
                     }
+                } else if (Config.specialTropyMode == 2) {
+                    reelIn(false)
+                    Multithreading.runAsync {
+                        mc.thePlayer.sendChatMessage("/wardrobe")
+                        MinecraftForge.EVENT_BUS.register(WardrobeEquipper("Ember Helmet"))
+                        Thread.sleep(2000)
+                        reelIn(false)
+                        Thread.sleep(20000)
+                        if (Config.funnyFishing){
+                            mc.thePlayer.sendChatMessage("/wardrobe")
+                            MinecraftForge.EVENT_BUS.register(WardrobeEquipper("Hunter"))
+                        }
+                    }
 
 
-//                    reelIn(false)
                 } else reelIn(true)
             }
         }
@@ -173,10 +188,12 @@ object FunnyFishing : Feature() {
         placingTotem = false
         goldenFishEntity = null
         lookForGolenFish = false
+        enemyEntity = null
     }
     //TODO: Fix Lag?
     @SubscribeEvent
     fun onPlayerTick(event: PlayerTickEvent) {
+        if (mc.thePlayer == null) return
         if (collidingEntity != null) {
             printdev("Colliding With: ${collidingEntity!!.name}")
             if (System.currentTimeMillis() / 1000 - lastTimeHitEntity > 2) {
@@ -188,6 +205,7 @@ object FunnyFishing : Feature() {
         }
         if (!Config.funnyFishing) return
         if (placingTotem) return
+        if (killing) return
         if (goldenFishEntity != null) {
             if (System.currentTimeMillis() - lastTimeReeled > 5000){
                 printdev("No activity with Golden Fish, Recasting")
@@ -199,7 +217,7 @@ object FunnyFishing : Feature() {
             )
             PlayerRotation(
                 PlayerRotation.Rotation(yawAndPitch.first, yawAndPitch.second),
-                150L
+                0
             )
             return
         }
@@ -232,7 +250,7 @@ object FunnyFishing : Feature() {
             }
         }
         if (Config.fishingRotate){
-            if (System.currentTimeMillis() - rotateCooldown >= 5000) {
+            if (System.currentTimeMillis() - rotateCooldown >= 10000) {
                 printdev("Rotating")
                 printdev("Coords: ${mainLookAtBlock!!.blockPos.x}")
                 val pitchOffset = ((Math.random() * (2.5 - -2.5)) + -2.5).toFloat()
@@ -250,7 +268,7 @@ object FunnyFishing : Feature() {
             }
         }
         if (Config.fishingMove){
-            if (System.currentTimeMillis() - movementCooldown >= 6000) {
+            if (System.currentTimeMillis() - movementCooldown >= 15000) {
                 movePlayer()
                 movementCooldown = System.currentTimeMillis()
             }
@@ -330,7 +348,7 @@ var placingTotem = false
                 val blockOverBlockPos = mc.theWorld.getChunkFromBlockCoords(BlockPos(blockPos)).getBlock(BlockPos(blockPos.add(0,1,0)))
                 if (blockAtBlockPos != Blocks.air && blockAtBlockPos != Blocks.water && blockAtBlockPos != Blocks.flowing_water && blockAtBlockPos != Blocks.lava && blockAtBlockPos != Blocks.flowing_lava && blockOverBlockPos == Blocks.air)
                 {
-                    printdev("Found Proper Block: ${blockPos} Block Type: ${blockAtBlockPos}")
+                    printdev("Found Proper Block: $blockPos Block Type: $blockAtBlockPos")
                     return blockPos
                 }
             }
@@ -408,8 +426,15 @@ var placingTotem = false
                 }
             } else {
                 printdev("Moving Randomly")
-                val xOffset = ((Math.random() * (1 - -1)) + -1)
-                val zOffset = ((Math.random() * (1 - -1)) + -1)
+                var xOffset = ((Math.random() * (1 - -1)) + -1)
+                var zOffset = ((Math.random() * (1 - -1)) + -1)
+                var targetBlock = mc.theWorld.getChunkFromBlockCoords(BlockPos(startingPosition)).getBlock(BlockPos(startingPosition!!.add(Vec3(xOffset,-1.0,zOffset))))
+
+                while ((targetBlock == Blocks.air || targetBlock is BlockDynamicLiquid || targetBlock is BlockStaticLiquid) && Config.funnyFishing && System.currentTimeMillis() - moveStartedTime < 2000){
+                    xOffset = ((Math.random() * (1 - -1)) + -1)
+                    zOffset = ((Math.random() * (1 - -1)) + -1)
+                    targetBlock = mc.theWorld.getChunkFromBlockCoords(BlockPos(startingPosition)).getBlock(BlockPos(startingPosition!!.add(Vec3(xOffset,-1.0,zOffset))))
+                }
                 printdev("New Location is: ${startingPosition!!.xCoord + xOffset} ${startingPosition!!.yCoord} ${startingPosition!!.zCoord + zOffset}")
                 printdev(
                     "Distance: ${
@@ -444,7 +469,7 @@ var placingTotem = false
     }
 
     private fun getMobsWithinAABB(entity: Entity) {
-        val aabb = AxisAlignedBB(entity.posX + 0.4, entity.posY - 2.0, entity.posZ + 0.4, entity.posX - 0.4, entity.posY + 0.2, entity.posZ - 0.4)
+        val aabb = AxisAlignedBB(entity.posX + 6, entity.posY - 2.0, entity.posZ + 6, entity.posX - 6, entity.posY + 5, entity.posZ - 6)
         val i = MathHelper.floor_double(aabb.minX - 1.0) shr 4
         val j = MathHelper.floor_double(aabb.maxX + 1.0) shr 4
         val k = MathHelper.floor_double(aabb.minZ - 1.0) shr 4
@@ -464,15 +489,84 @@ var placingTotem = false
         for (k in i..j) {
             if (entityLists[k].isEmpty()) continue
             entity@ for (e in entityLists[k]) {
-                if (!e.entityBoundingBox.intersectsWith(aabb.expand(0.7,0.7,0.7))) continue@entity
-                if (e.name != "unknown") {
-                    if(e.hasCustomName()) printdev(e.customNameTag)
-                    else e.name
+                if (enemyEntity != null) return
+                if (!e.entityBoundingBox.intersectsWith(aabb)) continue@entity
+                if (e !is EntityArmorStand) continue@entity
+                if (!e.hasCustomName()) continue@entity
+                if (e.customNameTag.stripColor().contains("0/")) continue@entity
+                if (e.customNameTag.stripColor().contains("[Lv") && e.customNameTag.contains("❤")){
+                    enemyEntity = e
+                    printdev("Detected Enemy In Range: ${e.customNameTag}")
+                    killing = true
+                    Multithreading.runAsync{
+                        if (funnyFishingAutoHook){
+                            if (e.customNameTag.contains("Lava Flame") && !seenFlames.contains(e.entityId)){
+                                seenFlames.add(e.entityId)
+                                printdev("Its Lava Flame")
+                                val grappleshotSlotIndex = findItemInHotbar("Moody Grappleshot")
+                                if (grappleshotSlotIndex == -1){
+                                    addMessage("$prefix Haven't found Grappleshot for Lava Flame, skipping")
+                                } else {
+                                    printdev("Attempting to hook it")
+                                    mc.thePlayer.inventory.currentItem = grappleshotSlotIndex
+                                    val yawAndPitch = VecToYawPitch(e.positionVector,mc.thePlayer.positionVector)
+                                    PlayerRotation(PlayerRotation.Rotation(yawAndPitch.first, yawAndPitch.second), 300L)
+                                    Thread.sleep(350)
+                                    mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
+                                    Thread.sleep(100)
+                                }
+                            }
+                        }
+
+                    val witherBlades = listOf("Scylla", "Astraea", "Hyperion", "Valkyrie")
+                    var bladeSlotIndex = -1
+                    for (blade in witherBlades) {
+                        if (findItemInHotbar(blade) != -1) {
+                            bladeSlotIndex = findItemInHotbar(blade)
+                            break
+                        }
+                    }
+                    if (bladeSlotIndex == -1) {
+                        addMessage("$prefix Haven't Found Wither Blade!")
+                        killing = false
+                        return@runAsync
+                    }
+//                    Multithreading.runAsync{
+                        var lastTimeAttacked = 0L
+                        Thread.sleep(100)
+                        printdev("Changing slot to Blade")
+                        mc.thePlayer.inventory.currentItem = bladeSlotIndex
+                        Thread.sleep(100)
+                        printdev("Looking Down")
+                        PlayerRotation(PlayerRotation.Rotation(mc.thePlayer.rotationYaw, 90f), 300L)
+                        Thread.sleep(400)
+                        printdev("Loop Start")
+                        while (killing && Config.funnyFishing && enemyEntity!!.isEntityAlive){
+                            if (System.currentTimeMillis() - lastTimeAttacked > 1000){
+                                printdev("Attacking")
+                                mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
+                                lastTimeAttacked = System.currentTimeMillis()
+                            }
+                        }
+                        printdev("Loop End")
+                        lastTimeHitEntity = System.currentTimeMillis()
+//                        if (!enemyEntity!!.isEntityAlive) enemyEntity = null
+//                        Thread.sleep(400)
+//                        printdev("Looking At Old Location")
+//                        PlayerRotation(PlayerRotation.Rotation(mc.thePlayer.rotationYaw, currentPitch), 500L)
+//                        Thread.sleep(100)
+//                        printdev("Changing slot to Rod")
+//                        mc.thePlayer.inventory.currentItem = getFishingRod()
+//                        Thread.sleep(500)
+//                        printdev("Casting")
+//                        mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
+//                        rotateCooldown = System.currentTimeMillis()
+//                        movementCooldown = System.currentTimeMillis()
+//                        killing = false
+//                        printdev("Disabling Killing Variable")
+                    }
+                    return
                 }
-                if (e !is EntityLivingBase) continue@entity
-                if (e is EntityPlayer) continue@entity
-                collidingEntity = e
-                break
             }
         }
     }
@@ -484,14 +578,52 @@ var placingTotem = false
             if (lookForGolenFish && goldenFishEntity == null) {
                 printdev("Looking for Golden Fish Entity")
                 for (entity in mc.theWorld.loadedEntityList){
-                    if (mc.thePlayer.getDistanceToEntity(entity) > 7) continue
                     if (entity !is EntityArmorStand) continue
-                    if (entity.getCurrentArmor(0) == null && entity.getCurrentArmor(1) == null && entity.getCurrentArmor(2) == null && entity.getCurrentArmor(3) != null) {
+                    if (mc.thePlayer.getDistanceToEntity(entity) > 7) continue
+                    if (entity.getCurrentArmor(3) != null && entity.getCurrentArmor(0) == null && entity.getCurrentArmor(1) == null && entity.getCurrentArmor(2) == null) {
                         goldenFishEntity = entity
                         printdev("Golden Fish Entity Found")
                     }
                 }
             }
+        }
+        if (enemyEntity != null) if (!enemyEntity!!.isEntityAlive) enemyEntity = null
+        if (enemyEntity != null) if (mc.thePlayer.getDistanceToEntity(enemyEntity!!) > 6) enemyEntity = null
+        if (Config.fishingKilling == 2 && enemyEntity == null){
+            getMobsWithinAABB(mc.thePlayer)
+            if (lastTimeHitEntity != 0L && System.currentTimeMillis() - lastTimeHitEntity > 2000){
+                lastTimeHitEntity = 0L
+                Multithreading.runAsync {
+                    Thread.sleep(400)
+                    printdev("Looking At Old Location")
+                    val yawAndPitch = blockPosToYawPitch(
+                        BlockPos(mainLookAtBlock!!.blockPos.x + 1, mainLookAtBlock!!.blockPos.y, mainLookAtBlock!!.blockPos.z),
+                        mc.thePlayer.positionVector
+                    )
+                    PlayerRotation(
+                        PlayerRotation.Rotation(yawAndPitch.first, yawAndPitch.second),
+                        600L
+                    )
+                    Thread.sleep(100)
+                    printdev("Changing slot to Rod")
+                    mc.thePlayer.inventory.currentItem = getFishingRod()
+                    Thread.sleep(500)
+                    printdev("Casting")
+                    mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
+//                    rotateCooldown = System.currentTimeMillis()
+//                    movementCooldown = System.currentTimeMillis()
+                    killing = false
+                    printdev("Disabling Killing Variable")
+                }
+            }
+//            var lastAttacked = 0L
+//            while (killing && Config.funnyFishing) {
+//                if (System.currentTimeMillis() - lastAttacked > 1000){
+//                    mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
+//                    lastAttacked = System.currentTimeMillis()
+//                }
+//            }
+
         }
         RenderUtils.drawFishingBox(mainLookAtBlock!!.blockPos, Color(236, 204, 8, 255), event.partialTicks)
     }
@@ -535,6 +667,18 @@ var placingTotem = false
 
     @SubscribeEvent
     fun onChat(event: ClientChatReceivedEvent){
+        if (event.message.unformattedText.stripColor().startsWith(" ☠ You were killed by")) {
+            addMessage("$prefix You died, applying failsafe")
+            Config.funnyFishing = false
+            rotateCooldown = 0
+            lastTimeHitEntity = 0L
+            lastTimeSold = 0L
+            playersFishHook = null
+            placingTotem = false
+            goldenFishEntity = null
+            lookForGolenFish = false
+            enemyEntity = null
+        }
         if (!Config.funnyFishing) return
         if (event.message.unformattedText.stripColor() == "You spot a Golden Fish surface from beneath the lava!") {
             printdev("Start Looking For Golden Fish")
@@ -560,24 +704,46 @@ var placingTotem = false
             printdev("Recasting on Golden Fish")
             reelIn(false)
         }
-        if (!Config.fishingKilling) return
+        if (Config.fishingKilling == 0) return
         for (mobMessage in FishingTracker.seaCreatureMessages){
             if (event.message.unformattedText.stripColor().lowercase() == mobMessage.key.lowercase()){
-                killing = true
-                when (getFireVeil()){
-                    -1 -> addMessage("$prefix Haven't Found Fire Veil Wand!")
-                    else -> {
-                        Multithreading.runAsync{
-                            Thread.sleep(100)
-                            mc.thePlayer.inventory.currentItem = getFireVeil()
-                            Thread.sleep(100)
-                            mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
-                            Thread.sleep(100)
-                            mc.thePlayer.inventory.currentItem = getFishingRod()
-                            Thread.sleep(100)
-                            mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
-                            killing = false
+
+                when (Config.fishingKilling) {
+                    1 -> {
+                        when (getFireVeil()){
+                            -1 -> addMessage("$prefix Haven't Found Fire Veil Wand!")
+                            else -> {
+                                killing = true
+                                Multithreading.runAsync{
+                                    Thread.sleep(100)
+                                    mc.thePlayer.inventory.currentItem = getFireVeil()
+                                    Thread.sleep(100)
+                                    mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
+                                    Thread.sleep(100)
+                                    mc.thePlayer.inventory.currentItem = getFishingRod()
+                                    Thread.sleep(100)
+                                    mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
+                                    killing = false
+                                }
+                            }
                         }
+                    }
+                    2 -> {
+
+//                        Multithreading.runAsync{
+//                            val currentPitch = mc.thePlayer.rotationPitch
+//                            Thread.sleep(100)
+//                            mc.thePlayer.inventory.currentItem = bladeSlotIndex
+//                            Thread.sleep(100)
+//                            PlayerRotation(PlayerRotation.Rotation(mc.thePlayer.rotationYaw, 90f), 0)
+//                            mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
+//                            PlayerRotation(PlayerRotation.Rotation(mc.thePlayer.rotationYaw, currentPitch), 0)
+//                            Thread.sleep(100)
+//                            mc.thePlayer.inventory.currentItem = getFishingRod()
+//                            Thread.sleep(100)
+//                            mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
+//                            killing = false
+//                        }
                     }
                 }
 

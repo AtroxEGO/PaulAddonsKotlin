@@ -1,10 +1,7 @@
 package me.atroxego.pauladdons.hooks.render
 
-import PaulAddons
-import gg.essential.universal.UChat
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.utils.SBInfo
-import me.atroxego.pauladdons.utils.Utils
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.scoreboard.Team

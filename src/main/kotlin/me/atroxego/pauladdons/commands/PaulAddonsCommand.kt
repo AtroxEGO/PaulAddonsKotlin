@@ -5,12 +5,11 @@ import PaulAddons.Companion.mc
 import PaulAddons.Companion.prefix
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.features.dungeons.Jerry.toggleJerry
-import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.getBlocksForTotem
-import me.atroxego.pauladdons.features.funnyFishing.FunnyFishing.placeTotem
 import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter.chaosCounter
 import me.atroxego.pauladdons.features.other.PetSwapper
 import me.atroxego.pauladdons.features.other.Ping
 import me.atroxego.pauladdons.features.other.Ping.sendPing
+import me.atroxego.pauladdons.features.other.WardrobeEquipper
 import me.atroxego.pauladdons.features.slayers.TotemTimer
 import me.atroxego.pauladdons.gui.LocationEditGui
 import me.atroxego.pauladdons.utils.PlayerRotation
@@ -20,7 +19,6 @@ import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.scoreboardData
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
-import net.minecraft.network.play.client.C01PacketChatMessage
 import net.minecraft.util.BlockPos
 import net.minecraft.util.ChatComponentText
 import net.minecraftforge.common.MinecraftForge
@@ -56,6 +54,14 @@ class PaulAddonsCommand : CommandBase() {
                 }
                 mc.thePlayer.sendChatMessage("/pets")
                 MinecraftForge.EVENT_BUS.register(PetSwapper(args[1]))
+            }
+            "wardrobe" -> {
+                if (args.size < 2) {
+                    addMessage("$prefix Usage: /pa wardrobe [Helmet Name]")
+                    return
+                }
+                mc.thePlayer.sendChatMessage("/wardrobe")
+                MinecraftForge.EVENT_BUS.register(WardrobeEquipper(args[1]))
             }
             "test" -> {
                 TotemTimer.delay = args[1].toInt()

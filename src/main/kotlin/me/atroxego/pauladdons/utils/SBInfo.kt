@@ -17,12 +17,8 @@
  */
 package me.atroxego.pauladdons.utils
 
-import PaulAddons
 import PaulAddons.Companion.json
 import PaulAddons.Companion.mc
-import gg.essential.universal.UChat
-import gg.essential.universal.UPacket.sendChatMessage
-import gg.essential.universal.wrappers.message.UTextComponent
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
@@ -37,7 +33,6 @@ import me.atroxego.pauladdons.events.impl.SendChatMessageEvent
 import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import me.atroxego.pauladdons.utils.Utils.stripControlCodes
-import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.inventory.ContainerChest
 import net.minecraft.network.play.client.C01PacketChatMessage
@@ -49,7 +44,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
-import java.awt.TextComponent
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*

@@ -1,6 +1,5 @@
 package me.atroxego.pauladdons.mixin;
 
-import me.atroxego.pauladdons.config.Config;
 import me.atroxego.pauladdons.hooks.render.FarmingBlocksHook;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
