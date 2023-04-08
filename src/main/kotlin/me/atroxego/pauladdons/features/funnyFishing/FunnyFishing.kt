@@ -667,6 +667,7 @@ var placingTotem = false
 
     @SubscribeEvent
     fun onChat(event: ClientChatReceivedEvent){
+        if (!Config.funnyFishing) return
         if (event.message.unformattedText.stripColor().startsWith(" ☠ You were killed by")) {
             addMessage("$prefix You died, applying failsafe")
             Config.funnyFishing = false
@@ -679,7 +680,6 @@ var placingTotem = false
             lookForGolenFish = false
             enemyEntity = null
         }
-        if (!Config.funnyFishing) return
         if (event.message.unformattedText.stripColor() == "You spot a Golden Fish surface from beneath the lava!") {
             printdev("Start Looking For Golden Fish")
             lookForGolenFish = true
