@@ -34,10 +34,9 @@ import me.atroxego.pauladdons.utils.Utils.VecToYawPitch
 import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.blockPosToYawPitch
 import me.atroxego.pauladdons.utils.Utils.findItemInHotbar
-import me.atroxego.pauladdons.utils.Utils.findItemInInventory
 import me.atroxego.pauladdons.utils.Utils.fullInventory
 import me.atroxego.pauladdons.utils.Utils.stripColor
-import me.atroxego.pauladdons.utils.Utils.switchToItemInInventory
+import me.atroxego.pauladdons.utils.Utils.switchToItemInHotbar
 import net.minecraft.block.BlockDynamicLiquid
 import net.minecraft.block.BlockStaticLiquid
 import net.minecraft.client.settings.KeyBinding
@@ -78,6 +77,7 @@ object FunnyFishing : Feature() {
     private var goldenFishEntity : EntityArmorStand? = null
     private var seenFlames = mutableListOf<Int>()
     private var enemyEntity: EntityArmorStand? = null
+    private var lastGoldenFishLookTime = 0L
 
     fun toggleFishing() {
         if (!Config.funnyFishing) {
@@ -144,18 +144,26 @@ object FunnyFishing : Feature() {
                 )
                 if(Config.specialTropyMode == 1){
                     reelIn(false)
-                    val starterRodSlotIndex = findItemInInventory("Starter Lava Rod")
+                    val starterRodSlotIndex = findItemInHotbar("Starter Lava Rod")
                     if (starterRodSlotIndex == -1){
-                        UChat.chat("$prefix Haven't found Starter Lava Rod, make sure it's not in the hotbar")
+                        UChat.chat("$prefix Haven't found Starter Lava Rod, make sure it's in the hotbar")
                         reelIn(false)
                     } else {
                         Multithreading.runAsync {
-                            rodSlotIndex = starterRodSlotIndex
-                            switchToItemInInventory(starterRodSlotIndex)
+                            var normalRodSlot = -1
+                            if (findItemInHotbar("Magma Rod") == -1){
+                                if (findItemInHotbar("Inferno Rod") == -1){
+                                    if (findItemInHotbar("Hellfire Rod") == -1) {
+                                        UChat.chat("$prefix Haven't found Lava Rod that's not Starter Lava Rod in your hotbar")
+                                    } else normalRodSlot = findItemInHotbar("Hellfire Rod")
+                                }else normalRodSlot = findItemInHotbar("Inferno Rod")
+                            } else normalRodSlot = findItemInHotbar("Magma Rod")
+                            Thread.sleep(300)
+                            switchToItemInHotbar(normalRodSlot)
                             Thread.sleep(1500)
                             reelIn(false)
                             Thread.sleep(1500)
-                            switchToItemInInventory(rodSlotIndex)
+                            switchToItemInHotbar(findItemInHotbar("Starter Lava Rod"))
                         }
                     }
                 } else if (Config.specialTropyMode == 2) {
@@ -193,6 +201,7 @@ object FunnyFishing : Feature() {
     //TODO: Fix Lag?
     @SubscribeEvent
     fun onPlayerTick(event: PlayerTickEvent) {
+//        switchToItemInHotbar(0)
         if (mc.thePlayer == null) return
         if (collidingEntity != null) {
             printdev("Colliding With: ${collidingEntity!!.name}")
@@ -206,7 +215,8 @@ object FunnyFishing : Feature() {
         if (!Config.funnyFishing) return
         if (placingTotem) return
         if (killing) return
-        if (goldenFishEntity != null) {
+        if (goldenFishEntity != null && System.currentTimeMillis() - lastGoldenFishLookTime > 9) {
+            lastGoldenFishLookTime = System.currentTimeMillis()
             if (System.currentTimeMillis() - lastTimeReeled > 5000){
                 printdev("No activity with Golden Fish, Recasting")
                 reelIn(true)
@@ -215,9 +225,10 @@ object FunnyFishing : Feature() {
                 goldenFishEntity!!.positionVector.addVector(0.0, goldenFishEntity!!.eyeHeight.toDouble(),0.0),
                 mc.thePlayer.positionVector,
             )
+            printdev("Rotating to Golden Fish")
             PlayerRotation(
                 PlayerRotation.Rotation(yawAndPitch.first, yawAndPitch.second),
-                0
+                10L
             )
             return
         }
@@ -531,9 +542,8 @@ var placingTotem = false
                         killing = false
                         return@runAsync
                     }
-//                    Multithreading.runAsync{
                         var lastTimeAttacked = 0L
-                        Thread.sleep(100)
+                        Thread.sleep(Config.funnyFishingAutoKillingDelay.toLong())
                         printdev("Changing slot to Blade")
                         mc.thePlayer.inventory.currentItem = bladeSlotIndex
                         Thread.sleep(100)
@@ -542,7 +552,7 @@ var placingTotem = false
                         Thread.sleep(400)
                         printdev("Loop Start")
                         while (killing && Config.funnyFishing && enemyEntity!!.isEntityAlive){
-                            if (System.currentTimeMillis() - lastTimeAttacked > 1000){
+                            if (System.currentTimeMillis() - lastTimeAttacked > 160){
                                 printdev("Attacking")
                                 mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
                                 lastTimeAttacked = System.currentTimeMillis()
@@ -550,20 +560,6 @@ var placingTotem = false
                         }
                         printdev("Loop End")
                         lastTimeHitEntity = System.currentTimeMillis()
-//                        if (!enemyEntity!!.isEntityAlive) enemyEntity = null
-//                        Thread.sleep(400)
-//                        printdev("Looking At Old Location")
-//                        PlayerRotation(PlayerRotation.Rotation(mc.thePlayer.rotationYaw, currentPitch), 500L)
-//                        Thread.sleep(100)
-//                        printdev("Changing slot to Rod")
-//                        mc.thePlayer.inventory.currentItem = getFishingRod()
-//                        Thread.sleep(500)
-//                        printdev("Casting")
-//                        mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
-//                        rotateCooldown = System.currentTimeMillis()
-//                        movementCooldown = System.currentTimeMillis()
-//                        killing = false
-//                        printdev("Disabling Killing Variable")
                     }
                     return
                 }
@@ -695,7 +691,7 @@ var placingTotem = false
             goldenFishEntity = null
             lookForGolenFish = false
             Multithreading.runAsync {
-                Thread.sleep(1500)
+                Thread.sleep(2000)
                 printdev("Recasting into lava")
                 reelIn(false)
             }
@@ -715,8 +711,27 @@ var placingTotem = false
                             else -> {
                                 killing = true
                                 Multithreading.runAsync{
-                                    Thread.sleep(100)
+                                    Thread.sleep(Config.funnyFishingAutoKillingDelay.toLong())
                                     mc.thePlayer.inventory.currentItem = getFireVeil()
+                                    Thread.sleep(150)
+                                    mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
+                                    Thread.sleep(150)
+                                    mc.thePlayer.inventory.currentItem = getFishingRod()
+                                    Thread.sleep(150)
+                                    mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
+                                    killing = false
+                                }
+                            }
+                        }
+                    }
+                    3 -> {
+                        when (findItemInHotbar("Midas Staff")){
+                            -1 -> addMessage("$prefix Haven't Found Midas Staff!")
+                            else -> {
+                                killing = true
+                                Multithreading.runAsync{
+                                    Thread.sleep(Config.funnyFishingAutoKillingDelay.toLong())
+                                    mc.thePlayer.inventory.currentItem = findItemInHotbar("Midas Staff")
                                     Thread.sleep(100)
                                     mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
                                     Thread.sleep(100)
@@ -727,23 +742,6 @@ var placingTotem = false
                                 }
                             }
                         }
-                    }
-                    2 -> {
-
-//                        Multithreading.runAsync{
-//                            val currentPitch = mc.thePlayer.rotationPitch
-//                            Thread.sleep(100)
-//                            mc.thePlayer.inventory.currentItem = bladeSlotIndex
-//                            Thread.sleep(100)
-//                            PlayerRotation(PlayerRotation.Rotation(mc.thePlayer.rotationYaw, 90f), 0)
-//                            mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
-//                            PlayerRotation(PlayerRotation.Rotation(mc.thePlayer.rotationYaw, currentPitch), 0)
-//                            Thread.sleep(100)
-//                            mc.thePlayer.inventory.currentItem = getFishingRod()
-//                            Thread.sleep(100)
-//                            mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
-//                            killing = false
-//                        }
                     }
                 }
 

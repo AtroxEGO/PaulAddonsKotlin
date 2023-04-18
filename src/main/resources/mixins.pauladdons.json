@@ -19,6 +19,7 @@
     "IMixinRendererLivingEntity",
     "IMixinRenderManager",
     "MixinLayerCape",
+    "MixinRenderItem",
     "MixinRenderManager"
   ]
 }

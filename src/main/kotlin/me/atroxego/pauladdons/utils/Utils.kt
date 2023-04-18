@@ -179,6 +179,18 @@ object Utils {
         mc.thePlayer.closeScreen()
     }
 
+    fun switchToItemInHotbar(slotIndex: Int){
+        mc.displayGuiScreen(GuiInventory(mc.thePlayer))
+        val windowId = GuiInventory(mc.thePlayer).inventorySlots.windowId
+        var itemStack = mc.thePlayer.inventory.getStackInSlot(slotIndex)
+        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotIndex + 36,0,0,itemStack,0))
+        itemStack = mc.thePlayer.inventory.getStackInSlot(mc.thePlayer.inventory.currentItem)
+        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, mc.thePlayer.inventory.currentItem + 36,0,0,itemStack,0))
+        itemStack = mc.thePlayer.inventory.getStackInSlot(slotIndex)
+        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotIndex + 36,0,0,itemStack,0))
+        mc.thePlayer.closeScreen()
+    }
+
 
     /**
      * @link https://stackoverflow.com/a/47925649

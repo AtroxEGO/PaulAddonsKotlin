@@ -130,6 +130,8 @@ object Config : Vigilant(
     var dropshipNotification = false
     var totemTimer = false
     var funnyFishingAutoHook = false
+    var removeArmorGlint = false
+    var funnyFishingAutoKillingDelay = 100
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -270,7 +272,8 @@ object Config : Vigilant(
             subcategory("Better Stonk"){
             switch(
                 Config::betterStonk,
-                name = "Better Stonk"
+                name = "Better Stonk",
+                description = "Mining blocks with any pickaxe in dunegon instantly creates ghost blocks"
             )
             switch(
                 Config::betterStonkShiftOnly,
@@ -453,7 +456,13 @@ object Config : Vigilant(
                 selector(
                     Config::fishingKilling,
                     name = "Auto Killing",
-                    options = listOf("Disabled", "Fire Veil Wand", "Wither Impact")
+                    options = listOf("Disabled", "Fire Veil Wand","Wither Impact","Midas Staff")
+                )
+                slider(
+                    Config::funnyFishingAutoKillingDelay,
+                    name = "Kill Delay (ms)",
+                    min = 100,
+                    max = 2000
                 )
                 switch(
                     Config::fishingTotem,
@@ -621,6 +630,10 @@ object Config : Vigilant(
                 Config::realisticHeightType,
                 name = "Realistic Height Type",
                 options = listOf("Only tripleB36", "Everyone"),
+            )
+            switch(
+                Config::removeArmorGlint,
+                name = "Remove Your Armor Enchant Glint"
             )
         }
         category("GUI Locations"){

@@ -50,6 +50,7 @@ object BonzoMask {
 
     var hasBonzoInInv = false
     var nextBonzoUse = 0.0
+    var lastBonzoEquipTime = 0L
     var bonzoMaskItem : ItemStack? = null
 
     class BonzoMaskTimerGuiElement : GuiElement("Bonzo Mask Timer", FloatPair(10, 10)) {
@@ -132,8 +133,10 @@ object BonzoMask {
     fun onChatPacket(event: PacketEvent.ReceiveEvent) {
         if (!Utils.inDungeon) return
         if (!Config.autoBonzoMask) return
+        if (mc.thePlayer.inventory.getStackInSlot(0) != null && mc.thePlayer.inventory.getStackInSlot(0).displayName.stripColor().contains("Haunt")) return
+        if (System.currentTimeMillis() - lastBonzoEquipTime < 4000) return
         if (nextBonzoUse - System.currentTimeMillis()/1000 < 0)
-        if (event.packet is S02PacketChat) {
+        if (event.packet is S02PacketChat) { //TODO: Dont Fire If Dead In Dungeon
         if (System.currentTimeMillis()/1000 - timeWorldJoined < 5) return
             if(event.packet.chatComponent.unformattedText.contains("❤") && event.packet.chatComponent.unformattedText.contains("❈") && event.packet.chatComponent.unformattedText.contains("✎") && !event.packet.chatComponent.unformattedText.contains(":")){
             val unformatted = event.packet.chatComponent.unformattedText
@@ -144,8 +147,9 @@ object BonzoMask {
                 val helmetEquipped = mc.thePlayer.inventoryContainer.inventory[5]
                 if (healthPercent < Config.autoBonzoMaskHealth * 100){
                     if (helmetEquipped == null){
-                    swapToBonzo()
-                    addMessage("$prefix Automatically Equipped ${mc.thePlayer.inventoryContainer.inventory[5].displayName}")
+                        swapToBonzo()
+                        lastBonzoEquipTime = System.currentTimeMillis()
+                        addMessage("$prefix Automatically Equipped ${mc.thePlayer.inventoryContainer.inventory[5].displayName}")
                     } else if (!helmetEquipped.displayName.contains("Bonzo's Mask")){
                         swapToBonzo()
                     }

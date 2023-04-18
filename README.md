@@ -6,15 +6,10 @@ Discord: [discord.gg/qVamggFna6](discord.gg/qVamggFna6)
 
 ## Changes
 
-Slayer:
-- Added Auto Orb
-- Added Blaze Totem Timer
-- Added Blocking Necromancy GUI when fighting boss
-
-Auto Fishing:
-- Added Golden Fish Support
-- Added Vanilla Fish Support
-- Fixed falling off cliffs
+- Added Midas Staff killing to Fishing Macro
+- Added Custom Kill Delay to Fishing Macro
+- Fixed Crystal Hollows Mobs with Fishing Macro
+- Added Remove Glint from your armor
 
 ## Features
 <details>

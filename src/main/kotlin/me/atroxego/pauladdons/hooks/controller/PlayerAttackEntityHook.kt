@@ -4,7 +4,6 @@ import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.PlayerAttackEntityEvent
 import me.atroxego.pauladdons.features.other.AutoDojo
 import me.atroxego.pauladdons.features.other.AutoDojo.dojoType
-import me.atroxego.pauladdons.utils.Utils.addMessage
 import net.minecraft.entity.Entity
 import net.minecraft.entity.monster.EntityZombie
 import net.minecraft.entity.player.EntityPlayer

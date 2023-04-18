@@ -23,7 +23,6 @@ import PaulAddons
 import PaulAddons.Companion.mc
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.config.PersistentSave
-import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
 import me.atroxego.pauladdons.gui.GuiElement
 import me.atroxego.pauladdons.render.font.FontUtils.getTimeBetween
 import me.atroxego.pauladdons.utils.core.FloatPair
@@ -75,7 +74,13 @@ object FishingTracker {
         "A Fire Eel slithers out from the depths." to "Fire Eel",
         "Taurus and his steed emerge." to "Taurus",
         "You hear a massive rumble as Thunder emerges." to "Thunder",
-        "You have angered a legendary creature... Lord Jawbus has arrived" to "Lord Jawbus"
+        "You have angered a legendary creature... Lord Jawbus has arrived" to "Lord Jawbus",
+        "A Water Worm surfaces!" to "Water Worm",
+        "A Poisoned Water Worm surfaces!" to "Poisoned Water Worm",
+        "A Zombie miner surfaces!" to "Zombie Miner",
+        "A flaming worm surfaces from the depths!" to "Flaming Worm",
+        "A Lava Blaze has surfaced from the depths!" to "Lava Blaze",
+        "A Lava Pigman arose from the depths!" to "Lava Pigman",
     )
     var mobsCatched = FishingData.mobsCatched
     var lastTimeCatched = FishingData.lastTimeCatched
@@ -260,10 +265,9 @@ object FishingTracker {
                 }
                 if (mobsCatched[mobMessage.value] != null) {
                     mobsCatched[mobMessage.value] = mobsCatched[mobMessage.value]!! + 1
-                    logger.info(mobMessage.value)
+//                    logger.info(mobMessage.value)
                 } else {
                     mobsCatched[mobMessage.value] = 1
-//                    mc.thePlayer.sendChatMessage(mobsCatched[mobMessage.value].toString())
                 }
             }
         }

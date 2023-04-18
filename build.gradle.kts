@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "PaulAddons"
-version = "2.8"
+version = "2.9"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
