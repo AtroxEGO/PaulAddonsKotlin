@@ -57,6 +57,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.PlayerEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent
 import org.lwjgl.input.Keyboard
 import java.awt.Color
@@ -197,7 +198,42 @@ object FunnyFishing : Feature() {
         goldenFishEntity = null
         lookForGolenFish = false
         enemyEntity = null
+        UChat.chat("$prefix Detected world change, disabling!")
     }
+
+    //failsafe I guess
+
+    @SubscribeEvent // to be safe if ^^^ fails idk
+    fun onPlayerRespawn(event: PlayerEvent.PlayerChangedDimensionEvent) {
+        Config.funnyFishing = false
+        rotateCooldown = 0
+        lastTimeHitEntity = 0L
+        lastTimeSold = 0L
+        playersFishHook = null
+        placingTotem = false
+        goldenFishEntity = null
+        lookForGolenFish = false
+        enemyEntity = null
+        UChat.chat("$prefix Detected world change, disabling!")
+        printdev("Dimension change")
+    }
+    @SubscribeEvent //die fail
+    fun onPlayerRespawn(event: PlayerEvent.PlayerRespawnEvent) {
+        Config.funnyFishing = false
+        rotateCooldown = 0
+        lastTimeHitEntity = 0L
+        lastTimeSold = 0L
+        playersFishHook = null
+        placingTotem = false
+        goldenFishEntity = null
+        lookForGolenFish = false
+        enemyEntity = null
+        UChat.chat("$prefix Player died, what a noob, disabling!")
+        printdev("World change")
+    }
+
+
+
     //TODO: Fix Lag?
     @SubscribeEvent
     fun onPlayerTick(event: PlayerTickEvent) {
