@@ -19,8 +19,8 @@
 
 package me.atroxego.pauladdons.events
 
-import PaulAddons
 import gg.essential.universal.UChat
+import me.atroxego.pauladdons.PaulAddons
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.Event
 

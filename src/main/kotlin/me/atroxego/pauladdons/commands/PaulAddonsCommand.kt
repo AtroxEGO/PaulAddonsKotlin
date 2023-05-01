@@ -1,8 +1,8 @@
 package me.atroxego.pauladdons.commands
 
-import PaulAddons
-import PaulAddons.Companion.mc
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.features.dungeons.Jerry.toggleJerry
 import me.atroxego.pauladdons.features.kuudra.ChaosmiteCounter.chaosCounter
@@ -10,13 +10,14 @@ import me.atroxego.pauladdons.features.other.PetSwapper
 import me.atroxego.pauladdons.features.other.Ping
 import me.atroxego.pauladdons.features.other.Ping.sendPing
 import me.atroxego.pauladdons.features.other.WardrobeEquipper
-import me.atroxego.pauladdons.features.slayers.TotemTimer
 import me.atroxego.pauladdons.gui.LocationEditGui
 import me.atroxego.pauladdons.utils.PlayerRotation
 import me.atroxego.pauladdons.utils.SBInfo
 import me.atroxego.pauladdons.utils.SBInfo.onSkyblock
 import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.scoreboardData
+import me.atroxego.pauladdons.utils.core.Cosmetics.loadCustomCapes
+import me.atroxego.pauladdons.utils.core.Cosmetics.loadCustomNicks
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 import net.minecraft.util.BlockPos
@@ -63,8 +64,9 @@ class PaulAddonsCommand : CommandBase() {
                 mc.thePlayer.sendChatMessage("/wardrobe")
                 MinecraftForge.EVENT_BUS.register(WardrobeEquipper(args[1]))
             }
-            "test" -> {
-                TotemTimer.delay = args[1].toInt()
+            "cosmetics" -> {
+                loadCustomNicks()
+                loadCustomCapes()
             }
             "ping" -> {
                 addMessage("${Ping.ping}")
@@ -85,6 +87,7 @@ class PaulAddonsCommand : CommandBase() {
                     §9PaulAddons §f:: §a/pa §f- §aOpens GUI
                     §9PaulAddons §f:: §a/pa jerry §f- §aToggles Jerry Knockback
                     §9PaulAddons §f:: §a/pa pet [index or name] §f- §aEquips given pet
+                    §9PaulAddons §f:: §a/pa cosmetics §f- §aReload Cosmetics
                     §9PaulAddons §f:: §a/pa hud §f- §aEdit GUI Locations
                     """.trimIndent()
             ))

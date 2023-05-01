@@ -1,7 +1,7 @@
 package me.atroxego.pauladdons.gui
 
-import PaulAddons
 import gg.essential.universal.UResolution
+import me.atroxego.pauladdons.PaulAddons
 import me.atroxego.pauladdons.config.PersistentSave
 import me.atroxego.pauladdons.gui.buttons.LocationButton
 import me.atroxego.pauladdons.gui.buttons.ResizeButton

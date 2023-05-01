@@ -1,8 +1,8 @@
 package me.atroxego.pauladdons.render
 
-import PaulAddons
-import PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
 import gg.essential.api.utils.Multithreading
+import me.atroxego.pauladdons.PaulAddons
 import me.atroxego.pauladdons.gui.GuiElement
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import org.lwjgl.opengl.GL11

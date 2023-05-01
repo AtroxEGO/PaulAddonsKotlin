@@ -18,8 +18,8 @@
 
 package me.atroxego.pauladdons.utils
 
-import PaulAddons
 import kotlinx.coroutines.launch
+import me.atroxego.pauladdons.PaulAddons
 import me.atroxego.pauladdons.gui.RequestUpdateGui
 import me.atroxego.pauladdons.gui.UpdateGui
 import me.atroxego.pauladdons.utils.core.GithubRelease
@@ -167,7 +167,7 @@ object UpdateManager {
             val latestReleaseBody = jsonArray["body"].toString()
             val latestTag = jsonArray["tag_name"].toString()
             val uploader = jsonArray.getJSONObject("author").get("login").toString()
-            val currentVersion = 2.9 // TODO: Change This Every Version Cuz Idk Why PA.Version doesnt update
+            val currentVersion = 3.0 // TODO: Change This Every Version Cuz Idk Why PA.Version doesnt update
             val latestVersion = latestTag.toDouble()
             println("$currentVersion < $latestVersion")
             println("${PaulAddons.VERSION.toDouble()} ${PaulAddons.VERSION}")

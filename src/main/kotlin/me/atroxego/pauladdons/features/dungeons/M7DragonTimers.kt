@@ -1,6 +1,6 @@
 package me.atroxego.pauladdons.features.dungeons
 
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import gg.essential.universal.UChat
 import gg.essential.universal.UMatrixStack
 import me.atroxego.pauladdons.config.Config

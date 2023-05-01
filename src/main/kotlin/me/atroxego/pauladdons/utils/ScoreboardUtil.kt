@@ -19,7 +19,7 @@
 
 package me.atroxego.pauladdons.utils
 
-import PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
 import me.atroxego.pauladdons.utils.Utils.stripControlCodes
 import net.minecraft.scoreboard.Score
 import net.minecraft.scoreboard.ScorePlayerTeam

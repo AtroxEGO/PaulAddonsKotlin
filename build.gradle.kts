@@ -1,3 +1,5 @@
+
+
 plugins {
     kotlin("jvm") version "1.8.20"
 
@@ -12,7 +14,7 @@ plugins {
 }
 
 group = "PaulAddons"
-version = "2.9"
+version = "3.0"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
@@ -52,6 +54,8 @@ repositories {
     maven("https://repo.sk1er.club/repository/maven-public")
     maven("https://maven.ilarea.ru/snapshots")
     maven("https://repo.essential.gg/repository/maven-public")
+    maven("https://jcenter.bintray.com")
+    jcenter()
 }
 
 val shadowImpl: Configuration by configurations.creating {
@@ -59,10 +63,10 @@ val shadowImpl: Configuration by configurations.creating {
 }
 
 dependencies {
-    // For serialization: remove if not needed
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
-//    shadowImpl("com.squareup.okhttp3:okhttp:4.10.0")
     shadowImpl ("com.moandjiezana.toml:toml4j:0.7.2")
+    implementation("org.mongodb:mongodb-driver-sync:4.9.1")
+    compileOnly("com.yworks:yguard:4.0.0")
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
@@ -124,3 +128,5 @@ tasks.shadowJar {
 }
 
 tasks.assemble.get().dependsOn(tasks.remapJar)
+
+

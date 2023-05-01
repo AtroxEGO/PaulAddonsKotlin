@@ -19,10 +19,10 @@
 
 package me.atroxego.pauladdons.features.funnyFishing
 
-import PaulAddons
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
+import me.atroxego.pauladdons.PaulAddons
 import me.atroxego.pauladdons.config.PersistentSave
 import java.io.File
 import java.io.Reader

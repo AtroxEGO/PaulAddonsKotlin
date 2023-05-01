@@ -19,8 +19,8 @@
 
 package me.atroxego.pauladdons.features.slayers
 
-import PaulAddons.Companion.mc
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import gg.essential.api.utils.Multithreading
 import gg.essential.universal.UScreen
 import me.atroxego.pauladdons.config.Config

@@ -19,7 +19,7 @@
 
 package me.atroxego.pauladdons.features.funnyFishing
 
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import gg.essential.api.utils.Multithreading
 import gg.essential.universal.UChat
 import me.atroxego.pauladdons.config.Config
@@ -30,6 +30,7 @@ import me.atroxego.pauladdons.features.other.InstaSell
 import me.atroxego.pauladdons.features.other.WardrobeEquipper
 import me.atroxego.pauladdons.render.RenderUtils
 import me.atroxego.pauladdons.utils.PlayerRotation
+import me.atroxego.pauladdons.utils.SBInfo
 import me.atroxego.pauladdons.utils.Utils.VecToYawPitch
 import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.blockPosToYawPitch
@@ -63,8 +64,8 @@ import java.awt.Color
 
 
 object FunnyFishing : Feature() {
-    private var mainLookAtBlock: MovingObjectPosition? = null
-    private var startingPosition: Vec3? = null
+    var mainLookAtBlock: MovingObjectPosition? = null
+    var startingPosition: Vec3? = null
     private var rotateCooldown = 0L
     private var movementCooldown = 0L
     private var lastTimeHitEntity = 0L
@@ -78,6 +79,7 @@ object FunnyFishing : Feature() {
     private var seenFlames = mutableListOf<Int>()
     private var enemyEntity: EntityArmorStand? = null
     private var lastGoldenFishLookTime = 0L
+    var pauseMacro = false
 
     fun toggleFishing() {
         if (!Config.funnyFishing) {
@@ -97,13 +99,14 @@ object FunnyFishing : Feature() {
                 BarnFishingTimer.timerStartTime = System.currentTimeMillis()
             }
         } else {
+
             mainLookAtBlock = null
         }
         Config.funnyFishing = !Config.funnyFishing
         addMessage("$prefix Auto Fishing: ${if (Config.funnyFishing) "§aOn" else "§cOff"}")
     }
 
-    private fun getFishingRod(): Int {
+    fun getFishingRod(): Int {
         for (i in 0..7) {
             val item = mc.thePlayer.inventory.mainInventory[i] ?: continue
             if (item.item == Items.fishing_rod) {
@@ -188,7 +191,10 @@ object FunnyFishing : Feature() {
 
     @SubscribeEvent
     fun onWorldLoad(event: WorldEvent.Load) {
-        Config.funnyFishing = false
+        if (Config.funnyFishing && !pauseMacro){
+            UChat.chat("$prefix Pausing Fishing Macro")
+            pauseMacro = true
+        }
         rotateCooldown = 0
         lastTimeHitEntity = 0L
         lastTimeSold = 0L
@@ -201,7 +207,6 @@ object FunnyFishing : Feature() {
     //TODO: Fix Lag?
     @SubscribeEvent
     fun onPlayerTick(event: PlayerTickEvent) {
-//        switchToItemInHotbar(0)
         if (mc.thePlayer == null) return
         if (collidingEntity != null) {
             printdev("Colliding With: ${collidingEntity!!.name}")
@@ -215,6 +220,7 @@ object FunnyFishing : Feature() {
         if (!Config.funnyFishing) return
         if (placingTotem) return
         if (killing) return
+        if (pauseMacro) return
         if (goldenFishEntity != null && System.currentTimeMillis() - lastGoldenFishLookTime > 9) {
             lastGoldenFishLookTime = System.currentTimeMillis()
             if (System.currentTimeMillis() - lastTimeReeled > 5000){
@@ -248,6 +254,7 @@ object FunnyFishing : Feature() {
         }
         if (playersFishHook != null){
             if (playersFishHook!!.onGround && playersFishHook!!.motionX == 0.0 && playersFishHook!!.motionZ == 0.0) {
+                UChat.chat("$prefix Bobber was on the ground, recasting.")
                 printdev("Should Recast")
                 reelIn(true)
             }
@@ -279,7 +286,7 @@ object FunnyFishing : Feature() {
             }
         }
         if (Config.fishingMove){
-            if (System.currentTimeMillis() - movementCooldown >= 15000) {
+            if (System.currentTimeMillis() - movementCooldown >= 15000 && mc.currentScreen == null) {
                 movePlayer()
                 movementCooldown = System.currentTimeMillis()
             }
@@ -340,7 +347,7 @@ var placingTotem = false
                 PlayerRotation.Rotation(yawAndPitch.first, yawAndPitch.second),
                 500L
             )
-            Thread.sleep(200)
+            Thread.sleep(1500)
             mc.playerController.sendUseItem(mc.thePlayer,mc.theWorld,mc.thePlayer.heldItem)
             placingTotem = false
         }
@@ -407,8 +414,8 @@ var placingTotem = false
                 }
             }
 
-
-            KeyBinding.setKeyBindState(Keyboard.KEY_LSHIFT, true)
+            val sneakKey = mc.gameSettings.keyBindSneak.keyCode
+            KeyBinding.setKeyBindState(sneakKey, true)
             if (mc.thePlayer.getDistance(
                     startingPosition!!.xCoord,
                     startingPosition!!.yCoord,
@@ -474,13 +481,14 @@ var placingTotem = false
             KeyBinding.setKeyBindState(Keyboard.KEY_A, false)
             KeyBinding.setKeyBindState(Keyboard.KEY_D, false)
             Thread.sleep((((Math.random() * (500 - 400)) + 400).toLong()))
-            KeyBinding.setKeyBindState(Keyboard.KEY_LSHIFT, false)
+
+            KeyBinding.setKeyBindState(sneakKey, false)
             return@runAsync
         }
     }
 
     private fun getMobsWithinAABB(entity: Entity) {
-        val aabb = AxisAlignedBB(entity.posX + 6, entity.posY - 2.0, entity.posZ + 6, entity.posX - 6, entity.posY + 5, entity.posZ - 6)
+        val aabb = AxisAlignedBB(entity.posX + 6, entity.posY - 3.0, entity.posZ + 6, entity.posX - 6, entity.posY + 5, entity.posZ - 6)
         val i = MathHelper.floor_double(aabb.minX - 1.0) shr 4
         val j = MathHelper.floor_double(aabb.maxX + 1.0) shr 4
         val k = MathHelper.floor_double(aabb.minZ - 1.0) shr 4
@@ -551,7 +559,7 @@ var placingTotem = false
                         PlayerRotation(PlayerRotation.Rotation(mc.thePlayer.rotationYaw, 90f), 300L)
                         Thread.sleep(400)
                         printdev("Loop Start")
-                        while (killing && Config.funnyFishing && enemyEntity!!.isEntityAlive){
+                        while (killing && Config.funnyFishing && enemyEntity != null && enemyEntity!!.isEntityAlive){
                             if (System.currentTimeMillis() - lastTimeAttacked > 160){
                                 printdev("Attacking")
                                 mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem)
@@ -628,7 +636,7 @@ var placingTotem = false
     //The Golden Fish escapes your hook but looks weakened.
     //TROPHY FISH! You caught a Golden Fish
 
-    private fun reelIn(recast: Boolean) {
+    fun reelIn(recast: Boolean) {
         playersFishHook = null
         if (!BarnFishingTimer.timerRunning){
             BarnFishingTimer.timerRunning = true
@@ -663,6 +671,17 @@ var placingTotem = false
 
     @SubscribeEvent
     fun onChat(event: ClientChatReceivedEvent){
+        if (event.message.unformattedText.stripColor() == "You were spawned in Limbo." || event.message.unformattedText.stripColor() == "A kick occurred in your connection, so you were put in the SkyBlock lobby!"){
+            Multithreading.runAsync {
+                Thread.sleep(1000)
+                mc.thePlayer.sendChatMessage("/lobby")
+                    Thread.sleep(2000)
+                do {
+                    mc.thePlayer.sendChatMessage("/play sb")
+                    Thread.sleep(10000)
+                } while (!SBInfo.onSkyblock)
+            }
+        }
         if (!Config.funnyFishing) return
         if (event.message.unformattedText.stripColor().startsWith(" ☠ You were killed by")) {
             addMessage("$prefix You died, applying failsafe")

@@ -19,7 +19,7 @@
 
 package me.atroxego.pauladdons.features.other
 
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import me.atroxego.pauladdons.features.Feature
 import me.atroxego.pauladdons.utils.Utils.addMessage
 import me.atroxego.pauladdons.utils.Utils.stripColor

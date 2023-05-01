@@ -2,7 +2,7 @@
 
 package me.atroxego.pauladdons.gui
 
-import PaulAddons
+import me.atroxego.pauladdons.PaulAddons
 import me.atroxego.pauladdons.utils.MathUtil
 import me.atroxego.pauladdons.utils.UpdateManager
 import net.minecraft.client.gui.GuiButton

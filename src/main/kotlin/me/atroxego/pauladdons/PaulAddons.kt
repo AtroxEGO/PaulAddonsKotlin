@@ -1,3 +1,4 @@
+package me.atroxego.pauladdons
 /*
  * Paul Addons - Hypixel Skyblock QOL Mod
  * Copyright (C) 2023  AtroxEGO
@@ -20,8 +21,12 @@ import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
+import me.atroxego.pauladdons.PaulAddons.Companion.MODID
+import me.atroxego.pauladdons.PaulAddons.Companion.MOD_NAME
+import me.atroxego.pauladdons.PaulAddons.Companion.VERSION
 import me.atroxego.pauladdons.commands.PaulAddonsCommand
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.config.PersistentSave
@@ -46,6 +51,8 @@ import me.atroxego.pauladdons.gui.GuiManager
 import me.atroxego.pauladdons.render.DisplayNotification
 import me.atroxego.pauladdons.utils.SBInfo
 import me.atroxego.pauladdons.utils.UpdateManager
+import me.atroxego.pauladdons.utils.core.Cosmetics.loadCustomCapes
+import me.atroxego.pauladdons.utils.core.Cosmetics.loadCustomNicks
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.settings.KeyBinding
@@ -66,9 +73,9 @@ import java.io.File
 
 
 @Mod(
-    modid = PaulAddons.MODID,
-    name = PaulAddons.MOD_NAME,
-    version = PaulAddons.VERSION,
+    modid = MODID,
+    name = MOD_NAME,
+    version = VERSION,
     useMetadata = true,
     clientSideOnly = true,
     acceptedMinecraftVersions = "[1.8.9]",
@@ -84,7 +91,7 @@ class PaulAddons {
         lateinit var config: Config
         const val MODID = "pauladdons"
         const val MOD_NAME = "Paul Addons"
-        const val VERSION = "2.9"
+        const val VERSION = "3.0"
         lateinit var metadata: ModMetadata
         const val prefix = "§5[§6PA§5]§8"
         var devMode = false
@@ -120,7 +127,6 @@ class PaulAddons {
         jarFile = event.sourceFile
         guiManager = GuiManager
     }
-
     @EventHandler
     fun onInit(event: FMLInitializationEvent) {
         ClientCommandHandler.instance.registerCommand(PaulAddonsCommand())
@@ -179,11 +185,12 @@ class PaulAddons {
 
     }
     @EventHandler
-    fun postInit(event: FMLPostInitializationEvent){
+    fun postInit(event: FMLPostInitializationEvent) {
         PersistentSave.loadData()
         Config.loadData()
+        loadCustomNicks()
+        loadCustomCapes()
     }
-
 
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {

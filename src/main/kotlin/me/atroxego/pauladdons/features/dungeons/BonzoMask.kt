@@ -19,9 +19,9 @@
 
 package me.atroxego.pauladdons.features.dungeons
 
-import PaulAddons
-import PaulAddons.Companion.mc
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.features.betterlootshare.ESP.logger

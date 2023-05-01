@@ -19,7 +19,7 @@
 
 package me.atroxego.pauladdons.features.dungeons
 
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.features.Feature

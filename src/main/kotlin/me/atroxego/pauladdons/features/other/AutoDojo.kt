@@ -19,7 +19,7 @@
 
 package me.atroxego.pauladdons.features.other
 
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import gg.essential.api.utils.Multithreading
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.events.impl.PacketEvent

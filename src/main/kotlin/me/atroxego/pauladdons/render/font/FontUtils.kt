@@ -1,6 +1,6 @@
 package me.atroxego.pauladdons.render.font
 
-import PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
 import me.atroxego.pauladdons.gui.GuiElement
 import me.atroxego.pauladdons.render.RenderUtils
 import net.minecraft.item.ItemStack

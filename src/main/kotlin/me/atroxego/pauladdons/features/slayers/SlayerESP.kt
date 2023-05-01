@@ -41,7 +41,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 object SlayerESP : Feature() {
     private val customMobs = hashMapOf<Entity, EntityLivingBase>()
-
     @SubscribeEvent
     fun onRenderEntityModel(event: RenderEntityModelEvent) {
         if (!Config.slayerESP) return

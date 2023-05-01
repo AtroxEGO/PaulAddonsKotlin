@@ -1,10 +1,10 @@
 package me.atroxego.pauladdons.gui
 
-import PaulAddons
 import gg.essential.universal.UChat
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
+import me.atroxego.pauladdons.PaulAddons
 import me.atroxego.pauladdons.config.PersistentSave
 import me.atroxego.pauladdons.events.RenderHUDEvent
 import me.atroxego.pauladdons.utils.core.FloatPair

@@ -17,8 +17,8 @@
  */
 package me.atroxego.pauladdons.utils
 
-import PaulAddons.Companion.json
-import PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.json
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
@@ -28,6 +28,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import me.atroxego.pauladdons.config.Cache
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.events.impl.SendChatMessageEvent
 import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
@@ -58,13 +59,14 @@ object SBInfo {
 
     private val timePattern = ".+(am|pm)".toRegex()
 
-    var onSkyblock = false //TODO: False
+    var onSkyblock = false
     var location = ""
     var date = ""
     var time = ""
     var objective: String? = ""
     var mode: String? = ""
     var currentTimeDate: Date? = null
+    var lastSentToLimbo = 0L
 
     @JvmField
     var lastOpenContainerName: String? = null
@@ -106,6 +108,9 @@ object SBInfo {
     fun onChatMessage(event: PacketEvent.ReceiveEvent) {
         if (event.packet is S02PacketChat) {
             val unformatted = event.packet.chatComponent.unformattedText
+            if (unformatted == "You were spawned in Limbo.") {
+                lastSentToLimbo = System.currentTimeMillis()
+            }
             if (unformatted.startsWith("{") && unformatted.endsWith("}")) {
                 try {
                     val obj = json.decodeFromString<LocrawObject>(unformatted)
@@ -114,6 +119,9 @@ object SBInfo {
                     }
                     locraw = obj
                     mode = obj.mode
+                    if (System.currentTimeMillis() - lastSentToLimbo > 60000) {
+                        Cache.lastLocation = obj.mode
+                    }
                 } catch (e: SerializationException) {
                     e.printStackTrace()
                 }

@@ -19,7 +19,8 @@
 
 package me.atroxego.pauladdons.utils
 
-import PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
+import gg.essential.api.utils.Multithreading
 import gg.essential.universal.wrappers.message.UTextComponent
 import me.atroxego.pauladdons.events.impl.MainReceivePacketEvent
 import me.atroxego.pauladdons.events.impl.PacketEvent
@@ -87,9 +88,6 @@ object Utils {
     }
     fun scoreboardData(){
         if(getScoreboardLines()[3].contains("F7") || getScoreboardLines()[3].contains("M7")) addMessage("True")
-//        for (line in getScoreboardLines()){
-//            mc.thePlayer.addChatMessage(ChatComponentText(line))
-//        }
     }
 
     fun fullInventory() : Boolean {
@@ -159,6 +157,19 @@ object Utils {
         return -1
     }
 
+    fun findItemInHotbarWithLore(lore: String) : Int{
+        for (slot in 0..35){
+            val itemStack = mc.thePlayer.inventory.getStackInSlot(slot) ?: continue
+            for (line in getItemLore(itemStack)){
+                if (line != null) {
+                    if (line.stripColor().contains(lore)) return slot
+                }
+            }
+        }
+        return -1
+    }
+
+
     fun findItemInInventory(name: String) : Int{
         for (slot in 9..35){
             val itemStack = mc.thePlayer.inventory.getStackInSlot(slot) ?: continue
@@ -168,27 +179,33 @@ object Utils {
     }
 
     fun switchToItemInInventory(slotIndex: Int){
-        mc.displayGuiScreen(GuiInventory(mc.thePlayer))
-        val windowId = GuiInventory(mc.thePlayer).inventorySlots.windowId
-        var itemStack = mc.thePlayer.inventory.mainInventory[slotIndex]
-        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotIndex,0,0,itemStack,0))
-        itemStack = mc.thePlayer.inventory.mainInventory[mc.thePlayer.inventory.currentItem]
-        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, mc.thePlayer.inventory.currentItem + 36,0,0,itemStack,0))
-        itemStack = mc.thePlayer.inventory.mainInventory[slotIndex]
-        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotIndex,0,0,itemStack,0))
-        mc.thePlayer.closeScreen()
+        Multithreading.runAsync {
+            mc.displayGuiScreen(GuiInventory(mc.thePlayer))
+            val windowId = GuiInventory(mc.thePlayer).inventorySlots.windowId
+            var itemStack = mc.thePlayer.inventory.mainInventory[slotIndex]
+            mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotIndex,0,0,itemStack,0))
+            itemStack = mc.thePlayer.inventory.mainInventory[mc.thePlayer.inventory.currentItem]
+            mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, mc.thePlayer.inventory.currentItem + 36,0,0,itemStack,0))
+            itemStack = mc.thePlayer.inventory.mainInventory[slotIndex]
+            mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotIndex,0,0,itemStack,0))
+            Thread.sleep(100)
+            mc.thePlayer.closeScreen()
+    }
     }
 
     fun switchToItemInHotbar(slotIndex: Int){
-        mc.displayGuiScreen(GuiInventory(mc.thePlayer))
-        val windowId = GuiInventory(mc.thePlayer).inventorySlots.windowId
-        var itemStack = mc.thePlayer.inventory.getStackInSlot(slotIndex)
-        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotIndex + 36,0,0,itemStack,0))
-        itemStack = mc.thePlayer.inventory.getStackInSlot(mc.thePlayer.inventory.currentItem)
-        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, mc.thePlayer.inventory.currentItem + 36,0,0,itemStack,0))
-        itemStack = mc.thePlayer.inventory.getStackInSlot(slotIndex)
-        mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotIndex + 36,0,0,itemStack,0))
-        mc.thePlayer.closeScreen()
+        Multithreading.runAsync {
+            mc.displayGuiScreen(GuiInventory(mc.thePlayer))
+            val windowId = GuiInventory(mc.thePlayer).inventorySlots.windowId
+            var itemStack = mc.thePlayer.inventory.getStackInSlot(slotIndex)
+            mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotIndex + 36,0,0,itemStack,0))
+            itemStack = mc.thePlayer.inventory.getStackInSlot(mc.thePlayer.inventory.currentItem)
+            mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, mc.thePlayer.inventory.currentItem + 36,0,0,itemStack,0))
+            itemStack = mc.thePlayer.inventory.getStackInSlot(slotIndex)
+            mc.netHandler.addToSendQueue(C0EPacketClickWindow(windowId, slotIndex + 36,0,0,itemStack,0))
+            Thread.sleep(100)
+            mc.thePlayer.closeScreen()
+        }
     }
 
 
@@ -256,6 +273,9 @@ object Utils {
 
     @JvmStatic
     fun String.stripColor(): String = STRIP_COLOR_PATTERN.replace(this, "")
+
+    @JvmStatic
+    fun BlockPos.toVec3(): Vec3 = Vec3(this.x.toDouble(), this.y.toDouble(), this.z.toDouble())
 
     fun File.ensureFile() = (parentFile.exists() || parentFile.mkdirs()) && createNewFile()
     }

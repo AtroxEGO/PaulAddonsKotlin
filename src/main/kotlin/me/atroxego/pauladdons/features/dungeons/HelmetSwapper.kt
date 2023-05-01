@@ -19,8 +19,8 @@
 
 package me.atroxego.pauladdons.features.dungeons
 
-import PaulAddons.Companion.mc
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import me.atroxego.pauladdons.config.Config
 import net.minecraft.client.gui.inventory.GuiInventory
 import net.minecraft.network.play.client.C0EPacketClickWindow

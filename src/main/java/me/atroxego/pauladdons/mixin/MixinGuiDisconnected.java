@@ -25,34 +25,32 @@
 
 package me.atroxego.pauladdons.mixin;
 
-import me.atroxego.pauladdons.hooks.render.RenderEntityHookKt;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RendererLivingEntity;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import me.atroxego.pauladdons.config.Cache;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiDisconnected;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.multiplayer.GuiConnecting;
+import net.minecraft.client.multiplayer.ServerData;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(RenderManager.class)
-public abstract class MixinRenderManager {
+@Mixin(GuiDisconnected.class)
+public class MixinGuiDisconnected {
+    @Shadow
+    private int field_175353_i;
 
     @Shadow
-    public abstract <T extends Entity> Render<T> getEntityRenderObject(Entity entityIn);
+    @Final
+    private GuiScreen parentScreen;
 
-    @Shadow
-    public TextureManager renderEngine;
-
-    @Inject(method = "doRenderEntity(Lnet/minecraft/entity/Entity;DDDFFZ)Z", at = @At("HEAD"), cancellable = true)
-    public void onRender(Entity entity, double x, double y, double z, float entityYaw, float partialTicks, boolean p_147939_10_, CallbackInfoReturnable<Boolean> cir) {
-        if (!(entity instanceof EntityLivingBase)) return;
-        Render<Entity> render = this.getEntityRenderObject(entity);
-        if (this.renderEngine == null || !(render instanceof RendererLivingEntity)) return;
-
-        RenderEntityHookKt.onRenderEntityModel((EntityLivingBase) entity,((IMixinRendererLivingEntity) render).getMainModel(),partialTicks, cir);
+    @Inject(method = "initGui", at = @At("TAIL"))
+    public void initGui(CallbackInfo ci) {
+        if (Cache.attempts >= 3) return;
+        Cache.attempts++;
+        Minecraft.getMinecraft().displayGuiScreen(new GuiConnecting(this.parentScreen, Minecraft.getMinecraft(), new ServerData(Cache.lastName, Cache.lastIP, false)));
     }
 }

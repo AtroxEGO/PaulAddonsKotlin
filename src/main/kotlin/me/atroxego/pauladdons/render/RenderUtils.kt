@@ -25,7 +25,7 @@
 
 package me.atroxego.pauladdons.render
 
-import PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
 import gg.essential.elementa.font.DefaultFonts
 import gg.essential.elementa.font.ElementaFonts
 import gg.essential.universal.ChatColor

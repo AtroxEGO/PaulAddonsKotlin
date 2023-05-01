@@ -25,7 +25,7 @@
 
 package me.atroxego.pauladdons.render
 
-import PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
 import me.atroxego.pauladdons.mixin.IMixinRendererLivingEntity
 import net.minecraft.client.model.ModelBase
 import net.minecraft.client.renderer.GlStateManager

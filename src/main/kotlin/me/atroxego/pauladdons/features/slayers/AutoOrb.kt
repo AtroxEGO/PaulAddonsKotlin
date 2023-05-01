@@ -1,6 +1,6 @@
 package me.atroxego.pauladdons.features.slayers
 
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import gg.essential.api.utils.Multithreading
 import gg.essential.universal.UChat
 import me.atroxego.pauladdons.config.Config

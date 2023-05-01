@@ -23,19 +23,21 @@
  * SOFTWARE.
  */
 
-package me.atroxego.pauladdons.features
+package me.atroxego.pauladdons.mixin;
 
-import gg.essential.universal.UChat
-import me.atroxego.pauladdons.PaulAddons
-import net.minecraft.client.Minecraft
+import me.atroxego.pauladdons.config.Cache;
+import net.minecraft.client.gui.GuiMultiplayer;
+import net.minecraft.client.multiplayer.ServerData;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-abstract class Feature {
-    protected val mc: Minecraft = Minecraft.getMinecraft()
-
-    protected fun printdev(text: String) {
-        if (PaulAddons.devMode) {
-            println("[PaulAddons DEV] $text")
-            UChat.chat("[PaulAddons DEV] $text")
-        }
+@Mixin(GuiMultiplayer.class)
+public class MixinGuiMultiplayer {
+    @Inject(method = "connectToServer", at = @At("HEAD"))
+    public void connectToServer(ServerData server, CallbackInfo ci) {
+        Cache.lastName = server.serverName;
+        Cache.lastIP = server.serverIP;
     }
 }

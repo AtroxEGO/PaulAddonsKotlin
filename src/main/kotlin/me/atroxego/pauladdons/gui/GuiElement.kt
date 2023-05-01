@@ -1,6 +1,6 @@
 package me.atroxego.pauladdons.gui
 
-import PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
 import gg.essential.universal.UResolution
 import me.atroxego.pauladdons.utils.core.FloatPair
 

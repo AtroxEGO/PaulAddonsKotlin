@@ -19,8 +19,8 @@
 
 package me.atroxego.pauladdons.features.other
 
-import PaulAddons.Companion.mc
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import me.atroxego.pauladdons.utils.Utils
 import me.atroxego.pauladdons.utils.Utils.stripColor
 import net.minecraft.client.gui.inventory.GuiInventory

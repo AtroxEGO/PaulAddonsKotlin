@@ -1,9 +1,10 @@
 package me.atroxego.pauladdons.features.autoExperiments
 
-import PaulAddons.Companion.mc
 import gg.essential.api.utils.Multithreading
+import me.atroxego.pauladdons.PaulAddons.Companion.mc
 import me.atroxego.pauladdons.config.Config
 import me.atroxego.pauladdons.features.betterlootshare.ESP.logger
+import me.atroxego.pauladdons.features.betterlootshare.ESP.mc
 import me.atroxego.pauladdons.utils.Utils
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.inventory.GuiChest

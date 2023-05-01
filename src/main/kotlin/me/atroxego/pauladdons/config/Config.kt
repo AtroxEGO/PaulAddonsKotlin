@@ -19,7 +19,7 @@
 
 package me.atroxego.pauladdons.config
 
-import PaulAddons
+import me.atroxego.pauladdons.PaulAddons
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Category
 import gg.essential.vigilance.data.SortingBehavior

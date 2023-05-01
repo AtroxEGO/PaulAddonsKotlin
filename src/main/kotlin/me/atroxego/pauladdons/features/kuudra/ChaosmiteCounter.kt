@@ -19,8 +19,8 @@
 
 package me.atroxego.pauladdons.features.kuudra
 
-import PaulAddons
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import me.atroxego.pauladdons.gui.GuiElement
 import me.atroxego.pauladdons.render.RenderUtils
 import me.atroxego.pauladdons.utils.Utils.addMessage

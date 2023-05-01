@@ -1,6 +1,4 @@
 package me.atroxego.pauladdons.mixin;
-
-//import com.moandjiezana.toml.Toml;
 import com.moandjiezana.toml.Toml;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockMushroom;

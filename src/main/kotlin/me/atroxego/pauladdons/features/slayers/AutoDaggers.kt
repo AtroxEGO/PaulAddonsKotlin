@@ -19,7 +19,7 @@
 
 package me.atroxego.pauladdons.features.slayers
 
-import PaulAddons.Companion.prefix
+import me.atroxego.pauladdons.PaulAddons.Companion.prefix
 import me.atroxego.pauladdons.events.impl.PacketEvent
 import me.atroxego.pauladdons.features.Feature
 import me.atroxego.pauladdons.utils.Utils

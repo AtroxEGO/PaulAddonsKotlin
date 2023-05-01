@@ -18,8 +18,8 @@
 
 package me.atroxego.pauladdons.config
 
-import PaulAddons
 import kotlinx.serialization.json.Json
+import me.atroxego.pauladdons.PaulAddons
 import me.atroxego.pauladdons.utils.Utils.ensureFile
 import net.minecraft.client.Minecraft
 import java.io.File

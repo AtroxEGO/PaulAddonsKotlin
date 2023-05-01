@@ -1,7 +1,0 @@
-- book combiner
-
-- make auto chest closer faster
-
-- Auto Kismet
-
-- Timer for jacob with crops

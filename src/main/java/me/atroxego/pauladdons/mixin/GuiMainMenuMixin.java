@@ -13,7 +13,6 @@ public class GuiMainMenuMixin extends GuiScreen implements GuiYesNoCallback {
 
     @Inject(method = "initGui", at = @At("RETURN"))
     public void addSingleplayerMultiplayerButtons_ExampleMod(CallbackInfo ci) {
-        // Change singleplayer button text
         buttonList.stream().filter(guib -> guib.id == 1).forEach(guiButton -> guiButton.displayString = "Paul Addons");
     }
 
