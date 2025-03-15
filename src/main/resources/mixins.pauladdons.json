@@ -6,9 +6,7 @@
   "mixins": [
     "MixinBlockCocoa",
     "MixinBlockMushroom",
-    "MixinEntityFishHook",
     "MixinEntityLivingBase",
-    "MixinEntityPlayer",
     "MixinGuiScreen",
     "MixinModList",
     "MixinNetHandlerPlayClient",
@@ -20,9 +18,6 @@
     "IMixinMinecraft",
     "IMixinRendererLivingEntity",
     "IMixinRenderManager",
-    "MixinFontRenderer",
-    "MixinGuiDisconnected",
-    "MixinGuiMultiplayer",
     "MixinLayerCape",
     "MixinRenderItem",
     "MixinRenderManager"

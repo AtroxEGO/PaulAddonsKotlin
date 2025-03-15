@@ -49,7 +49,7 @@ public abstract class MixinLayerCape implements LayerRenderer<AbstractClientPlay
 //        this.playerRenderer.bindTexture(new ResourceLocation("pauladdons/cape.png"));
     }
 
-    @Inject(method = "doRenderLayer(Lnet/minecraft/client/entity/AbstractClientPlayer;FFFFFFF)V", at = @At("HEAD"), cancellable = true)
+//    @Inject(method = "doRenderLayer(Lnet/minecraft/client/entity/AbstractClientPlayer;FFFFFFF)V", at = @At("HEAD"), cancellable = true)
     private void renderCustomCape(AbstractClientPlayer entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci){
 
         ResourceLocation textureLocation = getCustomCape(entitylivingbaseIn.getName());
