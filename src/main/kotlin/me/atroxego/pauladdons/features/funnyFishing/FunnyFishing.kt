@@ -73,7 +73,6 @@ object FunnyFishing : Feature() {
     private var lastTimeTotemPlaced = 0L
     private var lastTimeReeled = 0L
     private var lastTimeSold = 0L
-    private var rodSlotIndex = -1
     private var lookForGolenFish = false
     private var goldenFishEntity : EntityArmorStand? = null
     private var seenFlames = mutableListOf<Int>()

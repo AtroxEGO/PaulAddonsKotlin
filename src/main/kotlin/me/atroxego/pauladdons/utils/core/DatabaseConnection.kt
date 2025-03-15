@@ -1,7 +1,6 @@
 package me.atroxego.pauladdons.utils.core
 
 import gg.essential.api.utils.Multithreading
-import gg.essential.universal.UChat
 import me.atroxego.pauladdons.utils.HttpUtils
 
 object DatabaseConnection {

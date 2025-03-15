@@ -17,7 +17,7 @@ object Cosmetics {
 
     private val customNames = hashSetOf<CustomName>()
     private val customCapes = hashMapOf<String,ResourceLocation>()
-    private val regex = Regex("(?:§.)*(?<rank>\\[(?:§.)*\\d+(?:§.)*\\])? ?(?:§.)*(?<prefix>\\[\\w\\w\\w(?:§.)*(?:\\+(?:§.)*)*])? ?(?<username>\\w{3,16})(?:§.)*:*")
+    private val regex = Regex("(?:§.)*(?<rank>\\[(?:§.)*\\d+(?:§.)*])? ?(?:§.)*(?<prefix>\\[\\w\\w\\w(?:§.)*(?:\\+(?:§.)*)*])? ?(?<username>\\w{3,16})(?:§.)*:*")
     val namesCache = hashMapOf<String, String>()
     private val gson = Gson()
 
@@ -92,40 +92,5 @@ object Cosmetics {
                 }
             println("Loaded custom capes")
         }
-    }
-
-    @JvmStatic
-    fun getCustomCape(username: String?) : ResourceLocation? {
-        if (mc.thePlayer == null || username == null) return null
-        if (customCapes.containsKey(username)) return customCapes[username]
-        return null
-    }
-
-    @JvmStatic
-    fun getCustomNicks(message: String?): String? {
-        if (mc.thePlayer == null || message == null) return message
-        if (namesCache.containsValue(message)) return namesCache[message]
-
-        var text = message!!
-        val result = regex.findAll(text)
-        var displace = 0
-        for (matcher in result) {
-            val username = matcher.groups["username"] ?: continue
-            val name = username.value.trim()
-            val nameRange = username.range
-            val prefixRange = matcher.groups["prefix"]?.range
-
-            val customName = customNames.find { it.name == name }?.getNick() ?: continue
-            val newName = customName.nick.replace("&", "§")
-            val newPrefix = customName.prefix.replace("&", "§")
-
-            text = text.replaceRange(IntRange(nameRange.first + displace, nameRange.last + displace), newName)
-            if (prefixRange != null) text = text.replaceRange(IntRange(prefixRange.first + displace, prefixRange.last + displace), newPrefix)
-
-            displace += (newName.length - (nameRange.last - nameRange.first + 1)) + (if (prefixRange != null) (newPrefix.length - (prefixRange.last - prefixRange.first + 1)) else 0)
-        }
-
-        namesCache[message] = text
-        return text
     }
 }
