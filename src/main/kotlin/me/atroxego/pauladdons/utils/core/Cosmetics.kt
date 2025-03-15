@@ -69,7 +69,9 @@ object Cosmetics {
     fun loadCustomCapes(){
         Multithreading.run {
             customCapes.clear()
-            val response = fetchData("CustomCapes").split("{\"documents\":")[1].dropLast(1)
+            val responsee = fetchData("CustomCapes").split("{\"documents\":")
+            if(responsee.size < 2) return
+            val response = responsee[1].dropLast(1)
 
             gson.fromJson(response, JsonArray::class.java)
                 .toList()?.forEach {

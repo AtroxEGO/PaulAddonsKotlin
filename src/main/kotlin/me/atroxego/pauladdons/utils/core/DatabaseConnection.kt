@@ -25,9 +25,8 @@ object DatabaseConnection {
                 )
             )
             if (response != null) {
-                UChat.chat(response.replace("Â",""))
                 return response.replace("Â","")
-            } else UChat.chat("Null?")
+            }
             return "Request failed with response code: $response"
         }
     }
