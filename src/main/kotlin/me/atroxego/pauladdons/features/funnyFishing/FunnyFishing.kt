@@ -243,7 +243,7 @@ object FunnyFishing : Feature() {
             mc.thePlayer.sendChatMessage("/bz")
             MinecraftForge.EVENT_BUS.register(InstaSell())
         }
-        if (System.currentTimeMillis() - lastTimeReeled > 30000){
+        if (System.currentTimeMillis() - lastTimeReeled > Config.funnyFishingMaxTimeWithoutCatch * 1000){
             reelIn(true)
         }
         if (mc.thePlayer.inventory.currentItem != getFishingRod() && !killing) {

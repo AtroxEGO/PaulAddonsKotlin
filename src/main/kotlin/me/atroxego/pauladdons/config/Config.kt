@@ -132,6 +132,8 @@ object Config : Vigilant(
     var funnyFishingAutoHook = false
     var removeArmorGlint = false
     var funnyFishingAutoKillingDelay = 100
+    var funnyFishingMaxTimeWithoutCatch = 45
+
     init {
         category("Better Loot Share") {
             subcategory("Better Loot Share") {
@@ -463,6 +465,12 @@ object Config : Vigilant(
                     name = "Kill Delay (ms)",
                     min = 100,
                     max = 2000
+                )
+                slider(
+                    Config::funnyFishingMaxTimeWithoutCatch,
+                    name = "Max time without a catch (seconds)",
+                    min = 1,
+                    max = 180
                 )
                 switch(
                     Config::fishingTotem,
