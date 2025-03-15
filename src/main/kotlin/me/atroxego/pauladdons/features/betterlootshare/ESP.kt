@@ -46,19 +46,15 @@ object ESP : Feature() {
     @SubscribeEvent
     fun onRenderMob(event: RenderLivingEvent.Pre<EntityLivingBase>) {
         if (!Config.glowOnMob) return
-//        logger.info("Test")
-//        if (event.entity is EntityPlayerMP) return
         if (event.entity is EntityArmorStand) {
             if (!event.entity.hasCustomName()) return
             val mobsForESP = getMobsForESP()
             if (mobsForESP == "" || mobsForESP == " ") return
             val name = event.entity.customNameTag.stripColor()
             for (cname in mobsForESP.split(", ")) {
-//                if (name.endsWith(cname, true)) break
                 if (!name.contains(" $cname ", true)) continue
                 val mob = customMobs[event.entity]
                 if (mob != null) {
-//                    logger.info("mob != null")
                     if (mob.isDead()) {
                         customMobs.remove(event.entity)
                         break
@@ -89,6 +85,7 @@ object ESP : Feature() {
         }
         }
     }
+
     @SubscribeEvent
     fun onWorldLoad(event: WorldEvent.Load){
         customMobs.clear()
@@ -137,7 +134,6 @@ object ESP : Feature() {
 
     private fun getMobsForESP(): String {
         var mobs = ""
-//        if (!mobs.endsWith(", ")) mobs += ", "
         if (Config.nutterNotification) mobs += "Nutcracker, "
         if (Config.gwSharkNotification) mobs += "Great White Shark, "
         if (Config.thunderNotification) mobs += "Thunder, "
@@ -148,7 +144,6 @@ object ESP : Feature() {
         if (Config.customESPMobs != "") mobs += Config.customESPMobs
         if (mobs.endsWith(",")) mobs = mobs.removeSuffix(",")
         if (mobs.endsWith(", ")) mobs = mobs.removeSuffix(", ")
-//        for (mob in mobs.split(", ")) logger.info(mob)
         return mobs
     }
 

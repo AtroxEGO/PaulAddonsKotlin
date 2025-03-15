@@ -21,7 +21,6 @@ import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import me.atroxego.pauladdons.PaulAddons.Companion.MODID
@@ -51,8 +50,6 @@ import me.atroxego.pauladdons.gui.GuiManager
 import me.atroxego.pauladdons.render.DisplayNotification
 import me.atroxego.pauladdons.utils.SBInfo
 import me.atroxego.pauladdons.utils.UpdateManager
-import me.atroxego.pauladdons.utils.core.Cosmetics.loadCustomCapes
-import me.atroxego.pauladdons.utils.core.Cosmetics.loadCustomNicks
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.settings.KeyBinding
@@ -188,8 +185,6 @@ class PaulAddons {
     fun postInit(event: FMLPostInitializationEvent) {
         PersistentSave.loadData()
         Config.loadData()
-        loadCustomNicks()
-        loadCustomCapes()
     }
 
     @SubscribeEvent

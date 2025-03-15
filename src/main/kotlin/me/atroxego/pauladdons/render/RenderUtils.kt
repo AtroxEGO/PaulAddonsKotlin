@@ -376,7 +376,6 @@ object RenderUtils {
 
     private fun preModelDraw(entity: EntityLivingBase, model: ModelBase, partialTicks: Float): ModelData {
         val render = mc.renderManager.getEntityRenderObject<EntityLivingBase>(entity)
-//        val renderManager = getRenderPositions(mc.renderManager)
         val renderManager = mc.renderManager as IMixinRenderManager
         val renderer = render as IMixinRendererLivingEntity
 
@@ -438,10 +437,7 @@ object RenderUtils {
                     if (itemstack == null || itemstack.item !is ItemArmor) continue
 
                     val armorModel = layerrenderer.getArmorModel(i)
-//                    armorModel.setModelAttributes(renderer.mainModel)
                     armorModel.setLivingAnimations(entitylivingbaseIn, p_177093_2_, p_177093_3_, partialTicks)
-//                    val layerrendererAccessor = layerrenderer as IMixinLayerArmorBase
-//                    layerrendererAccessor.setModelPartVisible(armorModel, i)
 
                     GlStateManager.color(red, green, blue, alpha)
                     armorModel.render(entitylivingbaseIn, p_177093_2_, p_177093_3_, p_177093_5_, p_177093_6_, p_177093_7_, p_177093_8_)

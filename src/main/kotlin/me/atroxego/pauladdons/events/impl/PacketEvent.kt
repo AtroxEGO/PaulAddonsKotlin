@@ -32,8 +32,7 @@ open class PacketEvent(val packet: Packet<*>) : PaulAddonsEvent() {
     }
 
     class SendEvent(packet: Packet<*>) : PacketEvent(packet) {
-        init {
-            direction = Direction.OUTBOUND
+        init { direction = Direction.OUTBOUND
         }
     }
 

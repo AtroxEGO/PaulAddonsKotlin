@@ -32,8 +32,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static me.atroxego.pauladdons.utils.core.Cosmetics.getCustomCape;
-
 @Mixin(LayerCape.class)
 public abstract class MixinLayerCape implements LayerRenderer<AbstractClientPlayer> {
     @Shadow
@@ -46,52 +44,5 @@ public abstract class MixinLayerCape implements LayerRenderer<AbstractClientPlay
             GlStateManager.scale(0.5, 0.5, 0.5);
             GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
         }
-//        this.playerRenderer.bindTexture(new ResourceLocation("pauladdons/cape.png"));
-    }
-
-    @Inject(method = "doRenderLayer(Lnet/minecraft/client/entity/AbstractClientPlayer;FFFFFFF)V", at = @At("HEAD"), cancellable = true)
-    private void renderCustomCape(AbstractClientPlayer entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci){
-
-        ResourceLocation textureLocation = getCustomCape(entitylivingbaseIn.getName());
-        if (textureLocation == null) return;
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        this.playerRenderer.bindTexture(textureLocation);
-
-//        this.playerRenderer.bindTexture(new ResourceLocation("pauladdons/cape.png"));
-
-        GlStateManager.pushMatrix();
-        if (this.playerRenderer.getMainModel().isChild) {
-            GlStateManager.scale(0.5, 0.5, 0.5);
-            GlStateManager.translate(0.0F, 24.0F * scale, 0.2F);
-        } else {
-            GlStateManager.translate(0.0F, 0.0F, 0.125F);
-        }
-        double d = entitylivingbaseIn.prevChasingPosX + (entitylivingbaseIn.chasingPosX - entitylivingbaseIn.prevChasingPosX) * (double)partialTicks - (entitylivingbaseIn.prevPosX + (entitylivingbaseIn.posX - entitylivingbaseIn.prevPosX) * (double)partialTicks);
-        double e = entitylivingbaseIn.prevChasingPosY + (entitylivingbaseIn.chasingPosY - entitylivingbaseIn.prevChasingPosY) * (double)partialTicks - (entitylivingbaseIn.prevPosY + (entitylivingbaseIn.posY - entitylivingbaseIn.prevPosY) * (double)partialTicks);
-        double k = entitylivingbaseIn.prevChasingPosZ + (entitylivingbaseIn.chasingPosZ - entitylivingbaseIn.prevChasingPosZ) * (double)partialTicks - (entitylivingbaseIn.prevPosZ + (entitylivingbaseIn.posZ - entitylivingbaseIn.prevPosZ) * (double)partialTicks);
-        float l = entitylivingbaseIn.prevRenderYawOffset + (entitylivingbaseIn.renderYawOffset - entitylivingbaseIn.prevRenderYawOffset) * partialTicks;
-        double m = (double) MathHelper.sin(l * 3.1415927F / 180.0F);
-        double n = (double)(-MathHelper.cos(l * 3.1415927F / 180.0F));
-        float o = (float)e * 10.0F;
-        o = MathHelper.clamp_float(o, -6.0F, 32.0F);
-        float p = (float)(d * m + k * n) * 100.0F;
-        float q = (float)(d * n - k * m) * 100.0F;
-        if (p < 0.0F) {
-            p = 0.0F;
-        }
-
-        float r = entitylivingbaseIn.prevCameraYaw + (entitylivingbaseIn.cameraYaw - entitylivingbaseIn.prevCameraYaw) * partialTicks;
-        o += MathHelper.sin((entitylivingbaseIn.prevDistanceWalkedModified + (entitylivingbaseIn.distanceWalkedModified - entitylivingbaseIn.prevDistanceWalkedModified) * partialTicks) * 6.0F) * 32.0F * r;
-        if (entitylivingbaseIn.isSneaking()) {
-            o += 25.0F;
-        }
-
-        GlStateManager.rotate(6.0F + p / 2.0F + o, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotate(q / 2.0F, 0.0F, 0.0F, 1.0F);
-        GlStateManager.rotate(-q / 2.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-        this.playerRenderer.getMainModel().renderCape(0.0625F);
-        GlStateManager.popMatrix();
-        ci.cancel();
     }
 }

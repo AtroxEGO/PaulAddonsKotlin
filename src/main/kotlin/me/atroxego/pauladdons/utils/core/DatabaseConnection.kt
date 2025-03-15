@@ -1,7 +1,6 @@
 package me.atroxego.pauladdons.utils.core
 
 import gg.essential.api.utils.Multithreading
-import gg.essential.universal.UChat
 import me.atroxego.pauladdons.utils.HttpUtils
 
 object DatabaseConnection {
@@ -25,9 +24,8 @@ object DatabaseConnection {
                 )
             )
             if (response != null) {
-                UChat.chat(response.replace("Â",""))
                 return response.replace("Â","")
-            } else UChat.chat("Null?")
+            }
             return "Request failed with response code: $response"
         }
     }
