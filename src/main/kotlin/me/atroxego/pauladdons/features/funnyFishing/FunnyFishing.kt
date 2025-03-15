@@ -73,7 +73,6 @@ object FunnyFishing : Feature() {
     private var lastTimeTotemPlaced = 0L
     private var lastTimeReeled = 0L
     private var lastTimeSold = 0L
-    private var rodSlotIndex = -1
     private var lookForGolenFish = false
     private var goldenFishEntity : EntityArmorStand? = null
     private var seenFlames = mutableListOf<Int>()
@@ -243,7 +242,7 @@ object FunnyFishing : Feature() {
             mc.thePlayer.sendChatMessage("/bz")
             MinecraftForge.EVENT_BUS.register(InstaSell())
         }
-        if (System.currentTimeMillis() - lastTimeReeled > 30000){
+        if (System.currentTimeMillis() - lastTimeReeled > Config.funnyFishingMaxTimeWithoutCatch * 1000){
             reelIn(true)
         }
         if (mc.thePlayer.inventory.currentItem != getFishingRod() && !killing) {

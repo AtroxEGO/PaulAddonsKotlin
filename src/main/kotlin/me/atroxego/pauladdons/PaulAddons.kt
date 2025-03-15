@@ -50,7 +50,6 @@ import me.atroxego.pauladdons.gui.GuiManager
 import me.atroxego.pauladdons.render.DisplayNotification
 import me.atroxego.pauladdons.utils.SBInfo
 import me.atroxego.pauladdons.utils.UpdateManager
-import me.atroxego.pauladdons.utils.core.Cosmetics.loadCustomNicks
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.settings.KeyBinding
