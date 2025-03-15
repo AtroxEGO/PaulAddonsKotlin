@@ -89,7 +89,6 @@ object GuiManager : PersistentSave(File("config/".plus(PaulAddons.MODID), "guipo
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     fun onRenderHUD(event: RenderHUDEvent) {
         if (Minecraft.getMinecraft().currentScreen is LocationEditGui) return
-        mc.mcProfiler.startSection("SkytilsHUD")
         for ((_, element) in elements) {
             mc.mcProfiler.startSection(element.name)
             try {

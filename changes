@@ -1,3 +1,2 @@
-- Fixed Few Small Bugs in Fishing Macro
-- Added Custom Cape Support
-- Added Custom Nicks Support
+- Removed custom names and capes to reduce lag
+- Added slider to change max time without a fish
